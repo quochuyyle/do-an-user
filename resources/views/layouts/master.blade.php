@@ -30,6 +30,8 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="assets/bootstrap/bootstrap-select.min.js"></script>
+    @stack('before-script')
+    @stack('style-css')
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -61,51 +63,56 @@
                         </ul>
                     </li>
                     <li>
-{{--                        <i class="fas fa-bell" id="notification" style="padding-top: 19px;font-size: 30px;">--}}
-{{--                            <div class="counter-block"><span class="counter">1</span></div>--}}
-{{--                        </i>--}}
+                        {{--                        <i class="fas fa-bell" id="notification" style="padding-top: 19px;font-size: 30px;">--}}
+                        {{--                            <div class="counter-block"><span class="counter">1</span></div>--}}
+                        {{--                        </i>--}}
                         <div class="dropdown" style="float: right; padding: 13px">
-                            <a href="#" onclick="return false;" role="button" data-toggle="collapse" id="dropdownMenu1" data-target="#dropDownList" style="float: left" aria-expanded="true">
-                                <i class="fa fa-bell" id="bell" style="font-size: 27px !important; float: left; color:#f0f0f0">
+                            <a href="#" onclick="return false;" role="button" data-toggle="collapse" id="dropdownMenu1"
+                               data-target="#dropDownList" style="float: left" aria-expanded="true">
+                                <i class="fa fa-bell" id="bell"
+                                   style="font-size: 27px !important; float: left; color:#f0f0f0">
                                 </i>
                             </a>
                             <span class="badge badge-danger counter"></span>
-                            <ul class="dropdown-menu dropdown-menu-left pull-right" id="dropDownList" role="menu" aria-labelledby="dropdownMenu1">
+                            <ul class="dropdown-menu dropdown-menu-left pull-right" id="dropDownList" role="menu"
+                                aria-labelledby="dropdownMenu1">
                                 <li role="presentation">
                                     <a href="#" class="dropdown-menu-header">Thông báo</a>
                                 </li>
-                                <ul class="timeline timeline-icons timeline-sm" id="list-noti"  style="margin:10px;width:250px">
+                                <ul class="timeline timeline-icons timeline-sm" id="list-noti"
+                                    style="margin:10px;width:250px">
                                     @empty(!$notifications)
-                                    @foreach($notifications as $notification)
-                                        <li>
-                                            <p class="noti-image">
-                                                {{$notification->content}}
-                                                <span class="timeline-icon"><i class="fa fa-file-pdf-o" style="color:red"></i></span>
-                                                <span class="timeline-date">{{$notification->created_at->diffForHumans()}}</span>
-                                            </p>
-                                        </li>
-                                    @endforeach
+                                        @foreach($notifications as $notification)
+                                            <li>
+                                                <p class="noti-image">
+                                                    {{$notification->content}}
+                                                    <span class="timeline-icon"><i class="fa fa-file-pdf-o"
+                                                                                   style="color:red"></i></span>
+                                                    <span class="timeline-date">{{$notification->created_at->diffForHumans()}}</span>
+                                                </p>
+                                            </li>
+                                        @endforeach
                                     @else
                                         <li>
                                             <p class="noti-image">
-                                               Không có thông báo nào !
+                                                Không có thông báo nào !
                                             </p>
                                         </li>
                                     @endempty
-{{--                                    <li>--}}
-{{--                                        <p>--}}
-{{--                                            Your “Marketplace Report” PDF is ready <a href="">here</a>--}}
-{{--                                            <span class="timeline-icon"><i class="fa fa-file-pdf-o"  style="color:red"></i></span>--}}
-{{--                                            <span class="timeline-date">Dec 6, 10:17</span>--}}
-{{--                                        </p>--}}
-{{--                                    </li>--}}
-{{--                                    <li>--}}
-{{--                                        <p>--}}
-{{--                                            Your “Top Words” spreadsheet is ready <a href="">here</a>--}}
-{{--                                            <span class="timeline-icon"><i class="fa fa-file-excel-o"  style="color:green"></i></span>--}}
-{{--                                            <span class="timeline-date">Dec 5, 04:36</span>--}}
-{{--                                        </p>--}}
-{{--                                    </li>--}}
+                                    {{--                                    <li>--}}
+                                    {{--                                        <p>--}}
+                                    {{--                                            Your “Marketplace Report” PDF is ready <a href="">here</a>--}}
+                                    {{--                                            <span class="timeline-icon"><i class="fa fa-file-pdf-o"  style="color:red"></i></span>--}}
+                                    {{--                                            <span class="timeline-date">Dec 6, 10:17</span>--}}
+                                    {{--                                        </p>--}}
+                                    {{--                                    </li>--}}
+                                    {{--                                    <li>--}}
+                                    {{--                                        <p>--}}
+                                    {{--                                            Your “Top Words” spreadsheet is ready <a href="">here</a>--}}
+                                    {{--                                            <span class="timeline-icon"><i class="fa fa-file-excel-o"  style="color:green"></i></span>--}}
+                                    {{--                                            <span class="timeline-date">Dec 5, 04:36</span>--}}
+                                    {{--                                        </p>--}}
+                                    {{--                                    </li>--}}
                                 </ul>
                                 <li role="presentation">
                                     <a href="#" class="dropdown-menu-header"></a>
@@ -147,86 +154,106 @@
     </div>
 
 </footer>
-<script>
-    window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';
-</script>
-<script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
-<script src="{{ url('/js/laravel-echo-setup.js') }}" type="text/javascript"></script>
+{{--<script>--}}
+{{--    window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';--}}
+{{--</script>--}}
+{{--<script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>--}}
+{{--<script src="{{ url('/js/laravel-echo-setup.js') }}" type="text/javascript"></script>--}}
 <script type="text/javascript" src="assets/toast/toastr.min.js"></script>
 <script>
     $(document).ready(function () {
         // $('#notification').click(function (){
         //     console.log('Hello')
         // });
+
+        $(document).click(function (e) {
+            // let notification=document.getElementById('dropDownList')
+            // let show=$('#dropDownList').is(':visible')
+            // // console.log(show)
+            // if (show) {
+            //     $('#dropDownList').hide()
+            // }
+            // else
+            // {
+            //     $('#dropDownList').show()
+            // }
+            // notification.stopPropagation()
+            // e.stopPropagation()
+        })
+
+        // $('#dropDownList').mouseout((e)=>{
+        //     e.stopPropagation()
+        // })
+
         let i = 0;
-        let user_id={{\Illuminate\Support\Facades\Auth::id()}};
+        let user_id ={{\Illuminate\Support\Facades\Auth::id()}};
         // console.log(user_id)
         // console.log('Here')
         // console.log(i)
-        $('#bell').click(function (){
+        $('#bell').click(function () {
             // console.log('Hello')
-            i=0
+            i = 0
             $('.counter').hide()
             $('.counter').text('')
         })
 
 
-        window.Echo.channel('send-notification')
-            .listen('.SendNotification', (data) => {
-
-
-                if(user_id==data.actionData.source_to && user_id!=data.actionData.sender_id){
-                      // console.log('Hello')
-
-
-
-
-
-                    let html='<li> '+
-                       +' <p class="noti-image">' +
-                       + <span class="timeline-icon"><i class="fa fa-file-pdf-o" style="color:red"></i></span> +
-                    +'<span class="timeline-date">'+timeDifference(data.actionData.created_at)+'</span></p></li>'
-
-
-                    i++;
-                    $('.counter').text(i)
-                    $('.counter').show()
-                    $('#list-noti').prepend(html)
-
-                }
-                // data.data
-                // console.log(data)
-                // alert(data)
-                // console.log(data.actionId)
-                // console.log(data.actionData)
-                // $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
-            });
+        // window.Echo.channel('send-notification')
+        //     .listen('.SendNotification', (data) => {
+        //
+        //
+        //         if(user_id==data.actionData.source_to && user_id!=data.actionData.sender_id){
+        //               // console.log('Hello')
+        //
+        //
+        //
+        //
+        //
+        //             let html='<li> '+
+        //                +' <p class="noti-image">' +
+        //                + <span class="timeline-icon"><i class="fa fa-file-pdf-o" style="color:red"></i></span> +
+        //             +'<span class="timeline-date">'+timeDifference(data.actionData.created_at)+'</span></p></li>'
+        //
+        //
+        //             i++;
+        //             $('.counter').text(i)
+        //             $('.counter').show()
+        //             $('#list-noti').prepend(html)
+        //
+        //         }
+        //         // data.data
+        //         // console.log(data)
+        //         // alert(data)
+        //         // console.log(data.actionId)
+        //         // console.log(data.actionData)
+        //         // $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
+        //     });
 
         function timeDifference(created_date) {
-            var d=new Date();  // Gets the current time
-            var ts=new Date(created_date).getTime()/1000;
-            var nowTs = Math.floor(d.getTime()/1000); // getTime() returns milliseconds, and we need seconds, hence the Math.floor and division by 1000
-            var seconds = nowTs-ts;
+            var d = new Date();  // Gets the current time
+            var ts = new Date(created_date).getTime() / 1000;
+            var nowTs = Math.floor(d.getTime() / 1000); // getTime() returns milliseconds, and we need seconds, hence the Math.floor and division by 1000
+            var seconds = nowTs - ts;
 
             // more that two days
-            if (seconds > 2*24*3600) {
+            if (seconds > 2 * 24 * 3600) {
                 return "a few days ago";
             }
             // a day
-            if (seconds > 24*3600) {
+            if (seconds > 24 * 3600) {
                 return "1 day ago";
             }
 
             if (seconds > 3600) {
-                let hour=seconds/3600;
-                return  Math.round(hour)+" hours ago";
+                let hour = seconds / 3600;
+                return Math.round(hour) + " hours ago";
             }
-            if (seconds <3600 && seconds >60) {
-                let minute=seconds/60;
-                return  Math.round(minute)+" minutes ago";
+            if (seconds < 3600 && seconds > 60) {
+                let minute = seconds / 60;
+                return Math.round(minute) + " minutes ago";
             }
             if (seconds < 60) {
-                return Math.floor(seconds/60) + " seconds ago";
+                return Math.floor(seconds / 60) + " seconds ago";
             }
         }
     })

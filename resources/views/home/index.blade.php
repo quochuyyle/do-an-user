@@ -289,16 +289,16 @@ function time_elapsed_string($datetime, $full = false) {
 										})(phongtro,data);
 
 									}
-			// google.maps.event.addListener(map, 'mousemove', function (e) {
-			// 	document.getElementById("flat").innerHTML = e.latLng.lat().toFixed(6);
-			// 	document.getElementById("lng").innerHTML = e.latLng.lng().toFixed(6);
+			google.maps.event.addListener(map, 'mousemove', function (e) {
+				document.getElementById("flat").innerHTML = e.latLng.lat().toFixed(6);
+				document.getElementById("lng").innerHTML = e.latLng.lng().toFixed(6);
 
-			// });
+			});
 
 
 		}
 
 	</script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzlVX517mZWArHv4Dt3_JVG0aPmbSE5mE&callback=initMap"
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSgjO2ZLs29Zmv-GPwKucq0hkrIlrrF-U&callback=initMap"
 	async defer></script>
 	@endsection
