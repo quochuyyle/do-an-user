@@ -42,7 +42,9 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href=""><img src="images/logo.png"></a>
+            <a class="navbar-brand" href=""><img
+                        src="https://thumbs.dreamstime.com/b/motel-icon-white-background-simple-element-illustration-city-elements-concept-sign-symbol-design-141333219.jpg"
+                        style="width: 40px;height: auto;"></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
@@ -70,12 +72,12 @@
                             <a href="#" onclick="return false;" role="button" data-toggle="collapse" id="dropdownMenu1"
                                data-target="#dropDownList" style="float: left" aria-expanded="true">
                                 <i class="fa fa-bell" id="bell"
-                                   style="font-size: 27px !important; float: left; color:#f0f0f0">
+                                   style="font-size: 27px !important; float: left; color:#2C2E2F">
                                 </i>
                             </a>
                             <span class="badge badge-danger counter"></span>
                             <ul class="dropdown-menu dropdown-menu-left pull-right" id="dropDownList" role="menu"
-                                aria-labelledby="dropdownMenu1">
+                                aria-labelledby="dropdownMenu1" style="width: 235px;">
                                 <li role="presentation">
                                     <a href="#" class="dropdown-menu-header">Thông báo</a>
                                 </li>
@@ -136,24 +138,69 @@
 
 @yield('content')
 <div class="gap"></div>
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="logo-footer">
-                    <a href="/" title="Cổng thông tin số 1 về Dự án Bất động sản - Homedy.com">
-                        <img src="images/logo.png">
-                    </a>
-                    <div style="padding-top: 10px;">
-                        <p>Sinh viên thực hiện:Lê Quốc Huy - Vũ Thị Hường - Lớp:HTTT15</p>
-                        {{-- <p>Sinh viên thực hiện: Lê Thành Trung - Lớp 15SI-CLC.</p> --}}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="footer-dark">
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 item text">
+{{--                    <div class="row">--}}
+{{--                        <div class="col-md-6">--}}
+                            <img style="width: 140px;" src="https://thumbs.dreamstime.com/b/motel-icon-white-background-simple-element-illustration-city-elements-concept-sign-symbol-design-141333219.jpg" />
+{{--                            <span>Sinh viên thực hiện:Lê Quốc Huy-Vũ Thị Hường</span>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-md-6">--}}
+{{--                      --}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
-</footer>
+                </div>
+                <div class="col-sm-6 col-md-3 item">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Web design</a></li>
+                        <li><a href="#">Development</a></li>
+                        <li><a href="#">Hosting</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-md-3 item">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="#">Company</a></li>
+                        <li><a href="#">Team</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+
+                <div class="col item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i
+                                class="icon ion-social-twitter"></i></a><a href="#"><i
+                                class="icon ion-social-snapchat"></i></a><a href="#"><i
+                                class="icon ion-social-instagram"></i></a></div>
+            </div>
+
+        </div>
+        <p class="copyright">
+            <span>Sinh viên thực hiện:Lê Quốc Huy-Vũ Thị Hường</span>
+        </p>
+    </footer>
+</div>
+{{--<footer>--}}
+{{--    <div class="container">--}}
+{{--        <div class="row">--}}
+{{--            <div class="col-md-12">--}}
+{{--                <div class="logo-footer">--}}
+{{--                    <a href="/" title="Cổng thông tin số 1 về Dự án Bất động sản - Homedy.com">--}}
+{{--                        <img src="images/logo.png">--}}
+{{--                    </a>--}}
+{{--                    <div style="padding-top: 10px;">--}}
+{{--                        <p>Sinh viên thực hiện:Lê Quốc Huy - Vũ Thị Hường - Lớp:HTTT15</p>--}}
+{{--                        --}}{{-- <p>Sinh viên thực hiện: Lê Thành Trung - Lớp 15SI-CLC.</p> --}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+
+{{--</footer>--}}
 {{--<script>--}}
 {{--    window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';--}}
 {{--</script>--}}

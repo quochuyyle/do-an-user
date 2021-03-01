@@ -18,6 +18,33 @@ body {
     margin-top: 10px;
     border-radius: 5px;
 }
+
+.navbar-nav>li>a:hover{
+    color: #74B5CA !important;
+}
+
+.navbar-right .dropdown-menu {
+    /*left: auto;*/
+    /*right: 0;*/
+    color: #2C2E2F;
+}
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
+    background-color: #FFFFFF;
+    color: #2C2E2F !important;
+}
+
+.nav>li>a:hover, .nav>li>a:focus {
+    text-decoration: none;
+    background-color: #FFFFFF;
+    color:#2C2E2F !important; ;
+}
+
+
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
+    background-color: #FFFFFF;
+    /* color: #fff; */
+}
+
 .gap{
     margin-top: 10px;
 }
@@ -76,17 +103,22 @@ pre {
    margin-bottom: 0px;
 }
 .navbar-inverse {
-    background-color: #003352;
-    border-color: #003352;
+    /*background-color: #003352;*/
+    /*border-color: #003352;*/
+    background-color: #FFFFFF;
+    border-color: #FFFFFF;
+    box-shadow: 13px 7px 52px 12px rgba(0, 0, 0, 0.05);
 }
+
 .navbar-inverse .navbar-nav>li>a {
-    color: #fff;
+    color: #2C2E2F;
+    font-weight: bold;
 }
 .navbar-inverse .navbar-brand {
     color: #fff;
 }
 .navbar-brand{
-	padding: 0px
+	padding: 0px;
 }
 #map {
     height: 500px;
@@ -101,7 +133,10 @@ pre {
 	position: absolute;
 	bottom: 20px;
     right: 12px;
-    background: #003352;
+    /*background: #003352;*/
+    background: #FFFFFF;
+    box-shadow: 13px 7px 52px 12px rgba(0, 0, 0, 0.05);
+
     width: 600px;
     padding: 15px;
     border: 1px solid #f0f0f0;
@@ -251,38 +286,38 @@ h3.title-comm:before {
     font-size: 15px;
     margin-top: 2px;
 }
-footer {
-	font-size: 14px;
-    padding-top: 10px;
-    background-position: center bottom;
-    background: #003352 url(images/footer-bg.png) no-repeat center bottom;
-    color: #fff;
-    height: 300px
-}
-.logo-footer{
-	text-align: center;
-}
-footer .social-footer ul li {
-    display: inline-block;
-}
-footer .social-footer ul li a {
-    border: none;
-    background: #fff;
-    color: #6cd1f9;
-    font-size: 16px;
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    border: 1px solid #e3e9ec;
-    border-radius: 50%;
-    text-align: center;
-}
-footer h4 {
-    font-size: 16px;
-    border-bottom: solid 1px;
-    display: inline-block;
-}
+/*footer {*/
+/*	font-size: 14px;*/
+/*    padding-top: 10px;*/
+/*    background-position: center bottom;*/
+/*    background: #003352 url(images/footer-bg.png) no-repeat center bottom;*/
+/*    color: #fff;*/
+/*    height: 300px*/
+/*}*/
+/*.logo-footer{*/
+/*	text-align: center;*/
+/*}*/
+/*footer .social-footer ul li {*/
+/*    display: inline-block;*/
+/*}*/
+/*footer .social-footer ul li a {*/
+/*    border: none;*/
+/*    background: #fff;*/
+/*    color: #6cd1f9;*/
+/*    font-size: 16px;*/
+/*    display: inline-block;*/
+/*    width: 30px;*/
+/*    height: 30px;*/
+/*    line-height: 30px;*/
+/*    border: 1px solid #e3e9ec;*/
+/*    border-radius: 50%;*/
+/*    text-align: center;*/
+/*}*/
+/*footer h4 {*/
+/*    font-size: 16px;*/
+/*    border-bottom: solid 1px;*/
+/*    display: inline-block;*/
+/*}*/
 /*jssor slider loading skin spin css*/
 .jssorl-009-spin img {
     animation-name: jssorl-009-spin;
@@ -334,6 +369,7 @@ footer h4 {
     position: relative;
     border-bottom: 1px solid #E5E5E5;
     padding: 0 10px 10px;
+    background-color: #F2F4F8;
 }
 .contactpanel:after{
     content: '';
@@ -348,6 +384,7 @@ footer h4 {
     -ms-transform: rotate(-135deg);
     transform: rotate(-135deg);
     background: #FFFFFF;
+
     border-left: 1px solid #e5e5e5;
     border-top: 1px solid #e5e5e5;
 }
@@ -774,3 +811,101 @@ a.dropdown-menu-header {
 .badge-danger {
     background-color: #db5565;
 }
+
+.footer-dark {
+    padding:50px 0;
+    color:#2C2E2F;
+    background-color:#FFFFFF;
+    box-shadow: 13px 7px 52px 12px rgba(0, 0, 0, 0.05);
+    font-weight: 700;
+}
+
+.footer-dark h3 {
+    margin-top:0;
+    margin-bottom:12px;
+    font-weight:bold;
+    font-size:16px;
+}
+
+.footer-dark ul {
+    padding:0;
+    list-style:none;
+    line-height:1.6;
+    font-size:14px;
+    margin-bottom:0;
+}
+
+.footer-dark ul a {
+    color:inherit;
+    text-decoration:none;
+    opacity:0.6;
+}
+
+.footer-dark ul a:hover {
+    opacity:0.8;
+}
+
+@media (max-width:767px) {
+    .footer-dark .item:not(.social) {
+        text-align:center;
+        padding-bottom:20px;
+    }
+}
+
+.footer-dark .item.text {
+    margin-bottom:36px;
+}
+
+@media (max-width:767px) {
+    .footer-dark .item.text {
+        margin-bottom:0;
+    }
+}
+
+.footer-dark .item.text p {
+    opacity:0.6;
+    margin-bottom:0;
+}
+
+.footer-dark .item.social {
+    text-align:center;
+}
+
+@media (max-width:991px) {
+    .footer-dark .item.social {
+        text-align:center;
+        margin-top:20px;
+    }
+}
+
+.footer-dark .item.social > a {
+    font-size:20px;
+    width:36px;
+    height:36px;
+    line-height:36px;
+    display:inline-block;
+    text-align:center;
+    border-radius:50%;
+    box-shadow:0 0 0 1px rgba(255,255,255,0.4);
+    margin:0 8px;
+    color:#fff;
+    opacity:0.75;
+}
+
+.footer-dark .item.social > a:hover {
+    opacity:0.9;
+}
+
+.footer-dark .copyright {
+    text-align:center;
+    padding-top:24px;
+    opacity:0.3;
+    font-size:13px;
+    margin-bottom:0;
+}
+
+.copyright>span{
+    color: #0a001f !important;
+}
+
+/*https://epicbootstrap.com/snippets/footer-dark*/
