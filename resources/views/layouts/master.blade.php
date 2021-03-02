@@ -68,16 +68,19 @@
                         {{--                        <i class="fas fa-bell" id="notification" style="padding-top: 19px;font-size: 30px;">--}}
                         {{--                            <div class="counter-block"><span class="counter">1</span></div>--}}
                         {{--                        </i>--}}
-                        <div class="dropdown" style="float: right; padding: 13px">
+                        <div class="dropdown" style="float: right; padding: 13px;position: relative">
                             <a href="#" onclick="return false;" role="button" data-toggle="collapse" id="dropdownMenu1"
                                data-target="#dropDownList" style="float: left" aria-expanded="true">
-                                <i class="fa fa-bell" id="bell"
+                                <i class="fa fa-bell" id="notification"
                                    style="font-size: 27px !important; float: left; color:#2C2E2F">
+                                    <div class="counter-block">
+                                        <span class="counter">1</span>
+                                    </div>
                                 </i>
                             </a>
                             <span class="badge badge-danger counter"></span>
                             <ul class="dropdown-menu dropdown-menu-left pull-right" id="dropDownList" role="menu"
-                                aria-labelledby="dropdownMenu1" style="width: 235px;">
+                                aria-labelledby="dropdownMenu1">
                                 <li role="presentation">
                                     <a href="#" class="dropdown-menu-header">Thông báo</a>
                                 </li>
@@ -201,32 +204,31 @@
 {{--    </div>--}}
 
 {{--</footer>--}}
-{{--<script>--}}
-{{--    window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';--}}
-{{--</script>--}}
-{{--<script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>--}}
-{{--<script src="{{ url('/js/laravel-echo-setup.js') }}" type="text/javascript"></script>--}}
+<script>
+    window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';
+</script>
+<script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
+<script src="{{ url('/js/laravel-echo-setup.js') }}" type="text/javascript"></script>
 <script type="text/javascript" src="assets/toast/toastr.min.js"></script>
 <script>
     $(document).ready(function () {
-        // $('#notification').click(function (){
-        //     console.log('Hello')
-        // });
 
-        $(document).click(function (e) {
-            // let notification=document.getElementById('dropDownList')
-            // let show=$('#dropDownList').is(':visible')
-            // // console.log(show)
-            // if (show) {
-            //     $('#dropDownList').hide()
-            // }
-            // else
-            // {
-            //     $('#dropDownList').show()
-            // }
-            // notification.stopPropagation()
-            // e.stopPropagation()
-        })
+        $('.counter-block').hide()
+
+        // $(document).click(function (e) {
+        //     // let notification=document.getElementById('dropDownList')
+        //     // let show=$('#dropDownList').is(':visible')
+        //     // // console.log(show)
+        //     // if (show) {
+        //     //     $('#dropDownList').hide()
+        //     // }
+        //     // else
+        //     // {
+        //     //     $('#dropDownList').show()
+        //     // }
+        //     // notification.stopPropagation()
+        //     // e.stopPropagation()
+        // })
 
         // $('#dropDownList').mouseout((e)=>{
         //     e.stopPropagation()
@@ -234,47 +236,40 @@
 
         let i = 0;
         let user_id ={{\Illuminate\Support\Facades\Auth::id()}};
-        // console.log(user_id)
-        // console.log('Here')
-        // console.log(i)
-        $('#bell').click(function () {
+        $('#notification').click(function () {
             // console.log('Hello')
             i = 0
-            $('.counter').hide()
+            $('.counter-block').hide()
             $('.counter').text('')
         })
 
 
-        // window.Echo.channel('send-notification')
-        //     .listen('.SendNotification', (data) => {
-        //
-        //
-        //         if(user_id==data.actionData.source_to && user_id!=data.actionData.sender_id){
-        //               // console.log('Hello')
-        //
-        //
-        //
-        //
-        //
-        //             let html='<li> '+
-        //                +' <p class="noti-image">' +
-        //                + <span class="timeline-icon"><i class="fa fa-file-pdf-o" style="color:red"></i></span> +
-        //             +'<span class="timeline-date">'+timeDifference(data.actionData.created_at)+'</span></p></li>'
-        //
-        //
-        //             i++;
-        //             $('.counter').text(i)
-        //             $('.counter').show()
-        //             $('#list-noti').prepend(html)
-        //
-        //         }
-        //         // data.data
-        //         // console.log(data)
-        //         // alert(data)
-        //         // console.log(data.actionId)
-        //         // console.log(data.actionData)
-        //         // $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
-        //     });
+        window.Echo.channel('send-notification')
+            .listen('.SendNotification', (data) => {
+
+
+                if(user_id==data.actionData.source_to && user_id!=data.actionData.sender_id){
+                      // console.log('Hello')
+
+                    let html='<li> '+
+                       +' <p class="noti-image">' +
+                       + '<span class="timeline-icon"><i class="fa fa-file-pdf-o" style="color:red"></i></span>' +
+                    +'<span class="timeline-date">'+timeDifference(data.actionData.created_at)+'</span></p></li>'
+
+
+                    i++;
+                    $('.counter').text(i)
+                    $('.counter').show()
+                    $('#list-noti').prepend(html)
+
+                }
+                // data.data
+                // console.log(data)
+                // alert(data)
+                // console.log(data.actionId)
+                // console.log(data.actionData)
+                $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
+            });
 
         function timeDifference(created_date) {
             var d = new Date();  // Gets the current time

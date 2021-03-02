@@ -239,16 +239,12 @@ class UserController extends Controller
              'read'=>0,
              'user_type'=>Auth::user()->user_type
          ];
-         $motel=['motel_id'=>$motel->id];
+//         $motel=['motel_id'=>$motel->id];
 //         $push_notification=array_merge($push_notification,$motel);
          $push_user=PushUser::store($data_user);
           \event(new SendNotification($push_user->push_id,$push_notification));
 
-//          Redis::psubscribe(['*'], function ($message, $channel) {
-//              echo $message;
-//          });
-
-//          \event(new SendNotification(1,['sender_id'=>1,'name'=>'Hello','content'=>'Test','created_at'=>"2021-02-24 08:33:50"]));
+//          \event(new SendNotification(1,['sender_id'=>Auth::id(),'source_to'=>2,'name'=>'Hello','content'=>'Test','created_at'=>"2021-02-24 08:33:50"]));
          return redirect('/user/dangtin')->with('success','Đăng tin thành công. Vui lòng đợi Admin kiểm duyệt');
 
       }

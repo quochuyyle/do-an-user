@@ -10,7 +10,7 @@ class MotelController extends Controller
 {
 	public function SearchMotelAjax(Request $request){
 		$getmotel = Motelroom::where([
-			['district_id',$request->id_ditrict],
+			['district_id',$request->id_district],
 			['price','>=',$request->min_price],
 			['price','<=',$request->max_price],
 			['category_id',$request->id_category],

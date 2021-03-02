@@ -12007,6 +12007,24 @@ a.text-dark:focus {
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
-.noti-image::after{
-    background-image: url("./public/assets/images/images.png");
-}
+/*#notification{*/
+/*  position: relative;*/
+/*}*/
+
+/*.counter-block{*/
+/*  background-color: red;*/
+/*  position: absolute;*/
+/*  top: -13px;*/
+/*  right: -12px;*/
+/*  width: 25px;*/
+/*  height: 25px;*/
+/*  border-radius: 20px;*/
+/*  color: #f0f0f0;*/
+/*  text-align: center;*/
+/*  line-height: 70%;*/
+/*}*/
+
+/*.counter{*/
+/*  font-size: 20px;*/
+
+/*}*/

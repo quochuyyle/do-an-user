@@ -754,6 +754,7 @@
                     }, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             if (results[0]) {
+                                // console.log('Hello')
                                 console.log(results[0].formatted_address);
                             } else {
                                 console.log('No results found');
@@ -804,6 +805,7 @@
                     geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             if (results[0]) {
+                                console.log('Here')
                                 $('#location-text-box').val(results[0].formatted_address);
                                 $('#txtaddress').val(results[0].formatted_address);
                                 $('#txtlat').val(marker.getPosition().lat());
