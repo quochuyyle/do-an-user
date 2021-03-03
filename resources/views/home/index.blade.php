@@ -352,7 +352,7 @@
                         url: url,
                         data: {province_id: province_id},
                         success: function (result) {
-                            console.log(result)
+                            // console.log(result)
                             $('#selectdistrict').find('option:not(:first)').remove();
                             for (item in result)
                                 $("#selectdistrict").append('<option data-tokens="'+result[item].slug+'" value=' + result[item].id + '>' + result[item].name + '</option>').selectpicker('refresh');

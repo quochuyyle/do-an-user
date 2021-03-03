@@ -78,7 +78,7 @@
                                     </div>
                                 </i>
                             </a>
-                            <span class="badge badge-danger counter"></span>
+{{--                            <span class="badge badge-danger counter"></span>--}}
                             <ul class="dropdown-menu dropdown-menu-left pull-right" id="dropDownList" role="menu"
                                 aria-labelledby="dropdownMenu1">
                                 <li role="presentation">
@@ -215,24 +215,6 @@
 
         $('.counter-block').hide()
 
-        // $(document).click(function (e) {
-        //     // let notification=document.getElementById('dropDownList')
-        //     // let show=$('#dropDownList').is(':visible')
-        //     // // console.log(show)
-        //     // if (show) {
-        //     //     $('#dropDownList').hide()
-        //     // }
-        //     // else
-        //     // {
-        //     //     $('#dropDownList').show()
-        //     // }
-        //     // notification.stopPropagation()
-        //     // e.stopPropagation()
-        // })
-
-        // $('#dropDownList').mouseout((e)=>{
-        //     e.stopPropagation()
-        // })
 
         let i = 0;
         let user_id ={{\Illuminate\Support\Facades\Auth::id()}};
@@ -251,15 +233,17 @@
                 if(user_id==data.actionData.source_to && user_id!=data.actionData.sender_id){
                       // console.log('Hello')
 
-                    let html='<li> '+
-                       +' <p class="noti-image">' +
-                       + '<span class="timeline-icon"><i class="fa fa-file-pdf-o" style="color:red"></i></span>' +
-                    +'<span class="timeline-date">'+timeDifference(data.actionData.created_at)+'</span></p></li>'
+                    // console.log(data)
+                    let content='\f328';
+                    let html='<li><p class="noti-image">'+data.actionData.content;
+                       html+='<span class="timeline-icon"></span>';
+                    html+='<span class="timeline-date">'+timeDifference(data.actionData.created_at)+'</span></p></li>';
 
 
+                    // console.log(html)
                     i++;
                     $('.counter').text(i)
-                    $('.counter').show()
+                    $('.counter-block').show()
                     $('#list-noti').prepend(html)
 
                 }
@@ -268,17 +252,25 @@
                 // alert(data)
                 // console.log(data.actionId)
                 // console.log(data.actionData)
-                $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
+                // $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
             });
 
-        function timeDifference(created_date) {
-            var d = new Date();  // Gets the current time
-            var ts = new Date(created_date).getTime() / 1000;
-            var nowTs = Math.floor(d.getTime() / 1000); // getTime() returns milliseconds, and we need seconds, hence the Math.floor and division by 1000
-            var seconds = nowTs - ts;
+        function timeDifference(created_at) {
 
+            const oneDay = 24 * 60 * 60 * 1000;
+            let currentDate = new Date();
+            let created_date=new Date(created_at);
+            // let seconds = (currentDate.getTime()/1000-created_date.getTime()/1000)/(24*3600);
+            const diffDays = Math.round(Math.abs((currentDate - created_date) / oneDay));
+            const seconds=diffDays/oneDay;
+          //  console.log(currentDate)
+            // console.log(diffDays)
+            // console.log(currentDate.getTime()/1000)
+            // console.log(created_date.getTime()/1000)
             // more that two days
+            // console.log(seconds)
             if (seconds > 2 * 24 * 3600) {
+
                 return "a few days ago";
             }
             // a day
@@ -292,10 +284,10 @@
             }
             if (seconds < 3600 && seconds > 60) {
                 let minute = seconds / 60;
-                return Math.round(minute) + " minutes ago";
+                return Math.round(minute) + " minute(s) ago";
             }
             if (seconds < 60) {
-                return Math.floor(seconds / 60) + " seconds ago";
+                return Math.floor(seconds / 60) + " second(s) ago";
             }
         }
     })

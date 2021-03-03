@@ -617,7 +617,7 @@
                                         <div class="form-group">
                                             <label for="usr">Quận/ Huyện:</label>
                                             <select class="selectpicker pull-right" data-live-search="true"
-                                                    name="iddistrict">
+                                                    name="iddistrict" id="selectdistrict">
                                                 @foreach($district as $quan)
                                                     <option data-tokens="{{$quan->slug}}"
                                                             value="{{ $quan->id }}">{{ $quan->name }}</option>
@@ -754,7 +754,7 @@
                     }, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             if (results[0]) {
-                                // console.log('Hello')
+                                // console.log(results[0])
                                 console.log(results[0].formatted_address);
                             } else {
                                 console.log('No results found');
@@ -805,7 +805,7 @@
                     geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             if (results[0]) {
-                                console.log('Here')
+                                // console.log('Here')
                                 $('#location-text-box').val(results[0].formatted_address);
                                 $('#txtaddress').val(results[0].formatted_address);
                                 $('#txtlat').val(marker.getPosition().lat());
@@ -848,6 +848,20 @@
                 geocoder.geocode({'latLng': place.geometry.location}, function (results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
                         if (results[0]) {
+                            let count=results[0].address_components.length
+                            let districts=document.getElementById('selectdistrict')
+                            let districtName=results[0].address_components[count-3].long_name;
+                            for (let i=0;i<districts.length;i++){
+
+                                if(districtName.match(districts[i].innerText)){
+                                    console.log(districts[i].innerText)
+                                }
+                            }
+                            // $('#selectdistrict').each(function (){
+                            //     $(this).val()
+                            // })
+                            // console.log(results[count-3])
+                            // console.log(results[0].address_components[count-3].long_name)
                             $('#txtaddress').val(results[0].formatted_address);
                             infowindow.setContent(results[0].formatted_address);
                             infowindow.open(map, marker);
@@ -882,6 +896,7 @@
                     geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             if (results[0]) {
+                                console.log('Here')
                                 $('#location-text-box').val(results[0].formatted_address);
                                 $('#txtlat').val(marker.getPosition().lat());
                                 $('#txtlng').val(marker.getPosition().lng());
