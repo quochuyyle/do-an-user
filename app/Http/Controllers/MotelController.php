@@ -15,6 +15,7 @@ class MotelController extends Controller
 			['price','<=',$request->max_price],
 			['category_id',$request->id_category],
 			['approve',1]])->get();
+//		dd($getmotel);
 		$arr_result_search = array();
 		foreach ($getmotel as $room) {
 			$arrlatlng = json_decode($room->latlng,true);

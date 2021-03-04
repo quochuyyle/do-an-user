@@ -79,6 +79,7 @@
                     <div class="form-group row">
                         <div class="col-xs-6">
                             <select class="selectpicker" data-live-search="true" id="selectcategory">
+                                <option value="">Chọn loại phòng trọ</option>
                                 @foreach($categories as $category)
                                     <option data-tokens="{{ $category->slug }}"
                                             value="{{ $category->id }}">{{ $category->name }}</option>
@@ -254,6 +255,7 @@
                 </div>
             </div>
         </div>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
         <script>
 

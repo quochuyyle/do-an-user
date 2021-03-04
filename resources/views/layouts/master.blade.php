@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="assets/bootstrap/bootstrap-select.min.css">
 
     <!-- Latest compiled and minified JavaScript -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="assets/bootstrap/bootstrap-select.min.js"></script>
     @stack('before-script')
     @stack('style-css')
@@ -74,7 +75,7 @@
                                 <i class="fa fa-bell" id="notification"
                                    style="font-size: 27px !important; float: left; color:#2C2E2F">
                                     <div class="counter-block">
-                                        <span class="counter">1</span>
+                                        <span class="counter">0</span>
                                     </div>
                                 </i>
                             </a>
@@ -287,7 +288,7 @@
                 return Math.round(minute) + " minute(s) ago";
             }
             if (seconds < 60) {
-                return Math.floor(seconds / 60) + " second(s) ago";
+                return "now";
             }
         }
     })

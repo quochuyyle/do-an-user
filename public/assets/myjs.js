@@ -24,12 +24,13 @@ $(function () {
 });
 
 function searchMotelajax() {
-    var min = $("#selectprice option:selected").attr("min");
-    var max = $("#selectprice option:selected").attr("max");
-    var id_ditrict = $("#selectdistrict").val();
-    var id_category = $("#selectcategory").val();
+    let min = $("#selectprice option:selected").attr("min");
+    let max = $("#selectprice option:selected").attr("max");
+    let id_ditrict = $("#selectdistrict").val();
+    let id_category = $("#selectcategory").val();
+    let district = $('#selectdistrict option:selected').text()
     // console.log(min,max,id_category,id_ditrict);
-    var data_send = {
+    let data_send = {
         min_price: min,
         max_price: max,
         id_district: id_ditrict,
@@ -47,8 +48,9 @@ function searchMotelajax() {
         success: function (result) {
             let xmlContent = ''
 
-            let coordinatesObj = [],
-                i = 0;
+            let array = [];
+            let i = 0;
+
             // console.log(result)
             fetch('/assets/coordinates/vietnam.xml').then((response) => {
                 // console.log(response)
@@ -62,45 +64,48 @@ function searchMotelajax() {
                     // console.log(placeMarks)
 
 
-                    // let districtName = placeMarks[0].children[1].children[0].children[2].innerHTML
-                    // if() {
-                    // }
-                    // }
-                    let strCoordinates = placeMarks[0].children[2].children[0].children[0].children[0].children[0].innerHTML
-                    // console.log(strCoordinates)
-                    let re = ' +';
-                    let coordinates=strCoordinates.split(' ')
-
-                    coordinates.forEach(coordinate=>{
-
-                        let arr=coordinate.split(',')
-                        let lat=arr[1],
-                            lng=arr[0];
-                        // coordinatesObj[i]={lat:parseFloat(lat),lng: parseFloat(lng)}
-                        coordinatesObj.push({lat:parseFloat(lat),lng: parseFloat(lng)})
-                        // i++;
-                    })
-
-
-                    // placeMarks.forEach(placeMark => {
-                    //     let districtName = placeMark.children[1].children[0].children[2].innerHTML
-                    //     if (districtName == 'Hoàn Kiếm') {
-                    //         // console.log(districtName)
-                    //         let strCoordinates = placeMark.children[2].children[0].children[0].children[0].children[0].innerHTML
-                    //         // console.log(strCoordinates)
-                    //         let re = /\s*;\s*/;
-                    //         let coordinates = strCoordinates.split(' ')
+                    // // let districtName = placeMarks[0].children[1].children[0].children[2].innerHTML
+                    // // if() {
+                    // // }
+                    // // }
+                    // let strCoordinates = placeMarks[0].children[2].children[0].children[0].children[0].children[0].innerHTML
+                    // // console.log(strCoordinates)
+                    // let re = ' +';
+                    // let coordinates=strCoordinates.split(' ')
                     //
-                    //         coordinates.forEach(coordinate => {
+                    // coordinates.forEach(coordinate=>{
                     //
-                    //             let arr = coordinate.split(',')
-                    //             let lat = arr[1],
-                    //                 lng = arr[0];
-                    //             coordinatesObj[i] = {lat: parseFloat(lat), lng: parseFloat(lng)}
-                    //             i++;
-                    //         })
-                    //     }
+                    //     let arr=coordinate.split(',')
+                    //     let lat=arr[1],
+                    //         lng=arr[0];
+                    //     // coordinatesObj[i]={lat:parseFloat(lat),lng: parseFloat(lng)}
+                    //     coordinatesObj.push({lat:parseFloat(lat),lng: parseFloat(lng)})
+                    //     // i++;
                     // })
+
+
+                    placeMarks.forEach(placeMark => {
+                        let districtName = placeMark.children[1].children[0].children[2].innerHTML
+                        if (district.match(districtName)) {
+                            // console.log(districtName)
+                            // console.log(districtName)
+                            let strCoordinates = placeMark.children[2].children[0].children[0].children[0].children[0].innerHTML
+                            // console.log(strCoordinates)
+                            let re = /\s*;\s*/;
+                            let coordinates = strCoordinates.split(' ')
+
+                            coordinates.forEach(coordinate => {
+
+                                console.log(coordinate)
+                                let arr = coordinate.split(','),
+                                    lat = arr[1],
+                                    lng = arr[0];
+                                array[i] = {lat: parseFloat(lat), lng: parseFloat(lng)}
+                                i++;
+                                // console.log(array)
+                            })
+                        }
+                    })
                 });
             })
 
@@ -115,75 +120,119 @@ function searchMotelajax() {
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: 21.028511, lng: 105.804817},
                 zoom: 15,
-                draggable: true,
+                //draggable: true,
                 mapTypeId: "terrain",
             });
 
             // console.log(map)
-            // const triangleCoords = [
-            //     // { lat: 21.0303124, lng: 105.8488809 },
-            //     // {lat:21.026564181706924,lng: 105.79837851720734},
-            //     // {lat:21.000364085645753, lng:105.82275443138725},
-            //     // {lat:21.0098992098145, lng:105.84129385907337},
-            //     // {lat:21.02576302375656, lng:105.82275443138725},
-            //     // { lat: 18.466, lng: -66.118 },
-            //     // { lat: 32.321, lng: -64.757 },
-            //     {lng: 105.12155914, lat: 10.71159267},
-            //     {lng: 105.11474609, lat: 10.71973896},
-            //     {lng: 105.10116577, lat: 10.74414539},
-            //     {lng: 105.09790039, lat: 10.76532078},
-            //     {lng: 105.0883255, lat: 10.76043224},
-            //     {lng: 105.08817291, lat: 10.76061153},
-            //     {lng: 105.08486938, lat: 10.76449966},
-            //     {lng: 105.0823288, lat: 10.76829147},
-            //     {lng: 105.08082581, lat: 10.77006054},
-            //     {lng: 105.07979584, lat: 10.77185059},
-            //     {lng: 105.07845306, lat: 10.77317238},
-            //     {lng: 105.07551575, lat: 10.77719688},
-            //     {lng: 105.06964111, lat: 10.77971745},
-            //     {lng: 105.06411743, lat: 10.78042889},
-            //     {lng: 105.06388092, lat: 10.78098106},
-            //     {lng: 105.06224823, lat: 10.79805946},
-            //     {lng: 105.05731201, lat: 10.80019665},
-            //     {lng: 105.05618286, lat: 10.8013773},
-            //     {lng: 105.05581665, lat: 10.80400276},
-            //     {lng: 105.05714417, lat: 10.81182384},
-            //     {lng: 105.05714417, lat: 10.81229019},
-            //     {lng: 105.05713654, lat: 10.81296158},
-            //     {lng: 105.05709839, lat: 10.81670952},
-            //     {lng: 105.05741882, lat: 10.81685352},
-            //     {lng: 105.05765533, lat: 10.81696129},
-            //     {lng: 105.05817413, lat: 10.82019138},
-            //     {lng: 105.05445862, lat: 10.82912254},
-            //     {lng: 105.03429413, lat: 10.8696146},
-            //     {lng: 105.03371429, lat: 10.87156868},
-            //     {lng: 105.03344727, lat: 10.87246227},
-            //     {lng: 105.03321075, lat: 10.8732729},
-            //     {lng: 105.02843475, lat: 10.89156055},
-            //     {lng: 105.02928925, lat: 10.89202785},
-            //     {lng: 105.02968597, lat: 10.89224339},
-            //     {lng: 105.03210449, lat: 10.89356804},
-            //     {lng: 105.0340271, lat: 10.89427376},
-            //     {lng: 105.03412628, lat: 10.89431095},
-            //     {lng: 105.03579712, lat: 10.89498997},
-            //     {lng: 105.03618622, lat: 10.89562035},
-            //     {lng: 105.03612518, lat: 10.89576244}
-            //
-            // ];
+            const triangleCoords = [
+                // {lat: 21.01835632, lng: 105.85319519},
+                // {lat: 21.01832581, lng: 105.85131836},
+                // {lat: 21.01938629, lng: 105.85036469},
+                // {lat: 21.01869011, lng: 105.84954834},
+                // {lat: 21.0188179, lng: 105.84892273},
+                // {lat: 21.02073097, lng: 105.84282684},
+                // {lat: 21.02115822, lng: 105.84145355},
+                // {lat: 21.02105331, lng: 105.84091187},
+                // {lat: 21.02883911, lng: 105.84156036},
+                // {lat: 21.02936363, lng: 105.84303284},
+                // {lat: 21.03011322, lng: 105.84404755},
+                // {lat: 21.03503418, lng: 105.84410858},
+                // {lat: 21.03936386, lng: 105.84461212},
+                // {lat: 21.03993988, lng: 105.84739685},
+                // {lat: 21.03998756, lng: 105.8475647},
+                // {lat: 21.04075623, lng: 105.85002136},
+                // {lat: 21.0402317, lng: 105.85057068},
+                // {lat: 21.04243088, lng: 105.85635376},
+                // {lat: 21.04028893, lng: 105.85832214},
+                // {lat: 21.03354454, lng: 105.86185455},
+                // {lat: 21.0302639, lng: 105.86462402},
+                // {lat: 21.02458572, lng: 105.86633301},
+                // {lat: 21.01988792, lng: 105.86779785},
+                // {lat: 21.01855087, lng: 105.86199188},
+                // {lat: 21.01906586, lng: 105.85875702},
+                // {lat: 21.01893044, lng: 105.8559494},
+                // {lat: 21.01817322, lng: 105.85466766},
+                // {lat: 21.01835632, lng: 105.85319519}
 
-            const triangleCoords=coordinatesObj
-            console.log(coordinatesObj)
+                //
+                // {lat: 20.99428558, lng: 105.90068817}    ,
+                // {lat: 20.9990139, lng: 105.89408112}   ,
+                // {lat: 21.00270081, lng: 105.8830719}   ,
+                // {lat: 21.00530815, lng: 105.87498474}  ,
+                // {lat: 21.01103973, lng: 105.86999512}  ,
+                // {lat: 21.01988792, lng: 105.86779785}  ,
+                // {lat: 21.02458572, lng: 105.86633301}  ,
+                // {lat: 21.0302639, lng: 105.86462402}   ,
+                // {lat: 21.03354454, lng: 105.86185455}  ,
+                // {lat: 21.04028893, lng: 105.85832214}  ,
+                // {lat: 21.04243088, lng: 105.85635376} ,
+                // {lat: 21.0543766, lng: 105.84924316}  ,
+                // {lat: 21.05807495, lng: 105.84765625} ,
+                // {lat: 21.07192993, lng: 105.84356689} ,
+                // {lat: 21.08115578, lng: 105.8416748}  ,
+                // {lat: 21.08005333, lng: 105.84564209} ,
+                // {lat: 21.07273865, lng: 105.85547638} ,
+                // {lat: 21.06809998, lng: 105.86120605} ,
+                // {lat: 21.06652451, lng: 105.8647995}  ,
+                // {lat: 21.06791115, lng: 105.87159729} ,
+                // {lat: 21.07111168, lng: 105.87796783} ,
+                // {lat: 21.07457161, lng: 105.88272858} ,
+                // {lat: 21.07681656, lng: 105.88654327} ,
+                // {lat: 21.07926559, lng: 105.89372253} ,
+                // {lat: 21.07979012, lng: 105.89772034} ,
+                // {lat: 21.07860184, lng: 105.90273285} ,
+                // {lat: 21.07770538, lng: 105.90856171} ,
+                // {lat: 21.07720184, lng: 105.91178131} ,
+                // {lat: 21.07588768, lng: 105.91855621} ,
+                // {lat: 21.07192993, lng: 105.92456055} ,
+                // {lat: 21.06771851, lng: 105.92775726} ,
+                // {lat: 21.05692291, lng: 105.93268585} ,
+                // {lat: 21.04786682, lng: 105.93566895} ,
+                // {lat: 21.04009628, lng: 105.93802643} ,
+                // {lat: 21.03570175, lng: 105.93480682} ,
+                // {lat: 21.03507614, lng: 105.93508911} ,
+                // {lat: 21.03318787, lng: 105.9331665}  ,
+                // {lat: 21.03257751, lng: 105.93359375} ,
+                // {lat: 21.02638817, lng: 105.92742157} ,
+                // {lat: 21.02565765, lng: 105.92718506} ,
+                // {lat: 21.02483368, lng: 105.92918396} ,
+                // {lat: 21.02601433, lng: 105.92973328} ,
+                // {lat: 21.02468109, lng: 105.93486023} ,
+                // {lat: 21.02392387, lng: 105.93424988} ,
+                // {lat: 21.02360344, lng: 105.93510437} ,
+                // {lat: 21.02252769, lng: 105.93465424} ,
+                // {lat: 21.02152824, lng: 105.93700409} ,
+                // {lat: 21.02111244, lng: 105.9379425}  ,
+                // {lat: 21.01980591, lng: 105.92591095} ,
+                // {lat: 21.01727676, lng: 105.92606354} ,
+                // {lat: 21.01683998, lng: 105.92288208} ,
+                // {lat: 21.01439857, lng: 105.92414856} ,
+                // {lat: 21.01414299, lng: 105.92224121} ,
+                // {lat: 21.01210785, lng: 105.92258453} ,
+                // {lat: 21.01193619, lng: 105.91993713} ,
+                // {lat: 21.0095253, lng: 105.92018127}  ,
+                // {lat: 21.00437546, lng: 105.92056274} ,
+                // {lat: 21.00202179, lng: 105.9144516}  ,
+                // {lat: 21.00493813, lng: 105.91010284} ,
+                // {lat: 21.00230789, lng: 105.90380096} ,
+                // {lat: 21.00076485, lng: 105.90459442} ,
+                // {lat: 20.99428558, lng: 105.90068817} ,
+                ];
+
+            // let coordinatesObj=array;
+             console.log(array)
             const bermudaTriangle = new google.maps.Polygon({
-                paths: triangleCoords,
+                paths: array,
                 strokeColor: "#FF0000",
-                strokeOpacity: 0.8,
-                strokeWeight: 3,
-                fillColor: "#FF0000",
+                strokeOpacity: 1,
+                strokeWeight: 1,
+                fillColor: 'white',
                 fillOpacity: 0.35,
             });
             // console.log('Here')
-
             bermudaTriangle.setMap(map);
+
 
             for (i in result_room) {
 
