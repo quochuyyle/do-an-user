@@ -32,7 +32,7 @@ Route::get('/', function () {
     	'map_motelroom'=>$map_motelroom,
         'listmotelroom'=>$listmotelroom
     ]);
-});
+})->name('user.index');
 Route::get('category/{id}','MotelController@getMotelByCategoryId');
 /* Admin */
 Route::get('admin/login','AdminController@getLogin');
@@ -60,14 +60,17 @@ Route::group(['prefix'=>'admin','middleware'=>'adminmiddleware'], function () {
 });
 /* End Admin */
 Route::get('/phongtro/{slug}',function($slug){
-    $room = Motelroom::findBySlug($slug);
+   // $room = Motelroom::findBySlug($slug)->with('term');
+    $room = Motelroom::with('term')->where('slug', $slug)->first();
     $room->count_view = $room->count_view +1;
     $room->save();
     $categories = Categories::all();
     return view('home.detail',['motelroom'=>$room, 'categories'=>$categories]);
 });
 Route::get('/report/{id}','MotelController@userReport')->name('user.report');
+Route::get('/motelroom/show/{id}','MotelController@getMotelById')->name('user.motelroom.show');
 Route::get('/motelroom/del/{id}','MotelController@user_del_motel');
+Route::post('/term/store','TermController@extendTerm')->name('user.term.store');
 /* User */
 Route::group(['prefix'=>'user'], function () {
     Route::get('register','UserController@get_register');
@@ -78,6 +81,7 @@ Route::group(['prefix'=>'user'], function () {
     Route::get('logout','UserController@logout');
 
     Route::get('dangtin','UserController@get_dangtin')->middleware('dangtinmiddleware');
+    Route::get('dangtin/datatable','UserController@dataTable')->name('user.dangtin.datatable');
     Route::post('dangtin','UserController@post_dangtin')->name('user.dangtin')->middleware('dangtinmiddleware');
 
     Route::get('profile','UserController@getprofile')->middleware('dangtinmiddleware');
@@ -89,3 +93,5 @@ Route::group(['prefix'=>'user'], function () {
 Route::post('searchmotel','MotelController@SearchMotelAjax');
 Route::get('district/{id}','DistrictController@getList')->name('district.list');
 
+Route::post('rentmotel','MotelController@rentMotel')->name('rent.create');
+Route::post('showphonenumber','MotelController@showMotelInformations')->name('rent.phone.show');

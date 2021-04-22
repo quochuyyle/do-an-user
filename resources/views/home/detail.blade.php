@@ -54,6 +54,11 @@
                     <li><a href="#">Trang Chủ</a></li>
                     <li><a href="#">{{ $motelroom->category->name }}</a></li>
                     <li class="active">{{ $motelroom->title }}</li>
+                    <input type="hidden" id="owner_id" value="{{ $motelroom->user_id }}"/>
+                    <input type="hidden" id="motelroom_id" value="{{ $motelroom->id }}"/>
+                    <input type="hidden" id="user_wallet"
+                           value="{{ \Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::user()->wallet : 0 }}"/>
+
                 </ul>
             </div>
         </div>
@@ -62,6 +67,32 @@
         <div class="row">
             <div class="col-md-8">
                 <h1 class="entry-title entry-prop">{{ $motelroom->title }}</h1>
+                <div class="row" style="margin: 15px 0 0 0;">
+                    <div class="col-md-6" style="padding-left: 0">
+                        @if(\Illuminate\Support\Facades\Auth::check())
+                            @if($motelroom->user_id == \Illuminate\Support\Facades\Auth::user()->id)
+                                <p>Thời hạn bài
+                                    đăng: {{ $motelroom->term->start_date .' - '. $motelroom->term->end_date }}</p>
+                            @endif
+                        @endif
+                    </div>
+                    <div style="text-align: right;padding-right: 0px" class="col-md-6">
+                        <?php
+                        date_default_timezone_set('Asia/Ho_Chi_Minh');
+                        $now = time();
+                        $convertDate = date('d-m-Y', $now);
+                        $start_date = new DateTime($convertDate);
+                        $end_date = new DateTime($motelroom->end_date);
+                        $diff = $start_date->diff($end_date);
+                        ?>
+                        @if($diff->days < 7)
+                            <p>
+                                <span class="text-danger"><b>Bài đăng sẽ hết hạn sau: {{ $diff->days }} ngày</b></span>
+                            </p>
+                        @endif
+                    </div>
+                </div>
+
 
                 <hr>
                 <div class="row">
@@ -76,11 +107,15 @@
 					</span></span>
                     </div>
                 </div>
-                <div id="map-detail"></div>
+                @if(Auth::check())
+                    <div id="map-detail" style="{{ $motelroom->user_id == \Illuminate\Support\Facades\Auth::user()->id ? 'filter: blur(0)' : 'filter: blur(10px)' }} "></div>
+                @else
+                    <div id="map-detail" style="filter: blur(10px)"></div>
 
+                @endif
                 <hr>
                 <div class="detail">
-                    <p><strong>Địa chỉ: {{ $motelroom->address }}</strong><br></p>
+                    {{--                    <p><strong>Địa chỉ: {{ $motelroom->address }}</strong><br></p>--}}
                     <p>
                         <strong>Giá phòng: </strong><span
                                 class="price_area"><?php echo number_format($motelroom->price); ?>  <span
@@ -138,54 +173,168 @@
                             <h4>Thông tin người đăng</h4>
                             <strong>{{ $motelroom->user->name }}</strong><br>
                             <i class="far fa-clock"></i> Ngày tham gia: 17-02-2018
-
                         </div>
                     </div>
                 </div>
-                <div class="phone_btn">
-                    <a id="show_phone_bnt" href="callto:{{ $motelroom->phone }}" class="btn btn-primary btn-block"
-                       style="font-weight: bold !important;
-				font-size: 14px;">
-                        <i class="fas fa-phone-square" style="font-size: 20px"></i>
-                        <span>SĐT: {{ $motelroom->phone }}</span></a>
-                </div>
+                @if(\Illuminate\Support\Facades\Auth::check())
+                    @if(\Illuminate\Support\Facades\Auth::user()->user_type == 2)
+                        {{--                        @if($motelroom->price > 4000000)--}}
+                        <div class="phone_btn">
+                            <button type="button" id="btn_show_phone" href="#" class="btn btn-primary btn-block"
+                                    style="font-weight: bold !important;font-size: 14px;">
+                                Hiển thị thông tin
+                            </button>
+                        </div>
+                        {{--                        @else--}}
+                        {{--                            <div class="phone_btn">--}}
+                        {{--                                <button  type="button" id="btn_rent_motel" href="#" class="btn btn-primary btn-block"--}}
+                        {{--                                   style="font-weight: bold !important;font-size: 14px;">--}}
+                        {{--                                    Thuê phòng trọ--}}
+                        {{--                                </button>--}}
+                        {{--                            </div>--}}
+                        {{--                        @endif--}}
+                    @endif
+                @endif
 
-{{--                <div class="gap"></div>--}}
+                {{--                <div class="gap"></div>--}}
 
 
-{{--                @if(session('thongbao'))--}}
-{{--                    <div class="alert bg-success">--}}
-{{--                        <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span>--}}
-{{--                        </button>--}}
-{{--                        <span class="text-semibold">Well done!</span> {{session('thongbao')}}--}}
-{{--                    </div>--}}
-{{--                @else--}}
-{{--                    <div class="report">--}}
-{{--                        <h4>BÁO CÁO</h4>--}}
-{{--                        <form action="{{ route('user.report',['id'=> $motelroom->id]) }}">--}}
-{{--                            <label class="radio" style="margin-right:15px"> Đã cho thuê--}}
-{{--                                <input type="radio" checked="checked" name="baocao" value="1">--}}
-{{--                                <span class="checkround"></span>--}}
-{{--                            </label>--}}
-{{--                            <label class="radio"> Sai thông tin--}}
-{{--                                <input type="radio" name="baocao" value="2">--}}
-{{--                                <span class="checkround"></span>--}}
-{{--                            </label>--}}
-{{--                            <button class="btn btn-danger">Gửi báo cáo</button>--}}
-{{--                        </form>--}}
-{{--                    </div>--}}
-{{--                @endif--}}
-{{--                <img src="images/banner-1.png" width="100%" style="margin-top: 20px">--}}
+                {{--                @if(session('thongbao'))--}}
+                {{--                    <div class="alert bg-success">--}}
+                {{--                        <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span>--}}
+                {{--                        </button>--}}
+                {{--                        <span class="text-semibold">Well done!</span> {{session('thongbao')}}--}}
+                {{--                    </div>--}}
+                {{--                @else--}}
+                {{--                    <div class="report">--}}
+                {{--                        <h4>BÁO CÁO</h4>--}}
+                {{--                        <form action="{{ route('user.report',['id'=> $motelroom->id]) }}">--}}
+                {{--                            <label class="radio" style="margin-right:15px"> Đã cho thuê--}}
+                {{--                                <input type="radio" checked="checked" name="baocao" value="1">--}}
+                {{--                                <span class="checkround"></span>--}}
+                {{--                            </label>--}}
+                {{--                            <label class="radio"> Sai thông tin--}}
+                {{--                                <input type="radio" name="baocao" value="2">--}}
+                {{--                                <span class="checkround"></span>--}}
+                {{--                            </label>--}}
+                {{--                            <button class="btn btn-danger">Gửi báo cáo</button>--}}
+                {{--                        </form>--}}
+                {{--                    </div>--}}
+                {{--                @endif--}}
+                {{--                <img src="images/banner-1.png" width="100%" style="margin-top: 20px">--}}
             </div>
         </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             var slider = $('.pgwSlider').pgwSlider({
-                maxHeight:300
+                maxHeight: 300
             });
             slider.previousSlide();
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            $('#btn_show_phone').click(function (e) {
+                e.preventDefault()
+                let url = "{{ route('rent.phone.show',':id') }}",
+                    id = {!! $motelroom->id !!},
+                    price = {!! $motelroom->price !!},
+                    fee = price * 10 / 100,
+                    type = 1,
+                    user_id = {{ Auth::check() ? \Illuminate\Support\Facades\Auth::user()->id : 0}},
+                    owner_id = $('#owner_id').val(),
+                    wallet = {{ Auth::check() ? \Illuminate\Support\Facades\Auth::user()->wallet : 0 }},
+                    updatedWallet = wallet - fee;
+                    console.log(updatedWallet)
+                    {{--$('#user_wallet').text({{ number_format() }})--}}
+                        url = url.replace(':id', id)
+
+                if (wallet >= fee) {
+                    swal.fire({
+                        title: 'Mất ' + fee + ' VND để xem thông tin chi tiết ?',
+                        text: "Bạn không thể hoàn tác !",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Có',
+                        cancelButtonText: 'không',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.value) {
+                            // $.ajax({
+                            //     type: 'POST',
+                            //     url: url,
+                            //     data: {
+                            //         type: type,
+                            //         fee: fee,
+                            //         motelroom_id: id,
+                            //         user_id: user_id,
+                            //         owner_id: owner_id
+                            //     },
+                            //     success: function (res) {
+                            //         if (res.message) {
+                            //             $('#user_wallet').html()
+                            //             $('#btn_show_phone').text('Số điện thoại liên hệ: ' + res.phone)
+                            //             $('#map-detail').css('filter', 'blur(0)')
+                            //             swalWithBootstrapButtons.fire(
+                            //                 'Thông báo',
+                            //                 res.message,
+                            //                 'success'
+                            //             )
+                            //         } else {
+                            //             swalWithBootstrapButtons.fire(
+                            //                 'Thông báo',
+                            //                 res.error,
+                            //                 'error'
+                            //             )
+                            //         }
+                            //     }
+                            //
+                            // })
+                        }
+                    });
+                }
+            })
+
+            $('#btn_rent_motel').click(function (e) {
+                e.preventDefault()
+                let url = "{{ route('rent.phone.show',':id') }}",
+                    id = {!! $motelroom->id !!};
+                url = url.replace(':id', id)
+                swal.fire({
+                    title: 'Bạn có chắc muốn thuê phòng trọ này ?',
+                    text: "Bạn không thể hoàn tác !",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'không',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.value) {
+                        $('#map-detail').css('filter', 'blur(0)')
+                        // $.ajax({
+                        //     type: 'POST',
+                        //     url: url,
+                        //     data:{
+                        //         fee:100000,
+                        //         motelroom_id:id
+                        //     },
+                        //     success:function (res){
+                        //         $('#user_wallet').html()
+                        //         $('#btn_show_phone').text('Số điện thoại liên hệ: ' +res.phone)
+                        //     }
+                        //
+                        // })
+                    }
+                });
+
+            })
         });
     </script>
     <script>

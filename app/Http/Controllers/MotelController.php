@@ -1,11 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Term;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Motelroom;
 use App\Categories;
 use App\Reports;
+use App\MotelTradeHistory;
+
 class MotelController extends Controller
 {
 	public function SearchMotelAjax(Request $request){
@@ -13,9 +17,9 @@ class MotelController extends Controller
 			['district_id',$request->id_district],
 			['price','>=',$request->min_price],
 			['price','<=',$request->max_price],
-			['category_id',$request->id_category],
+			['category_id','like', "%$request->id_category%"],
 			['approve',1]])->get();
-//		dd($getmotel);
+
 		$arr_result_search = array();
 		foreach ($getmotel as $room) {
 			$arrlatlng = json_decode($room->latlng,true);
@@ -48,6 +52,21 @@ class MotelController extends Controller
 		return view('home.category',['listmotel'=>$getmotel,'categories'=>$Categories]);
 	}
 
+	public function getMotelById(Request $request, Motelroom $modelMotelroom, Term $modelTerm){
+	    if($request->ajax()){
+	        $motelroom = $modelMotelroom->with('term')->where('id', $request->id)->first();
+	        $term = $motelroom->term;
+	        $terms = $modelTerm->where('motelroom_id', $request->id)->get();
+
+	        return response()->json([
+	            'motelroom'=>$motelroom,
+                'term'=>$term,
+                'view'=> view('motelroom.viewData', compact('terms'))->render()
+            ]);
+        }
+    }
+
+
 	public function userReport($id,Request $request){
 		$ipaddress = '';
 	    if (getenv('HTTP_CLIENT_IP'))
@@ -72,4 +91,47 @@ class MotelController extends Controller
 	    $getmotel = Motelroom::find($id);
 		return redirect('phongtro/'.$getmotel->slug)->with('thongbao','Cảm ơn bạn đã báo cáo, đội ngũ chúng tôi sẽ xem xét');
 	}
+
+	public function rentMotel(Request $request){
+
+    }
+
+    public function showMotelInformations(Request $request, Motelroom $modelMotelroom, User $user, MotelTradeHistory $motelTradeHistory){
+	    if ($request->ajax()) {
+	        if ($request->has('type')) {
+	            if ($request->get('type') == 0) {
+//                    $motelroom = $modelMotelroom->where('id', $request->motelroom_id)->first();
+//                    return $motelroom;
+                }
+	            else{
+	                $validate = [
+	                    'user_id'=>'required|numeric',
+                        'motelroom_id'=>'required|numeric',
+                        'type'=>'required|numeric',
+                        'fee'=>'required|numeric',
+                        'owner_id'=>'required|numeric',
+//                        'user_id'=>'required|numeric',
+//                        'user_id'=>'required|numeric',
+                    ];
+
+	                $request->validate($validate);
+
+	                $user->updateWallet($request);
+                    $newMotelTradeHistory = $motelTradeHistory->createMotelTradeHistory($request);
+                    if ($newMotelTradeHistory)
+                    {
+                        return response()->json([
+                            'message'=>'Updated successfully'
+                        ]);
+                    }
+                    else
+                    {
+                        return response()->json([
+                            'error'=>'Something went wrong'
+                        ]);
+                    }
+                }
+            }
+        }
+    }
 }

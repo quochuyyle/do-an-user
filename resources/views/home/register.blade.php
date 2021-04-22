@@ -54,6 +54,15 @@
 								<input type="text" class="form-control" name="txtname" placeholder="Tên hiển thị">
 							</div>
 						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="pwd">Nhóm người dùng:</label>
+							<div class="col-sm-9">
+								<select name="txttype" class="form-control">
+									<option value="2">Người tìm nhà trọ</option>
+									<option value="3">Chủ nhà trọ</option>
+								</select>
+							</div>
+						</div>
 						<div class="form-group"> 
 							<div class="col-sm-offset-6 col-sm-9">
 								<button type="submit" class="btn btn-primary">Đăng kí</button>

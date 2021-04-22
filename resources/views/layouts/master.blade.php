@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="assets/fileinput.css">
     <script src="assets/pgwslider/pgwslider.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="assets/pgwslider/pgwslider.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 
 
     <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview.
@@ -49,26 +51,41 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                @foreach($categories as $category)
-                    <li><a href="category/{{$category->id}}">{{ $category->name }}</a></li>
-                @endforeach
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Loại phòng trọ</a>
+                    <ul class="dropdown-menu">
+                        @foreach($categories as $category)
+                            <li><a href="category/{{$category->id}}">{{ $category->name }}</a></li>
+                        @endforeach
+                    </ul>
+                </li>
             </ul>
+
+
             @if(Auth::user())
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a class="btn-dangtin" href="user/dangtin"><i class="fas fa-edit"></i> Đăng tin ngay</a></li>
+                    @if(Auth::check())
+                        <li><a class="">Tài khoản hiện có: <span
+                                        id="user_wallet">{{ number_format(Auth::user()->wallet,2)  }}</span> VND</a>
+                        </li>
+                    @endif
+                    @if(Auth::user()->user_type != 2)
+                        <li><a class="btn-dangtin" href="user/dangtin"><i class="fas fa-edit"></i> Đăng tin ngay</a>
+                        </li>
+                    @endif
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Xin chào! {{Auth::user()->name}}
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="user/profile">Thông tin chi tiết</a></li>
-                            <li><a href="user/dangtin">Đăng tin</a></li>
+
+                            @if(Auth::user()->user_type != 2)
+                                <li><a href="user/dangtin">Đăng tin</a></li>
+                            @endif
                             <li><a href="user/logout">Thoát</a></li>
                         </ul>
                     </li>
                     <li>
-                        {{--                        <i class="fas fa-bell" id="notification" style="padding-top: 19px;font-size: 30px;">--}}
-                        {{--                            <div class="counter-block"><span class="counter">1</span></div>--}}
-                        {{--                        </i>--}}
                         <div class="dropdown" style="float: right; padding: 13px;position: relative">
                             <a href="#" onclick="return false;" role="button" data-toggle="collapse" id="dropdownMenu1"
                                data-target="#dropDownList" style="float: left" aria-expanded="true">
@@ -79,7 +96,6 @@
                                     </div>
                                 </i>
                             </a>
-{{--                            <span class="badge badge-danger counter"></span>--}}
                             <ul class="dropdown-menu dropdown-menu-left pull-right" id="dropDownList" role="menu"
                                 aria-labelledby="dropdownMenu1">
                                 <li role="presentation">
@@ -105,20 +121,6 @@
                                             </p>
                                         </li>
                                     @endempty
-                                    {{--                                    <li>--}}
-                                    {{--                                        <p>--}}
-                                    {{--                                            Your “Marketplace Report” PDF is ready <a href="">here</a>--}}
-                                    {{--                                            <span class="timeline-icon"><i class="fa fa-file-pdf-o"  style="color:red"></i></span>--}}
-                                    {{--                                            <span class="timeline-date">Dec 6, 10:17</span>--}}
-                                    {{--                                        </p>--}}
-                                    {{--                                    </li>--}}
-                                    {{--                                    <li>--}}
-                                    {{--                                        <p>--}}
-                                    {{--                                            Your “Top Words” spreadsheet is ready <a href="">here</a>--}}
-                                    {{--                                            <span class="timeline-icon"><i class="fa fa-file-excel-o"  style="color:green"></i></span>--}}
-                                    {{--                                            <span class="timeline-date">Dec 5, 04:36</span>--}}
-                                    {{--                                        </p>--}}
-                                    {{--                                    </li>--}}
                                 </ul>
                                 <li role="presentation">
                                     <a href="#" class="dropdown-menu-header"></a>
@@ -147,15 +149,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 item text">
-{{--                    <div class="row">--}}
-{{--                        <div class="col-md-6">--}}
-                            <img style="width: 140px;" src="https://thumbs.dreamstime.com/b/motel-icon-white-background-simple-element-illustration-city-elements-concept-sign-symbol-design-141333219.jpg" />
-{{--                            <span>Sinh viên thực hiện:Lê Quốc Huy-Vũ Thị Hường</span>--}}
-{{--                        </div>--}}
-{{--                        <div class="col-md-6">--}}
-{{--                      --}}
-{{--                        </div>--}}
-{{--                    </div>--}}
+                    {{--                    <div class="row">--}}
+                    {{--                        <div class="col-md-6">--}}
+                    <img style="width: 140px;"
+                         src="https://thumbs.dreamstime.com/b/motel-icon-white-background-simple-element-illustration-city-elements-concept-sign-symbol-design-141333219.jpg"/>
+                    {{--                            <span>Sinh viên thực hiện:Lê Quốc Huy-Vũ Thị Hường</span>--}}
+                    {{--                        </div>--}}
+                    {{--                        <div class="col-md-6">--}}
+                    {{--                      --}}
+                    {{--                        </div>--}}
+                    {{--                    </div>--}}
 
                 </div>
                 <div class="col-sm-6 col-md-3 item">
@@ -187,30 +190,14 @@
         </p>
     </footer>
 </div>
-{{--<footer>--}}
-{{--    <div class="container">--}}
-{{--        <div class="row">--}}
-{{--            <div class="col-md-12">--}}
-{{--                <div class="logo-footer">--}}
-{{--                    <a href="/" title="Cổng thông tin số 1 về Dự án Bất động sản - Homedy.com">--}}
-{{--                        <img src="images/logo.png">--}}
-{{--                    </a>--}}
-{{--                    <div style="padding-top: 10px;">--}}
-{{--                        <p>Sinh viên thực hiện:Lê Quốc Huy - Vũ Thị Hường - Lớp:HTTT15</p>--}}
-{{--                        --}}{{-- <p>Sinh viên thực hiện: Lê Thành Trung - Lớp 15SI-CLC.</p> --}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-
-{{--</footer>--}}
 <script>
-    window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';
+    window.laravel_echo_port = '{{env("LARAVEL_ECHO_PORT")}}';
 </script>
+
 <script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
 <script src="{{ url('/js/laravel-echo-setup.js') }}" type="text/javascript"></script>
 <script type="text/javascript" src="assets/toast/toastr.min.js"></script>
+
 <script>
     $(document).ready(function () {
 
@@ -231,14 +218,14 @@
             .listen('.SendNotification', (data) => {
 
 
-                if(user_id==data.actionData.source_to && user_id!=data.actionData.sender_id){
-                      // console.log('Hello')
+                if (user_id == data.actionData.source_to && user_id != data.actionData.sender_id) {
+                    // console.log('Hello')
 
                     // console.log(data)
-                    let content='\f328';
-                    let html='<li><p class="noti-image">'+data.actionData.content;
-                       html+='<span class="timeline-icon"></span>';
-                    html+='<span class="timeline-date">'+timeDifference(data.actionData.created_at)+'</span></p></li>';
+                    let content = '\f328';
+                    let html = '<li><p class="noti-image">' + data.actionData.content;
+                    html += '<span class="timeline-icon"></span>';
+                    html += '<span class="timeline-date">' + timeDifference(data.actionData.created_at) + '</span></p></li>';
 
 
                     // console.log(html)
@@ -260,11 +247,11 @@
 
             const oneDay = 24 * 60 * 60 * 1000;
             let currentDate = new Date();
-            let created_date=new Date(created_at);
+            let created_date = new Date(created_at);
             // let seconds = (currentDate.getTime()/1000-created_date.getTime()/1000)/(24*3600);
             const diffDays = Math.round(Math.abs((currentDate - created_date) / oneDay));
-            const seconds=diffDays/oneDay;
-          //  console.log(currentDate)
+            const seconds = diffDays / oneDay;
+            //  console.log(currentDate)
             // console.log(diffDays)
             // console.log(currentDate.getTime()/1000)
             // console.log(created_date.getTime()/1000)
@@ -293,5 +280,6 @@
         }
     })
 </script>
+@stack('after-script')
 </body>
 </html>

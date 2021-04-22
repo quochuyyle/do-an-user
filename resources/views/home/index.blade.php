@@ -123,31 +123,31 @@
 
         </div>
         <div class="container">
-            <div class="row" style="margin-top: 10px; margin-bottom: 10px">
-                <div class="col-md-6">
-                    <div class="asks-first">
-                        <div class="asks-first-circle">
-                            <span class="fa fa-search"></span>
-                        </div>
-                        <div class="asks-first-info">
-                            <h2>Giải pháp tìm kiếm mới</h2>
-                            <p>Tiết kiệm nhiều thời gian cho bạn với giải pháp và công nghệ mới</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="asks-first2">
-                        <div class="asks-first-circle">
-                            <span class="fas fa-hourglass-start"></span>
+{{--            <div class="row" style="margin-top: 10px; margin-bottom: 10px">--}}
+{{--                <div class="col-md-6">--}}
+{{--                    <div class="asks-first">--}}
+{{--                        <div class="asks-first-circle">--}}
+{{--                            <span class="fa fa-search"></span>--}}
+{{--                        </div>--}}
+{{--                        <div class="asks-first-info">--}}
+{{--                            <h2>Giải pháp tìm kiếm mới</h2>--}}
+{{--                            <p>Tiết kiệm nhiều thời gian cho bạn với giải pháp và công nghệ mới</p>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div class="col-md-6">--}}
+{{--                    <div class="asks-first2">--}}
+{{--                        <div class="asks-first-circle">--}}
+{{--                            <span class="fas fa-hourglass-start"></span>--}}
 
-                        </div>
-                        <div class="asks-first-info">
-                            <h2>An Toàn - Nhanh chóng</h2>
-                            <p>Với đội ngũ Quản trị viên kiểm duyệt hiệu quả, Chất Lượng đem lại sự tin tưởng.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+{{--                        </div>--}}
+{{--                        <div class="asks-first-info">--}}
+{{--                            <h2>An Toàn - Nhanh chóng</h2>--}}
+{{--                            <p>Với đội ngũ Quản trị viên kiểm duyệt hiệu quả, Chất Lượng đem lại sự tin tưởng.</p>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
             <h3 class="title-comm"><span class="title-holder">PHÒNG TRỌ XEM NHIỀU NHẤT</span></h3>
             <div class="row room-hot">
                 @foreach($hot_motelroom as $room)
