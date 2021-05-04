@@ -15,6 +15,8 @@ use App\District;
 use App\Categories;
 use App\Motelroom;
 use App\Province;
+use Illuminate\Support\Facades\Auth;
+
 Route::get('/', function () {
 
     $provinces=Province::all();

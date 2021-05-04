@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\SendNotification;
+use App\MotelTradeHistory;
 use App\Term;
 use App\PushNotification;
 use App\PushUser;
@@ -109,17 +110,24 @@ class UserController extends Controller
 
         $mypost = Motelroom::where('user_id', Auth::user()->id)->get();
         $categories = Categories::all();
+        if (Auth::check() && Auth::user()->user_type == 3) {
+            $motelTradeHistories = MotelTradeHistory::with(['motelroom', 'user'])->where('owner_id', Auth::user()->id)->get();
+        }
+        if (Auth::check() && Auth::user()->user_type == 2) {
+            $motelTradeHistories = MotelTradeHistory::with(['motelroom', 'user'])->where('user_id', Auth::user()->id)->get();
+        }
 
         return view('home.profile', [
             'categories' => $categories,
-            'mypost' => $mypost
+            'mypost' => $mypost,
+            'motelTradeHistories' => $motelTradeHistories
         ]);
     }
 
     public function dataTable(Request $request, Motelroom $motel)
     {
         if ($request->ajax()) {
-            $data = $motel->where('user_id' ,Auth::user()->id);
+            $data = $motel->where('user_id', Auth::user()->id);
             if (!empty($request->get('min')) && !empty($request->get('max'))) {
                 $min = (int)($request->get('min'));
                 $max = (int)($request->get('max'));
@@ -262,7 +270,7 @@ class UserController extends Controller
             'txtdescription' => 'required',
             'txtaddress' => 'required',
             'term' => 'required',
-            'txtfee'=>'required'
+            'txtfee' => 'required'
         ],
             [
                 'txttitle.required' => 'Nhập tiêu đề bài đăng',
@@ -320,7 +328,7 @@ class UserController extends Controller
         $motel->phone = $request->txtphone;
         $motel->start_date = $request->txtstart_date;
         $motel->end_date = $request->txtend_date;
-        $motel->status = 1;
+        $motel->approve = 1;
         $motel->save();
 
         $user = new User();

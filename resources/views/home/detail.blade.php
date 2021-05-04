@@ -67,14 +67,14 @@
         <div class="row">
             <div class="col-md-8">
                 <h1 class="entry-title entry-prop">{{ $motelroom->title }}</h1>
+                @if(\Illuminate\Support\Facades\Auth::check())
+                    @if($motelroom->user_id == \Illuminate\Support\Facades\Auth::user()->id)
                 <div class="row" style="margin: 15px 0 0 0;">
                     <div class="col-md-6" style="padding-left: 0">
-                        @if(\Illuminate\Support\Facades\Auth::check())
-                            @if($motelroom->user_id == \Illuminate\Support\Facades\Auth::user()->id)
+
                                 <p>Thời hạn bài
                                     đăng: {{ $motelroom->term->start_date .' - '. $motelroom->term->end_date }}</p>
-                            @endif
-                        @endif
+
                     </div>
                     <div style="text-align: right;padding-right: 0px" class="col-md-6">
                         <?php
@@ -92,6 +92,8 @@
                         @endif
                     </div>
                 </div>
+                    @endif
+                @endif
 
 
                 <hr>
@@ -107,8 +109,10 @@
 					</span></span>
                     </div>
                 </div>
+
                 @if(Auth::check())
-                    <div id="map-detail" style="{{ $motelroom->user_id == \Illuminate\Support\Facades\Auth::user()->id ? 'filter: blur(0)' : 'filter: blur(10px)' }} "></div>
+                    <div id="map-detail"
+                         style="{{ $motelroom->user_id == \Illuminate\Support\Facades\Auth::user()->id ? 'filter: blur(0)' :  \Illuminate\Support\Facades\Auth::user()->specificTradeHistory($motelroom->id) ? 'filter: blur(0)' : 'filter: blur(10px)' }} "></div>
                 @else
                     <div id="map-detail" style="filter: blur(10px)"></div>
 
@@ -176,23 +180,16 @@
                         </div>
                     </div>
                 </div>
+
                 @if(\Illuminate\Support\Facades\Auth::check())
-                    @if(\Illuminate\Support\Facades\Auth::user()->user_type == 2)
-                        {{--                        @if($motelroom->price > 4000000)--}}
+                    @if(\Illuminate\Support\Facades\Auth::user()->user_type == 2 && !\Illuminate\Support\Facades\Auth::user()->specificTradeHistory($motelroom->id))
+
                         <div class="phone_btn">
                             <button type="button" id="btn_show_phone" href="#" class="btn btn-primary btn-block"
                                     style="font-weight: bold !important;font-size: 14px;">
                                 Hiển thị thông tin
                             </button>
                         </div>
-                        {{--                        @else--}}
-                        {{--                            <div class="phone_btn">--}}
-                        {{--                                <button  type="button" id="btn_rent_motel" href="#" class="btn btn-primary btn-block"--}}
-                        {{--                                   style="font-weight: bold !important;font-size: 14px;">--}}
-                        {{--                                    Thuê phòng trọ--}}
-                        {{--                                </button>--}}
-                        {{--                            </div>--}}
-                        {{--                        @endif--}}
                     @endif
                 @endif
 
@@ -251,10 +248,14 @@
                     user_id = {{ Auth::check() ? \Illuminate\Support\Facades\Auth::user()->id : 0}},
                     owner_id = $('#owner_id').val(),
                     wallet = {{ Auth::check() ? \Illuminate\Support\Facades\Auth::user()->wallet : 0 }},
+                    commission = (fee * 25) / 100,
+                    receiving = (fee * 75) / 100,
                     updatedWallet = wallet - fee;
-                    console.log(updatedWallet)
-                    {{--$('#user_wallet').text({{ number_format() }})--}}
-                        url = url.replace(':id', id)
+                console.log(updatedWallet)
+                console.log(commission)
+                console.log(receiving)
+                {{--$('#user_wallet').text({{ number_format() }})--}}
+                    url = url.replace(':id', id)
 
                 if (wallet >= fee) {
                     swal.fire({
@@ -267,36 +268,38 @@
                         reverseButtons: true
                     }).then((result) => {
                         if (result.value) {
-                            // $.ajax({
-                            //     type: 'POST',
-                            //     url: url,
-                            //     data: {
-                            //         type: type,
-                            //         fee: fee,
-                            //         motelroom_id: id,
-                            //         user_id: user_id,
-                            //         owner_id: owner_id
-                            //     },
-                            //     success: function (res) {
-                            //         if (res.message) {
-                            //             $('#user_wallet').html()
-                            //             $('#btn_show_phone').text('Số điện thoại liên hệ: ' + res.phone)
-                            //             $('#map-detail').css('filter', 'blur(0)')
-                            //             swalWithBootstrapButtons.fire(
-                            //                 'Thông báo',
-                            //                 res.message,
-                            //                 'success'
-                            //             )
-                            //         } else {
-                            //             swalWithBootstrapButtons.fire(
-                            //                 'Thông báo',
-                            //                 res.error,
-                            //                 'error'
-                            //             )
-                            //         }
-                            //     }
-                            //
-                            // })
+                            $.ajax({
+                                type: 'POST',
+                                url: url,
+                                data: {
+                                    type: type,
+                                    fee: fee,
+                                    motelroom_id: id,
+                                    user_id: user_id,
+                                    owner_id: owner_id,
+                                    commission:commission,
+                                    receiving:receiving
+                                },
+                                success: function (res) {
+                                    if (res.message) {
+                                        $('#user_wallet').html()
+                                        $('#btn_show_phone').attr('style','display:none;')
+                                        $('#map-detail').css('filter', 'blur(0)')
+                                        swalWithBootstrapButtons.fire(
+                                            'Thông báo',
+                                            res.message,
+                                            'success'
+                                        )
+                                    } else {
+                                        swalWithBootstrapButtons.fire(
+                                            'Thông báo',
+                                            res.error,
+                                            'error'
+                                        )
+                                    }
+                                }
+
+                            })
                         }
                     });
                 }

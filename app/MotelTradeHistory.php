@@ -17,6 +17,7 @@ class MotelTradeHistory extends Model
 
     public function createMotelTradeHistory($request){
 
+        $modelUser = new User();
         $data = [
             'user_id' => $request->user_id,
             'motelroom_id' => $request->motelroom_id,
@@ -27,8 +28,21 @@ class MotelTradeHistory extends Model
             'owner_id' => $request->owner_id,
         ];
 
-
+        $owner = $modelUser->findOrFail($data['owner_id']);
+        $user = $modelUser->findOrFail($data['user_id']);
+        $admin =$modelUser->findOrFail(2);
+        $modelUser->updateWalletMotelroomDetail($request, $user->id, $user->user_type);
+        $modelUser->updateWalletMotelroomDetail($request, $owner->id, $owner->user_type);
+        $modelUser->updateWalletMotelroomDetail($request, $admin->id, $admin->user_type);
         $newMotelTradeHistory = $this->store($data);
         return $newMotelTradeHistory;
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function motelroom(){
+        return $this->belongsTo(Motelroom::class, 'motelroom_id', 'id');
     }
 }

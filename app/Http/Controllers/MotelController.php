@@ -10,6 +10,7 @@ use App\Categories;
 use App\Reports;
 use App\MotelTradeHistory;
 
+
 class MotelController extends Controller
 {
 	public function SearchMotelAjax(Request $request){
@@ -26,6 +27,8 @@ class MotelController extends Controller
 			$arrImg = json_decode($room->images,true);
 			$arr_result_search[] = ["id" =>$room->id,"lat"=> $arrlatlng[0],"lng"=> $arrlatlng[1],"title"=>$room->title,"address"=> $room->address,"image"=>$arrImg[0],"phone"=>$room->phone];
 		}
+
+
 		return json_encode($arr_result_search);
 	}
 
@@ -54,6 +57,7 @@ class MotelController extends Controller
 
 	public function getMotelById(Request $request, Motelroom $modelMotelroom, Term $modelTerm){
 	    if($request->ajax()){
+
 	        $motelroom = $modelMotelroom->with('term')->where('id', $request->id)->first();
 	        $term = $motelroom->term;
 	        $terms = $modelTerm->where('motelroom_id', $request->id)->get();
@@ -64,6 +68,8 @@ class MotelController extends Controller
                 'view'=> view('motelroom.viewData', compact('terms'))->render()
             ]);
         }
+
+
     }
 
 
@@ -116,7 +122,7 @@ class MotelController extends Controller
 
 	                $request->validate($validate);
 
-	                $user->updateWallet($request);
+//	                $user->updateWallet($request);
                     $newMotelTradeHistory = $motelTradeHistory->createMotelTradeHistory($request);
                     if ($newMotelTradeHistory)
                     {

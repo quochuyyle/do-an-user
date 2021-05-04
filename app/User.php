@@ -3,9 +3,9 @@
 namespace App;
 
 use App\Models\Category;
+use App\Motelroom;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Motelroom;
 
 
 class User extends Authenticatable
@@ -25,6 +25,18 @@ class User extends Authenticatable
         return $this->hasMany(Motelroom::class,'user_id','id');
     }
 
+    public  function tradeHistory(){
+        return $this->hasMany(MotelTradeHistory::class,'user_id','id');
+    }
+
+    public  function specificTradeHistory($motelroom_id){
+
+        return $this->with('tradeHistory')->whereHas('tradeHistory', function ($q) use ($motelroom_id) {
+            $q->where('motelroom_id', $motelroom_id);
+        })->first();
+    }
+
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -40,9 +52,10 @@ class User extends Authenticatable
         return User::where('id', $data['id'])->update($data);
     }
 
-    public function updateWallet($request)
+    public function updateWallet($request, $user_id = null, $user_type = null)
     {
-        $user = self::where('id', $request->user_id)->first();
+        $user_id = $user_id ? $user_id : $request->user_id;
+        $user = self::where('id', $user_id)->first();
         if ($request->has('money')) {
             $wallet = (int)($user->wallet) + (int)($request->money);
         }
@@ -55,6 +68,33 @@ class User extends Authenticatable
 
         $data = [
             'id' => $request->user_id,
+            'wallet' => $wallet
+        ];
+
+        $this->put($data);
+
+    }
+
+
+    public function updateWalletMotelroomDetail($request, $user_id = null, $user_type = null)
+    {
+        $user_id = $user_id ? $user_id : $request->user_id;
+        $user = self::where('id', $user_id)->first();
+        $wallet = 0;
+        //Người dùng
+        if ($user_type == 2 && $request->has('fee'))  {
+            $wallet = (int)($user->wallet) - (int)($request->fee);
+        }
+        //Chủ nhà trọ
+        if ($user_type == 3 && $request->has('commission'))  {
+            $wallet = (int)($user->wallet) + (int)($request->commission);
+        }
+
+        if ($user_type == 1 && $request->has('receiving'))  {
+            $wallet = (int)($user->wallet) + (int)($request->receiving);
+        }
+        $data = [
+            'id' => $user->id,
             'wallet' => $wallet
         ];
 

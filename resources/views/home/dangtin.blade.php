@@ -205,7 +205,7 @@
 
         $('input[name="term"]').on('cancel.daterangepicker', function(ev, picker) {
             $(this).val('');
-            $('#fee').val('')
+
         });
 
     </script>

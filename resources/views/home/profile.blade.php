@@ -69,7 +69,6 @@
                     </div>
                 </div>
                 <div class="mypage">
-                    <h4>Tin đã đăng gần đây</h4>
                     @if(session('thongbao'))
                         <div class="alert bg-danger">
                             <button type="button" class="close" data-dismiss="alert"><span>×</span><span
@@ -84,6 +83,7 @@
                             </div>
                             <a href="user/dangtin" class="btn-post">ĐĂNG TIN</a>
                         @else
+                            <h4>Tin đã đăng gần đây</h4>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -92,6 +92,7 @@
                                         <th>Danh mục</th>
                                         <th>Gía phòng</th>
                                         <th>Lượt xem</th>
+                                        <th>Thời hạn</th>
                                         <th>Tình trạng</th>
                                         <th></th>
                                     </tr>
@@ -103,6 +104,15 @@
                                             <td>{{ $post->category->name }}</td>
                                             <td>{{ $post->price }}</td>
                                             <td>{{ $post->count_view }}</td>
+                                            @php
+                                                date_default_timezone_set('Asia/Ho_Chi_Minh');
+                                                    $datetime1 = new DateTime();
+                                                    $datetime2 = new DateTime($post->end_date);
+                                                    $interval = $datetime2->diff($datetime1);
+                                                    $elapsed = $interval->format('%a ngày');
+
+                                            @endphp
+                                            <td>{{ $elapsed }}</td>
                                             <td>
                                                 @if($post->approve == 1)
                                                     <span class="label label-success">Đã kiểm duyệt</span>
@@ -111,6 +121,7 @@
                                                 @endif
                                             </td>
                                             <td>
+                                                <input type="hidden" value="{{ $post->end_date }}" class="old_endDate" name="old_endDate"/>
                                                 <a href="#" class="btn-editTerm" data-toggle="modal"
                                                    data-id="{{ $post->id }}" data-target="#editTerm">Gia hạn</a>
                                                 <a href="phongtro/{{ $post->slug }}"><i class="fas fa-eye"></i> Xem</a>
@@ -140,6 +151,35 @@
                             {{--                            </table>--}}
                         @endif
                     </div>
+                    <div style="margin: 30px 0 0 0;" class="mainpage">
+                        <h4>Giao dịch gần nhất</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Tên phòng trọ</th>
+                                    <th>Gía phòng</th>
+                                    <th>Phí nhận được (25% chi phí)</th>
+                                    <th>Loại giao dịch</th>
+                                    <th>Người giao dịch</th>
+                                    <th>Ngày giao dịch</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($motelTradeHistories as $motelTradeHistory)
+                                    <tr>
+                                        <td>{{ $motelTradeHistory->motelroom->title }}</td>
+                                        <td>{{ $motelTradeHistory->motelroom->price }}</td>
+                                        <td>{{ $motelTradeHistory->commission }}</td>
+                                        <td>{{ $motelTradeHistory->type == 1 ? 'Xem thông tin phòng trọ' : 'Thuê phòng trọ' }}</td>
+                                        <td>{{ $motelTradeHistory->user->username }}</td>
+                                        <td>{{ $motelTradeHistory->created_at->format('d M Y') }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <div class="modal fade" id="editTerm" tabindex="-1" role="dialog"
                          aria-labelledby="exampleModalLabel"
                          aria-hidden="true">
@@ -164,7 +204,7 @@
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                        <div class="tab-pane fade  active" id="home" role="tabpanel"
                                              aria-labelledby="home-tab">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -278,38 +318,30 @@
             {{--        },--}}
             {{--    ]--}}
             {{--});--}}
-            <?php
 
-            ?>
+            // let minDate = $('input[name = old_endDate]').val()
+            // $('#extend_term').daterangepicker({
+            //     singleDatePicker: true,
+            //     opens: 'left',
+            //     locale: {
+            //         format: 'DD-MM-YYYY'
+            //     },
+            //     autoUpdateInput: false,
+            //     // minDate: moment(minDate, "DDMMYYYY")
+            // }, function (start, end, label) {
+            //     let oldEnd_date = $('input[name="end_date"]').val(),
+            //         newEnd_date = start.format('DD-MM-YYYY');
+            //     console.log(oldEnd_date)
+            //     let a = moment(oldEnd_date, 'DDMMYYYY'),
+            //         b = moment(newEnd_date, 'DDMMYYYY');
+            //     let diff = b.diff(a, 'days'),
+            //         feePerDay = 50000,
+            //         fee = feePerDay * diff;
+            //     $('#fee').val(fee)
+            // });
 
-            $('#extend_term').daterangepicker({
-                singleDatePicker: true,
-                opens: 'left',
-                locale: {
-                    format: 'DD-MM-YYYY'
-                },
-                autoUpdateInput: false,
-                minDate: ''
-            }, function (start, end, label) {
-                let oldEnd_date = $('input[name="end_date"]').val(),
-                    newEnd_date = start.format('DD-MM-YYYY');
-                console.log(oldEnd_date)
-                let a = moment(oldEnd_date, 'DDMMYYYY'),
-                    b = moment(newEnd_date, 'DDMMYYYY');
-                let diff = b.diff(a, 'days'),
-                    feePerDay = 50000,
-                    fee = feePerDay * diff;
-                $('#fee').val(fee)
-            });
 
-            $('#extend_term').on('apply.daterangepicker', function (ev, picker) {
-                $(this).val(picker.endDate.format('DD-MM-YYYY'));
-            });
 
-            $('#extend_term').on('cancel.daterangepicker', function (ev, picker) {
-                $(this).val('');
-
-            });
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -325,7 +357,38 @@
                 let url = '{{ route('user.motelroom.show',':id') }}',
                     id = $(this).attr('data-id');
                 url = url.replace(':id', id);
-                // 		console.log(url)
+
+                // let minDate = $('input[name = old_endDate]').val()
+                let minDate = $(this).parent().find('input[name = old_endDate]').val()
+                $('#extend_term').daterangepicker({
+                    singleDatePicker: true,
+                    opens: 'left',
+                    locale: {
+                        format: 'DD-MM-YYYY'
+                    },
+                    autoUpdateInput: false,
+                    minDate: moment(minDate, "DDMMYYYY").add(1, 'd')
+                }, function (start, end, label) {
+                    let oldEnd_date = $('input[name="end_date"]').val(),
+                        newEnd_date = start.format('DD-MM-YYYY');
+                    console.log(oldEnd_date)
+                    let a = moment(oldEnd_date, 'DDMMYYYY'),
+                        b = moment(newEnd_date, 'DDMMYYYY');
+                    let diff = b.diff(a, 'days'),
+                        feePerDay = 50000,
+                        fee = feePerDay * diff;
+                    $('#fee').val(fee)
+                });
+
+                $('#extend_term').on('apply.daterangepicker', function (ev, picker) {
+                    $(this).val(picker.endDate.format('DD-MM-YYYY'));
+                });
+
+                $('#extend_term').on('cancel.daterangepicker', function (ev, picker) {
+                    $(this).val('');
+
+                });
+
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -341,7 +404,7 @@
                         $('#profile').html(res.view)
                         setTimeout(function () {
                             $('#editTerm').modal('show')
-                        }, 3000)
+                        }, 5000)
 
                     }
 
