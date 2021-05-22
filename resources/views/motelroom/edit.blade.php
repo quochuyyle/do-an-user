@@ -3,8 +3,22 @@
     <div class="gap"></div>
     <div class="container">
         <div class="row">
+            <?php
+             $latLng = (array)json_decode($motelroom->latlng);
+             $previewImages = [];
+             $images = (array)json_decode($motelroom->images);
+             foreach ($images as $image){
+                $previewImages [] = ("<img src='".asset("/uploads/images/$image")."' class='file-preview-image' alt='Image' title='Image' />");
+             }
+//             $previewImages = json_encode($previewImages);
+
+
+//             dd($previewImages);
+//             dd($images);
+//             dd($latLng[0]);
+            ?>
             <div class="col-md-8">
-                <h1 class="entry-title entry-prop">Đăng tin Phòng trọ</h1>
+                <h1 class="entry-title entry-prop">Chỉnh sửa thông tin Phòng trọ</h1>
                 <hr>
                 <div class="panel panel-default">
                     <div class="panel-heading">Thông tin bắt buộc*</div>
@@ -34,53 +48,35 @@
                             </div>
                         @endif
                         @if(Auth::user()->tinhtrang != 0)
-                            <form action="{{ route ('user.dangtin') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route ('user.dangtin.sua', $motelroom->id) }}" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <input type="hidden" name="user_id"
-                                       value="{{ \Illuminate\Support\Facades\Auth::user()->id }}">
+{{--                                <input type="hidden" name="motelroom_id" value="{{ \Illuminate\Support\Facades\Auth::user()->id }}">--}}
                                 <div class="form-group">
                                     <label for="usr">Tiêu đề bài đăng:</label>
-                                    <input type="text" class="form-control" name="txttitle"
-                                           value="{{ old('txttitle') }}">
+                                    <input type="text" class="form-control" name="txttitle" value="{{ $motelroom->title }}">
                                 </div>
                                 <div class="form-group">
                                     <label>Địa chỉ phòng trọ:</label> Bạn có thể nhập hoặc chọn ví trí trên bản đồ
                                     <input type="text" id="location-text-box" name="txtaddress" class="form-control"
-                                           value="{{ old('txtaddress') }}"/>
+                                           value="{{ $motelroom->address }}"/>
                                     <p><i class="far fa-bell"></i> Nếu địa chỉ hiển thị bên bản đồ không đúng bạn có thể
                                         điều chỉnh bằng cách kéo điểm màu xanh trên bản đồ tới vị trí chính xác.</p>
                                     <input type="hidden" id="txtaddress" name="txtaddress" value=""
                                            class="form-control"/>
-                                    <input type="hidden" id="txtlat" value="" name="txtlat" class="form-control"/>
-                                    <input type="hidden" id="txtlng" value="" name="txtlng" class="form-control"/>
+                                    <input type="hidden" id="txtlat" value="{{ $latLng[0] }}" name="txtlat" class="form-control" />
+                                    <input type="hidden" id="txtlng" value="{{ $latLng[1] }}" name="txtlng" class="form-control"/>
                                 </div>
                                 <div id="map-canvas" style="width: auto; height: 400px;"></div>
                                 <div class="row">
                                     <div class="col-md-9">
-                                        <label for="postCategory">Loại bài đăng:</label>
-                                        <select class="form-control" name="postCategory" id="postCategory">
-                                            @foreach($postCategories as $postCategory)
-                                                <option data-value="{{ $postCategory->price }}" value="{{ $postCategory->id }}">{{ $postCategory->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="pricePerDay">Gía ngày( vnđ )</label>
-                                        <input class="form-control" id="pricePerDay" type="text" name="pricePerDay"
-                                               value="{{ old('txtpricePerDay') }}"/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-9">
                                         <label for="term">Ngày bắt đầu và kết thúc:</label>
-                                        <input class="form-control" id="term" type="text" name="term"/>
-                                        <input type="hidden" name="txtstart_date" id="txtstart_date"/>
-                                        <input type="hidden" name="txtend_date" id="txtend_date"/>
+                                        <input  class="form-control" id="term" type="text" name="term"  value="{{ $motelroom->start_date .' - '.$motelroom->end_date }}"/>
+                                        <input type="hidden" name="txtstart_date" id="txtstart_date"  value="{{ $motelroom->start_date }}"  />
+                                        <input type="hidden" name="txtend_date" id="txtend_date"  value="{{ $motelroom->end_date }}"/>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="fee">Phí đăng tin</label>
-                                        <input class="form-control" id="fee" type="text" name="txtfee"
-                                               value="{{ old('txtfee') }}"/>
+                                        <input  class="form-control" id="fee" type="text" name="txtfee"  value="{{ old('txtfee') }}" />
                                     </div>
                                 </div>
                                 <div class="row">
@@ -88,14 +84,13 @@
                                         <div class="form-group">
                                             <label for="usr">Giá phòng( vnđ ):</label>
                                             <input type="number" name="txtprice" class="form-control"
-                                                   placeholder="750000" value="{{ old('txtprice') }}">
+                                                   placeholder="750000" value="{{ $motelroom->price }}" >
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="usr">Diện tích( m<sup>2</sup> ):</label>
-                                            <input type="number" name="txtarea" class="form-control" placeholder="16"
-                                                   value="{{ old('txtarea') }}">
+                                            <input type="number" name="txtarea" class="form-control" placeholder="16" value="{{ $motelroom->area }}" >
                                         </div>
                                     </div>
                                 </div>
@@ -105,9 +100,9 @@
                                             <label for="usr">Quận/ Huyện:</label>
                                             <select class="selectpicker pull-right" data-live-search="true"
                                                     name="iddistrict" id="selectdistrict">
-                                                @foreach($district as $quan)
-                                                    <option data-tokens="{{$quan->slug}}"
-                                                            value="{{ $quan->id }}">{{ $quan->name }}</option>
+                                                @foreach($districts as $district)
+                                                    <option data-tokens="{{$district->slug}}"
+                                                            value="{{ $district->id }}" {{ $motelroom->district_id == $district->id ? 'selected' : '' }} >{{ $district->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -119,7 +114,7 @@
                                                     class="form-control" name="idcategory">
                                                 @foreach($categories as $category)
                                                     <option data-tokens="{{$category->slug}}"
-                                                            value="{{ $category->id }}">{{ $category->name }}</option>
+                                                            value="{{ $category->id }}" {{ $motelroom->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -128,7 +123,7 @@
                                         <div class="form-group">
                                             <label for="usr">SĐT Liên hệ:</label>
                                             <input type="text" name="txtphone" class="form-control"
-                                                   placeholder="0915111234" value="{{ old('txtphone') }}">
+                                                   placeholder="0915111234" value="{{ $motelroom->phone }}">
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +145,7 @@
                                 <div class="form-group">
                                     <label for="comment">Mô tả ngắn:</label>
                                     <textarea class="form-control" rows="5" name="txtdescription"
-                                              style=" resize: none;" value="{{ old('txtdescription') }}"></textarea>
+                                              style=" resize: none;">{{ $motelroom->description  }}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="comment">Thêm hình ảnh:</label>
@@ -159,8 +154,15 @@
                                                data-preview-file-type="any" data-upload-url="#">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="comment" class="mr-2">Trạng thái phòng trọ:</label>
+                                    <label class="switch">
+                                        <input type="checkbox" name="status" {{ $motelroom->status ? 'checked' : '' }}>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
 
-                                <button class="btn btn-primary">Đăng Tin</button>
+                                <button class="btn btn-primary">Chỉnh sửa thông tin</button>
                             </form>
                         @else
                             <div class="alert bg-danger">
@@ -196,46 +198,43 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript">
+        {{--let previewImages = {{ json_encode($images) }};--}}
+        // console.log(previewImages)
+        {{--console.log({{$previewImages [0]}} );--}}
+        console.log({!! $previewImages [0] !!};
+        let previewImages = [];
+            {{--previewImages.push({{ $previewImages [0] }});--}}
+
         $('#file-5').fileinput({
             theme: 'fa',
             language: 'vi',
             showUpload: false,
-            allowedFileExtensions: ['jpg', 'png', 'gif']
+            allowedFileExtensions: ['jpg', 'png', 'gif'],
+            // uploadUrl: "https://mcdn.wallpapersafari.com/medium/4/26/oNjunF.jpg",
+            initialPreviewAsData: false,
+            initialPreview: [''], //,
+            initialPreviewConfig: [
+                {
+                    caption: 'desert.jpg',
+                    width: '120px',
+                    url: 'http://localhost/avatar/delete', // server delete action
+                    key: 100,
+                    extra: {id: 100}
+                }]
+{{--            {{$images [1]}},{{$images [2]}},{{$images [3]}},]--}}
         });
 
-        $('input[name="term"]').daterangepicker({
-            opens: 'left',
-            locale: {
-                format: 'DD-MM-YYYY'
-            },
-            autoUpdateInput: false,
-            maxDate:'3d',
-            minDate: -3
-        }, function (start, end, label) {
-            let diff = end.diff(start, 'days'),
-                feePerDay = $('#postCategory').find(':selected').data('value');
-            console.log(feePerDay)
-            $('#txtstart_date').val(start.format('DD-MM-YYYY'))
-            $('#txtend_date').val(end.format('DD-MM-YYYY'))
-            let fee = feePerDay * diff;
-            $('#fee').val(fee)
-        });
 
-        $('input[name="term"]').on('apply.daterangepicker', function (ev, picker) {
+
+        $('input[name="term"]').on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
         });
 
-        $('input[name="term"]').on('cancel.daterangepicker', function (ev, picker) {
+        $('input[name="term"]').on('cancel.daterangepicker', function(ev, picker) {
             $(this).val('');
 
         });
 
-        let pricePerDay =  $('#postCategory :selected').data('value')
-        $('#pricePerDay').val(pricePerDay)
-        $('#postCategory').change(function (){
-            let pricePerDay = $(this).find(':selected').data('value')
-            $('#pricePerDay').val(pricePerDay)
-        })
     </script>
 
     <script type="text/javascript"
@@ -245,9 +244,12 @@
         var map;
         var marker;
 
+
         function initialize() {
             let latitude = 0,
                 longitude = 0;
+
+
 
             var mapOptions = {
                 center: {lat: 16.070372, lng: 108.214388},
@@ -259,16 +261,23 @@
             // Get GEOLOCATION
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
-                    var pos = new google.maps.LatLng(position.coords.latitude,
-                        position.coords.longitude);
+                    let lat = {{ $latLng[0] }},
+                        lng = {{ $latLng[1] }}
+
+
+                    var pos = new google.maps.LatLng(lat,
+                        lng);
                     var geocoder = new google.maps.Geocoder();
                     geocoder.geocode({
                         'latLng': pos
                     }, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             if (results[0]) {
+
+                                // console.log(position.coords.latitude)
+                                // console.log(position.coords.longitude)
                                 // console.log(results[0])
-                                console.log(results[0].formatted_address);
+                                // console.log(results[0].formatted_address);
                             } else {
                                 console.log('No results found');
                             }
@@ -361,12 +370,13 @@
                 geocoder.geocode({'latLng': place.geometry.location}, function (results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
                         if (results[0]) {
-                            let count = results[0].address_components.length
-                            let districts = document.getElementById('selectdistrict')
-                            let districtName = results[0].address_components[count - 3].long_name;
-                            for (let i = 0; i < districts.length; i++) {
+                            let count=results[0].address_components.length
+                            let districts=document.getElementById('selectdistrict')
+                            let districtName=results[0].address_components[count-3].long_name;
+                            for (let i=0;i<districts.length;i++){
 
-                                if (districtName.match(districts[i].innerText)) {
+                                if(districtName.match(districts[i].innerText)){
+                                    console.log('Helloe here')
                                     console.log(districts[i].innerText)
                                 }
                             }
@@ -393,7 +403,7 @@
                 }));
                 document.getElementById('txtlat').value = place.geometry.location.lat();
                 document.getElementById('txtlng').value = place.geometry.location.lng();
-                console.log(place.geometry.location.lat());
+                // console.log(place.geometry.location.lat());
                 marker.setPosition(place.geometry.location);
                 marker.setVisible(true);
 
@@ -409,7 +419,7 @@
                     geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             if (results[0]) {
-                                console.log('Here')
+
                                 $('#location-text-box').val(results[0].formatted_address);
                                 $('#txtlat').val(marker.getPosition().lat());
                                 $('#txtlng').val(marker.getPosition().lng());

@@ -85,6 +85,9 @@ Route::group(['prefix'=>'user'], function () {
     Route::get('dangtin','UserController@get_dangtin')->middleware('dangtinmiddleware');
     Route::get('dangtin/datatable','UserController@dataTable')->name('user.dangtin.datatable');
     Route::post('dangtin','UserController@post_dangtin')->name('user.dangtin')->middleware('dangtinmiddleware');
+    Route::get('hienthi/{id}','UserController@hienThongTinNhaTro')->name('user.dangtin.hienthi')->middleware('dangtinmiddleware');
+    Route::post('chinhsua/{id}','UserController@chinhSuaThongTinNhaTro')->name('user.dangtin.sua')->middleware('dangtinmiddleware');
+
 
     Route::get('profile','UserController@getprofile')->middleware('dangtinmiddleware');
     Route::get('profile/edit','UserController@getEditprofile')->middleware('dangtinmiddleware');
@@ -92,6 +95,8 @@ Route::group(['prefix'=>'user'], function () {
 });
 /* ----*/
 
+Route::get('/postcategory','PostCategoryController@index')->name('postcategory.index');
+Route::get('/payment','PageController@paymentMethod')->name('payment.index');
 Route::post('searchmotel','MotelController@SearchMotelAjax');
 Route::get('district/{id}','DistrictController@getList')->name('district.list');
 

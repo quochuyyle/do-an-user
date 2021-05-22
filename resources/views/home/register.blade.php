@@ -58,8 +58,9 @@
 							<label class="control-label col-sm-3" for="pwd">Nhóm người dùng:</label>
 							<div class="col-sm-9">
 								<select name="txttype" class="form-control">
-									<option value="2">Người tìm nhà trọ</option>
-									<option value="3">Chủ nhà trọ</option>
+									@foreach($roles as $role)
+									<option value="{{ $role->id }}">{{ $role->name }}</option>
+									@endforeach
 								</select>
 							</div>
 						</div>

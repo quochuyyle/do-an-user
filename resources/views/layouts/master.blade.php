@@ -52,27 +52,32 @@
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Loại phòng trọ</a>
+                    @if(\Illuminate\Support\Facades\Auth::check())
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Loại phòng trọ</a>
+                    @endif
                     <ul class="dropdown-menu">
                         @foreach($categories as $category)
                             <li><a href="category/{{$category->id}}">{{ $category->name }}</a></li>
                         @endforeach
                     </ul>
                 </li>
+                <li><a href="{{ route('postcategory.index') }}">Bảng giá</a></li>
+                <li><a href="{{ route('payment.index') }}">Phương thức thanh toán</a></li>
             </ul>
 
 
             @if(Auth::user())
                 <ul class="nav navbar-nav navbar-right">
-                    @if(Auth::check())
+
+                    @if(Auth::user()->user_type == !2)
                         <li><a class="">Tài khoản hiện có: <span
                                         id="user_wallet">{{ number_format(Auth::user()->wallet,2)  }}</span> VND</a>
                         </li>
                     @endif
-                    @if(Auth::user()->user_type != 2)
-                        <li><a class="btn-dangtin" href="user/dangtin"><i class="fas fa-edit"></i> Đăng tin ngay</a>
-                        </li>
-                    @endif
+                        @if(Auth::user()->user_type != 2)
+                            <li><a class="btn-dangtin" href="user/dangtin"><i class="fas fa-edit"></i> Đăng tin ngay</a>
+                            </li>
+                        @endif
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Xin chào! {{Auth::user()->name}}
                             <span class="caret"></span></a>
@@ -133,8 +138,11 @@
 
             @else
                 <ul class="nav navbar-nav navbar-right">
+                    @if(\Illuminate\Support\Facades\Auth::check())
                     <li><a class="btn-dangtin" href="user/dangtin"><i class="fas fa-edit"></i> Đăng tin ngay</a></li>
+                    @endif
                     <li><a href="user/login"><i class="fas fa-user-circle"></i> Đăng Nhập</a></li>
+
                     <li><a href="user/register"><i class="fas fa-sign-in-alt"></i> Đăng Kí</a></li>
                 </ul>
             @endif

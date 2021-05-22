@@ -181,17 +181,17 @@
                     </div>
                 </div>
 
-                @if(\Illuminate\Support\Facades\Auth::check())
-                    @if(\Illuminate\Support\Facades\Auth::user()->user_type == 2 && !\Illuminate\Support\Facades\Auth::user()->specificTradeHistory($motelroom->id))
+{{--                @if(\Illuminate\Support\Facades\Auth::check())--}}
+{{--                    @if(\Illuminate\Support\Facades\Auth::user()->user_type == 2 && !\Illuminate\Support\Facades\Auth::user()->specificTradeHistory($motelroom->id))--}}
 
                         <div class="phone_btn">
                             <button type="button" id="btn_show_phone" href="#" class="btn btn-primary btn-block"
                                     style="font-weight: bold !important;font-size: 14px;">
-                                Hiển thị thông tin
+                                <i class="fa fa-mobile-phone"></i> Số điện thoại: {{ $motelroom->phone }}
                             </button>
                         </div>
-                    @endif
-                @endif
+{{--                    @endif--}}
+{{--                @endif--}}
 
                 {{--                <div class="gap"></div>--}}
 
@@ -238,106 +238,106 @@
                 buttonsStyling: false
             })
 
-            $('#btn_show_phone').click(function (e) {
-                e.preventDefault()
-                let url = "{{ route('rent.phone.show',':id') }}",
-                    id = {!! $motelroom->id !!},
-                    price = {!! $motelroom->price !!},
-                    fee = price * 10 / 100,
-                    type = 1,
-                    user_id = {{ Auth::check() ? \Illuminate\Support\Facades\Auth::user()->id : 0}},
-                    owner_id = $('#owner_id').val(),
-                    wallet = {{ Auth::check() ? \Illuminate\Support\Facades\Auth::user()->wallet : 0 }},
-                    commission = (fee * 25) / 100,
-                    receiving = (fee * 75) / 100,
-                    updatedWallet = wallet - fee;
-                console.log(updatedWallet)
-                console.log(commission)
-                console.log(receiving)
-                {{--$('#user_wallet').text({{ number_format() }})--}}
-                    url = url.replace(':id', id)
+            {{--$('#btn_show_phone').click(function (e) {--}}
+            {{--    e.preventDefault()--}}
+            {{--    let url = "{{ route('rent.phone.show',':id') }}",--}}
+            {{--        id = {!! $motelroom->id !!},--}}
+            {{--        price = {!! $motelroom->price !!},--}}
+            {{--        fee = price * 10 / 100,--}}
+            {{--        type = 1,--}}
+            {{--        user_id = {{ Auth::check() ? \Illuminate\Support\Facades\Auth::user()->id : 0}},--}}
+            {{--        owner_id = $('#owner_id').val(),--}}
+            {{--        wallet = {{ Auth::check() ? \Illuminate\Support\Facades\Auth::user()->wallet : 0 }},--}}
+            {{--        commission = (fee * 25) / 100,--}}
+            {{--        receiving = (fee * 75) / 100,--}}
+            {{--        updatedWallet = wallet - fee;--}}
+            {{--    console.log(updatedWallet)--}}
+            {{--    console.log(commission)--}}
+            {{--    console.log(receiving)--}}
+            {{--    --}}{{--$('#user_wallet').text({{ number_format() }})--}}
+            {{--        url = url.replace(':id', id)--}}
 
-                if (wallet >= fee) {
-                    swal.fire({
-                        title: 'Mất ' + fee + ' VND để xem thông tin chi tiết ?',
-                        text: "Bạn không thể hoàn tác !",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Có',
-                        cancelButtonText: 'không',
-                        reverseButtons: true
-                    }).then((result) => {
-                        if (result.value) {
-                            $.ajax({
-                                type: 'POST',
-                                url: url,
-                                data: {
-                                    type: type,
-                                    fee: fee,
-                                    motelroom_id: id,
-                                    user_id: user_id,
-                                    owner_id: owner_id,
-                                    commission:commission,
-                                    receiving:receiving
-                                },
-                                success: function (res) {
-                                    if (res.message) {
-                                        $('#user_wallet').html()
-                                        $('#btn_show_phone').attr('style','display:none;')
-                                        $('#map-detail').css('filter', 'blur(0)')
-                                        swalWithBootstrapButtons.fire(
-                                            'Thông báo',
-                                            res.message,
-                                            'success'
-                                        )
-                                    } else {
-                                        swalWithBootstrapButtons.fire(
-                                            'Thông báo',
-                                            res.error,
-                                            'error'
-                                        )
-                                    }
-                                }
+            {{--    if (wallet >= fee) {--}}
+            {{--        swal.fire({--}}
+            {{--            title: 'Mất ' + fee + ' VND để xem thông tin chi tiết ?',--}}
+            {{--            text: "Bạn không thể hoàn tác !",--}}
+            {{--            icon: 'warning',--}}
+            {{--            showCancelButton: true,--}}
+            {{--            confirmButtonText: 'Có',--}}
+            {{--            cancelButtonText: 'không',--}}
+            {{--            reverseButtons: true--}}
+            {{--        }).then((result) => {--}}
+            {{--            if (result.value) {--}}
+            {{--                $.ajax({--}}
+            {{--                    type: 'POST',--}}
+            {{--                    url: url,--}}
+            {{--                    data: {--}}
+            {{--                        type: type,--}}
+            {{--                        fee: fee,--}}
+            {{--                        motelroom_id: id,--}}
+            {{--                        user_id: user_id,--}}
+            {{--                        owner_id: owner_id,--}}
+            {{--                        commission:commission,--}}
+            {{--                        receiving:receiving--}}
+            {{--                    },--}}
+            {{--                    success: function (res) {--}}
+            {{--                        if (res.message) {--}}
+            {{--                            $('#user_wallet').html()--}}
+            {{--                            $('#btn_show_phone').attr('style','display:none;')--}}
+            {{--                            $('#map-detail').css('filter', 'blur(0)')--}}
+            {{--                            swalWithBootstrapButtons.fire(--}}
+            {{--                                'Thông báo',--}}
+            {{--                                res.message,--}}
+            {{--                                'success'--}}
+            {{--                            )--}}
+            {{--                        } else {--}}
+            {{--                            swalWithBootstrapButtons.fire(--}}
+            {{--                                'Thông báo',--}}
+            {{--                                res.error,--}}
+            {{--                                'error'--}}
+            {{--                            )--}}
+            {{--                        }--}}
+            {{--                    }--}}
 
-                            })
-                        }
-                    });
-                }
-            })
+            {{--                })--}}
+            {{--            }--}}
+            {{--        });--}}
+            {{--    }--}}
+            {{--})--}}
 
-            $('#btn_rent_motel').click(function (e) {
-                e.preventDefault()
-                let url = "{{ route('rent.phone.show',':id') }}",
-                    id = {!! $motelroom->id !!};
-                url = url.replace(':id', id)
-                swal.fire({
-                    title: 'Bạn có chắc muốn thuê phòng trọ này ?',
-                    text: "Bạn không thể hoàn tác !",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Có',
-                    cancelButtonText: 'không',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.value) {
-                        $('#map-detail').css('filter', 'blur(0)')
-                        // $.ajax({
-                        //     type: 'POST',
-                        //     url: url,
-                        //     data:{
-                        //         fee:100000,
-                        //         motelroom_id:id
-                        //     },
-                        //     success:function (res){
-                        //         $('#user_wallet').html()
-                        //         $('#btn_show_phone').text('Số điện thoại liên hệ: ' +res.phone)
-                        //     }
-                        //
-                        // })
-                    }
-                });
+            {{--$('#btn_rent_motel').click(function (e) {--}}
+            {{--    e.preventDefault()--}}
+            {{--    let url = "{{ route('rent.phone.show',':id') }}",--}}
+            {{--        id = {!! $motelroom->id !!};--}}
+            {{--    url = url.replace(':id', id)--}}
+            {{--    swal.fire({--}}
+            {{--        title: 'Bạn có chắc muốn thuê phòng trọ này ?',--}}
+            {{--        text: "Bạn không thể hoàn tác !",--}}
+            {{--        icon: 'warning',--}}
+            {{--        showCancelButton: true,--}}
+            {{--        confirmButtonText: 'Có',--}}
+            {{--        cancelButtonText: 'không',--}}
+            {{--        reverseButtons: true--}}
+            {{--    }).then((result) => {--}}
+            {{--        if (result.value) {--}}
+            {{--            $('#map-detail').css('filter', 'blur(0)')--}}
+            {{--            // $.ajax({--}}
+            {{--            //     type: 'POST',--}}
+            {{--            //     url: url,--}}
+            {{--            //     data:{--}}
+            {{--            //         fee:100000,--}}
+            {{--            //         motelroom_id:id--}}
+            {{--            //     },--}}
+            {{--            //     success:function (res){--}}
+            {{--            //         $('#user_wallet').html()--}}
+            {{--            //         $('#btn_show_phone').text('Số điện thoại liên hệ: ' +res.phone)--}}
+            {{--            //     }--}}
+            {{--            //--}}
+            {{--            // })--}}
+            {{--        }--}}
+            {{--    });--}}
 
-            })
+            {{--})--}}
         });
     </script>
     <script>

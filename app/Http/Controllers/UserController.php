@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Events\SendNotification;
+use App\Models\Category;
+use App\Models\WalletHistory;
 use App\MotelTradeHistory;
+use App\PostCategory;
+use App\Role;
 use App\Term;
 use App\PushNotification;
 use App\PushUser;
@@ -21,26 +25,12 @@ use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
-    /* Register */
-//    public function __construct()
-//    {
-//        if (!Auth::check()) {
-//            return view('auth.login');
-//        }
-//        else if (Auth::check())
-//        {
-//            if(Auth::user()->user_type == 2){
-//                return \redirect()->route('user.index');
-//            }
-//        }
-//
-//    }
 
-
-    public function get_register()
+    public function get_register(Role $role)
     {
         $categories = Categories::all();
-        return view('home.register', ['categories' => $categories]);
+        $roles = $role->where('id', '!=', '1')->get();
+        return view('home.register', compact('categories', 'roles'));
     }
 
     public function post_register(Request $req)
@@ -110,6 +100,7 @@ class UserController extends Controller
 
         $mypost = Motelroom::where('user_id', Auth::user()->id)->get();
         $categories = Categories::all();
+        $walletHistories = \App\WalletHistory::where('user_id', Auth::user()->id)->get();
         if (Auth::check() && Auth::user()->user_type == 3) {
             $motelTradeHistories = MotelTradeHistory::with(['motelroom', 'user'])->where('owner_id', Auth::user()->id)->get();
         }
@@ -117,10 +108,12 @@ class UserController extends Controller
             $motelTradeHistories = MotelTradeHistory::with(['motelroom', 'user'])->where('user_id', Auth::user()->id)->get();
         }
 
+
         return view('home.profile', [
             'categories' => $categories,
             'mypost' => $mypost,
-            'motelTradeHistories' => $motelTradeHistories
+            'motelTradeHistories' => $motelTradeHistories,
+            'walletHistories' => $walletHistories,
         ]);
     }
 
@@ -249,12 +242,13 @@ class UserController extends Controller
 //        $notifications=PushNotification::where('source_to',Auth::id())->limit(5)->get();
 ////        return View::share('notifications',$notifications);
 //   	    dd($notifications);
+        if (Auth::user()->user_type == 2){
+            return redirect()->back();
+        }
         $district = District::all();
         $categories = Categories::all();
-        return view('home.dangtin', [
-            'district' => $district,
-            'categories' => $categories
-        ]);
+        $postCategories = PostCategory::all();
+        return view('home.dangtin', compact('district','categories', 'postCategories'));
     }
 
     public function post_dangtin(Request $request)
@@ -370,5 +364,20 @@ class UserController extends Controller
 //          \event(new SendNotification(1,['sender_id'=>Auth::id(),'source_to'=>2,'name'=>'Hello','content'=>'Test','created_at'=>"2021-02-24 08:33:50"]));
         return redirect('/user/dangtin')->with('success', 'Đăng tin thành công.');
 
+    }
+
+    public function hienThongTinNhaTro(Request  $request, Motelroom $modelMotelroom, District  $district, Categories $category){
+
+        $motelroom = $modelMotelroom->where('id', $request->id)->first();
+        $districts = $district->get();
+        $categories = $category->get();
+       return \view('motelroom.edit', compact('motelroom', 'districts', 'categories'));
+    }
+
+    public function chinhSuaThongTinNhaTro(Request  $request, Motelroom $modelMotelroom){
+        dd($request->all());
+//        $motelroom = $modelMotelroom->where('id', $request->id)->first();
+//        dd($motelroom);
+//        return \view('motelroom.edit', compact('motelroom'));
     }
 }
