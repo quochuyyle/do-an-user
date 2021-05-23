@@ -1,0 +1,275 @@
+@font-face {
+  font-family: inter;
+  src: url("https://fonts.googleapis.com/css2?family=Rubik:wght@500;600;700&display=swap") format("truetype");
+}
+
+.navbar {
+  background: #438BCD;
+}
+
+.navbar .navbar-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+}
+
+.navbar .list-item {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 15px;
+  color: #FFFFFF;
+}
+
+.navbar .list-item:hover {
+  text-decoration: none;
+  background-color: #438BCD;
+  color: #2C2E2F !important;
+}
+
+.container-fluid {
+  background: rgba(229, 229, 229, 0.5);
+}
+
+.box-search {
+  position: absolute;
+  bottom: 58px;
+  right: 50%;
+  background: #438BCD;
+  -webkit-box-shadow: 13px 7px 52px 12px;
+  box-shadow: 13px 7px 52px 12px;
+  width: 1200px;
+  padding: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-transform: translate(50%, 50%);
+  transform: translate(50%, 50%);
+}
+
+.footer {
+  padding: 25px 0;
+}
+
+.footer .content-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+}
+
+.footer .content-wrapper .logo-wrapper img {
+  width: 78px;
+  height: 66px;
+}
+
+.footer .content-wrapper .information-wrapper .name-wrapper .name {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  color: #000000;
+}
+
+.footer .content-wrapper .information-wrapper .phone-wrapper .phone {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  color: #000000;
+}
+
+.footer .content-wrapper .information-wrapper .email-wrapper .email {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  color: #000000;
+}
+
+.footer .copyright {
+  display: none;
+}
+
+.home-wrapper {
+  padding: 30px 0 20px 0;
+}
+
+.home-wrapper .content-wrapper {
+  background: #FFFFFF;
+  border-radius: 8px 8px;
+  padding: 30px 0;
+}
+
+.home-wrapper .content-wrapper .title-wrapper {
+  padding: 0 20px;
+}
+
+.home-wrapper .content-wrapper .title-wrapper .title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 21px;
+  color: #000000;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border-top: 1px solid #438BCD;
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+  background: #FFF9F3;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .image-wrapper {
+  width: 300px;
+  height: 160px;
+  padding: 20px;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .image-wrapper .image {
+  height: 100%;
+  width: 100%;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper {
+  width: 100%;
+  padding: 20px;
+  background: none;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .name-wrapper {
+  width: 100%;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .name-wrapper .name {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  color: #EB1919;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .information-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .information-wrapper .price-wrapper {
+  margin: 0 20px 0 0;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .information-wrapper .price-wrapper .price {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  color: #16C786;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .information-wrapper .area-wrapper .area {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  color: #0b0b0b;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .address-wrapper {
+  width: 100%;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .address-wrapper .address {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  color: #0b0b0b;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .description {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #000000;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .contact-wrapper {
+  float: right;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .contact-wrapper .btn-phone {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  color: #FFFFFF;
+  width: 143px;
+  height: 30px;
+  background: #438BCD;
+  border-radius: 8px;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .contact-wrapper .btn-message {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  color: #438BCD;
+  background: #FFFFFF;
+  border: 1px solid #438BCD;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-radius: 8px;
+}
+
+.home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper:last-child {
+  border-bottom: 1px solid #438BCD;
+}
+
+.home-wrapper .list-filter-wrapper {
+  background: #FFFFFF;
+  border: 1px solid #D1D1D6;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-radius: 8px;
+  padding: 30px 20px;
+  margin: 0 0 30px 0;
+}
+
+.home-wrapper .list-filter-wrapper .title-wrapper {
+  margin: 0 0 15px 0;
+}
+
+.home-wrapper .list-filter-wrapper .title-wrapper .title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 21px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+  color: #000000;
+}
+
+.home-wrapper .list-filter-wrapper .list-options {
+  list-style: none;
+  padding: 0;
+}
+
+.home-wrapper .list-filter-wrapper .list-options li {
+  border-bottom: 1px dashed #D1D1D6;
+  padding: 0 0 10px 0;
+  margin: 0 0 10px 0;
+}
+
+.home-wrapper .list-filter-wrapper .list-options .option {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #000000;
+}
+

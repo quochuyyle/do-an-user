@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\District;
+use App\Province;
 use App\Term;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +15,28 @@ use App\MotelTradeHistory;
 
 class MotelController extends Controller
 {
+    public function index()
+    {
+        $provinces = Province::all();
+        $district = District::all();
+        $categories = Categories::all();
+        $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
+        $map_motelroom = Motelroom::where('approve', 1)->get();
+        $motelrooms = Motelroom::where('approve', 1)->paginate(4);
+
+
+//        return view('home.index', [
+//            'district' => $district,
+//            'provinces' => $provinces,
+//            'categories' => $categories,
+//            'hot_motelroom' => $hot_motelroom,
+//            'map_motelroom' => $map_motelroom,
+//            'listmotelroom' => $listmotelroom
+//        ]);
+        return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms'));
+    }
+
+
 	public function SearchMotelAjax(Request $request){
 		$getmotel = Motelroom::where([
 			['district_id',$request->id_district],

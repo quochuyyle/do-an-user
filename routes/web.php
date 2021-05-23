@@ -17,24 +17,7 @@ use App\Motelroom;
 use App\Province;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-
-    $provinces=Province::all();
-	$district = District::all();
-    $categories = Categories::all();
-    $hot_motelroom = Motelroom::where('approve',1)->limit(6)->orderBy('count_view','desc')->get();
-    $map_motelroom = Motelroom::where('approve',1)->get();
-	$listmotelroom = Motelroom::where('approve',1)->paginate(4);
-
-    return view('home.index',[
-    	'district'=>$district,
-        'provinces'=>$provinces,
-        'categories'=>$categories,
-        'hot_motelroom'=>$hot_motelroom,
-    	'map_motelroom'=>$map_motelroom,
-        'listmotelroom'=>$listmotelroom
-    ]);
-})->name('user.index');
+Route::get('/', 'MotelController@index')->name('user.index');
 Route::get('category/{id}','MotelController@getMotelByCategoryId');
 /* Admin */
 Route::get('admin/login','AdminController@getLogin');

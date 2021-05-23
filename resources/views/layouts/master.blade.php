@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="assets/pgwslider/pgwslider.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview.
         This must be loaded before fileinput.min.js -->
@@ -33,171 +33,16 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="assets/bootstrap/bootstrap-select.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('/css/new.css') }}">
     @stack('before-script')
     @stack('style-css')
 </head>
 <body>
-<nav class="navbar navbar-inverse">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href=""><img
-                        src="https://thumbs.dreamstime.com/b/motel-icon-white-background-simple-element-illustration-city-elements-concept-sign-symbol-design-141333219.jpg"
-                        style="width: 40px;height: auto;"></a>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    @if(\Illuminate\Support\Facades\Auth::check())
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Loại phòng trọ</a>
-                    @endif
-                    <ul class="dropdown-menu">
-                        @foreach($categories as $category)
-                            <li><a href="category/{{$category->id}}">{{ $category->name }}</a></li>
-                        @endforeach
-                    </ul>
-                </li>
-                <li><a href="{{ route('postcategory.index') }}">Bảng giá</a></li>
-                <li><a href="{{ route('payment.index') }}">Phương thức thanh toán</a></li>
-            </ul>
-
-
-            @if(Auth::user())
-                <ul class="nav navbar-nav navbar-right">
-
-                    @if(Auth::user()->user_type == !2)
-                        <li><a class="">Tài khoản hiện có: <span
-                                        id="user_wallet">{{ number_format(Auth::user()->wallet,2)  }}</span> VND</a>
-                        </li>
-                    @endif
-                        @if(Auth::user()->user_type != 2)
-                            <li><a class="btn-dangtin" href="user/dangtin"><i class="fas fa-edit"></i> Đăng tin ngay</a>
-                            </li>
-                        @endif
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Xin chào! {{Auth::user()->name}}
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="user/profile">Thông tin chi tiết</a></li>
-
-                            @if(Auth::user()->user_type != 2)
-                                <li><a href="user/dangtin">Đăng tin</a></li>
-                            @endif
-                            <li><a href="user/logout">Thoát</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="dropdown" style="float: right; padding: 13px;position: relative">
-                            <a href="#" onclick="return false;" role="button" data-toggle="collapse" id="dropdownMenu1"
-                               data-target="#dropDownList" style="float: left" aria-expanded="true">
-                                <i class="fa fa-bell" id="notification"
-                                   style="font-size: 27px !important; float: left; color:#2C2E2F">
-                                    <div class="counter-block">
-                                        <span class="counter">0</span>
-                                    </div>
-                                </i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-left pull-right" id="dropDownList" role="menu"
-                                aria-labelledby="dropdownMenu1">
-                                <li role="presentation">
-                                    <a href="#" class="dropdown-menu-header">Thông báo</a>
-                                </li>
-                                <ul class="timeline timeline-icons timeline-sm" id="list-noti"
-                                    style="margin:10px;width:250px">
-                                    @empty(!$notifications)
-                                        @foreach($notifications as $notification)
-                                            <li>
-                                                <p class="noti-image">
-                                                    {{$notification->content}}
-                                                    <span class="timeline-icon"><i class="fa fa-file-pdf-o"
-                                                                                   style="color:red"></i></span>
-                                                    <span class="timeline-date">{{$notification->created_at->diffForHumans()}}</span>
-                                                </p>
-                                            </li>
-                                        @endforeach
-                                    @else
-                                        <li>
-                                            <p class="noti-image">
-                                                Không có thông báo nào !
-                                            </p>
-                                        </li>
-                                    @endempty
-                                </ul>
-                                <li role="presentation">
-                                    <a href="#" class="dropdown-menu-header"></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                </ul>
-
-            @else
-                <ul class="nav navbar-nav navbar-right">
-                    @if(\Illuminate\Support\Facades\Auth::check())
-                    <li><a class="btn-dangtin" href="user/dangtin"><i class="fas fa-edit"></i> Đăng tin ngay</a></li>
-                    @endif
-                    <li><a href="user/login"><i class="fas fa-user-circle"></i> Đăng Nhập</a></li>
-
-                    <li><a href="user/register"><i class="fas fa-sign-in-alt"></i> Đăng Kí</a></li>
-                </ul>
-            @endif
-        </div>
-    </div>
-</nav>
+@include('common.navbar')
 
 @yield('content')
 <div class="gap"></div>
-<div class="footer-dark">
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 item text">
-                    {{--                    <div class="row">--}}
-                    {{--                        <div class="col-md-6">--}}
-                    <img style="width: 140px;"
-                         src="https://thumbs.dreamstime.com/b/motel-icon-white-background-simple-element-illustration-city-elements-concept-sign-symbol-design-141333219.jpg"/>
-                    {{--                            <span>Sinh viên thực hiện:Lê Quốc Huy-Vũ Thị Hường</span>--}}
-                    {{--                        </div>--}}
-                    {{--                        <div class="col-md-6">--}}
-                    {{--                      --}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
-
-                </div>
-                <div class="col-sm-6 col-md-3 item">
-                    <h3>Services</h3>
-                    <ul>
-                        <li><a href="#">Web design</a></li>
-                        <li><a href="#">Development</a></li>
-                        <li><a href="#">Hosting</a></li>
-                    </ul>
-                </div>
-                <div class="col-sm-6 col-md-3 item">
-                    <h3>About</h3>
-                    <ul>
-                        <li><a href="#">Company</a></li>
-                        <li><a href="#">Team</a></li>
-                        <li><a href="#">Careers</a></li>
-                    </ul>
-                </div>
-
-                <div class="col item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i
-                                class="icon ion-social-twitter"></i></a><a href="#"><i
-                                class="icon ion-social-snapchat"></i></a><a href="#"><i
-                                class="icon ion-social-instagram"></i></a></div>
-            </div>
-
-        </div>
-        <p class="copyright">
-            <span>Sinh viên thực hiện:Lê Quốc Huy-Vũ Thị Hường</span>
-        </p>
-    </footer>
-</div>
+@include('common.footer')
 <script>
     window.laravel_echo_port = '{{env("LARAVEL_ECHO_PORT")}}';
 </script>
