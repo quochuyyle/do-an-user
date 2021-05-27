@@ -1,4 +1,7 @@
 @extends('layouts.master')
+@section('style-css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endsection
 @section('content')
     <div class="gap"></div>
     <div class="container">
@@ -60,7 +63,8 @@
                                         <label for="postCategory">Loại bài đăng:</label>
                                         <select class="form-control" name="postCategory" id="postCategory">
                                             @foreach($postCategories as $postCategory)
-                                                <option data-value="{{ $postCategory->price }}" value="{{ $postCategory->id }}">{{ $postCategory->name }}</option>
+                                                <option data-value="{{ $postCategory->price }}"
+                                                        value="{{ $postCategory->id }}">{{ $postCategory->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -84,18 +88,25 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="usr">Giá phòng( vnđ ):</label>
                                             <input type="number" name="txtprice" class="form-control"
                                                    placeholder="750000" value="{{ old('txtprice') }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="usr">Diện tích( m<sup>2</sup> ):</label>
                                             <input type="number" name="txtarea" class="form-control" placeholder="16"
                                                    value="{{ old('txtarea') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="usr">SĐT Liên hệ:</label>
+                                            <input type="text" name="txtphone" class="form-control"
+                                                   placeholder="0915111234" value="{{ old('txtphone') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -103,7 +114,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="usr">Quận/ Huyện:</label>
-                                            <select class="selectpicker pull-right" data-live-search="true"
+                                            <select class="select-option-custom pull-right" data-live-search="true"
                                                     name="iddistrict" id="selectdistrict">
                                                 @foreach($district as $quan)
                                                     <option data-tokens="{{$quan->slug}}"
@@ -115,7 +126,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="usr">Danh mục:</label>
-                                            <select class="selectpicker pull-right" data-live-search="true"
+                                            <select class="select-option-custom pull-right" data-live-search="true"
                                                     class="form-control" name="idcategory">
                                                 @foreach($categories as $category)
                                                     <option data-tokens="{{$category->slug}}"
@@ -126,9 +137,14 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="usr">SĐT Liên hệ:</label>
-                                            <input type="text" name="txtphone" class="form-control"
-                                                   placeholder="0915111234" value="{{ old('txtphone') }}">
+                                            <label for="usr">Danh mục bài đăng:</label>
+                                            <select class="select-option-custom pull-right" data-live-search="true"
+                                                    class="form-control" name="idcategory">
+                                                @foreach($postMenus as $postMenu)
+                                                    <option data-tokens="{{$postMenu->slug}}"
+                                                            value="{{ $postMenu->id }}">{{ $postMenu->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -195,6 +211,7 @@
     </div>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript">
         $('#file-5').fileinput({
             theme: 'fa',
@@ -203,18 +220,20 @@
             allowedFileExtensions: ['jpg', 'png', 'gif']
         });
 
+        $('.select-option-custom').select2();
+
         $('input[name="term"]').daterangepicker({
             opens: 'left',
             locale: {
                 format: 'DD-MM-YYYY'
             },
             autoUpdateInput: false,
-            maxDate:'3d',
-            minDate: -3
+            // maxDate:'3d',
+            // minDate: -3
         }, function (start, end, label) {
             let diff = end.diff(start, 'days'),
                 feePerDay = $('#postCategory').find(':selected').data('value');
-            console.log(feePerDay)
+            // console.log(feePerDay)
             $('#txtstart_date').val(start.format('DD-MM-YYYY'))
             $('#txtend_date').val(end.format('DD-MM-YYYY'))
             let fee = feePerDay * diff;
@@ -230,9 +249,9 @@
 
         });
 
-        let pricePerDay =  $('#postCategory :selected').data('value')
+        let pricePerDay = $('#postCategory :selected').data('value')
         $('#pricePerDay').val(pricePerDay)
-        $('#postCategory').change(function (){
+        $('#postCategory').change(function () {
             let pricePerDay = $(this).find(':selected').data('value')
             $('#pricePerDay').val(pricePerDay)
         })

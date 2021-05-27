@@ -35,7 +35,7 @@
     <script src="assets/bootstrap/bootstrap-select.min.js"></script>
     <link rel="stylesheet" href="{{ asset('/css/new.css') }}">
     @stack('before-script')
-    @stack('style-css')
+    @yield('style-css')
 </head>
 <body>
 @include('common.navbar')

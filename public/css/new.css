@@ -4,7 +4,7 @@
 }
 
 .navbar {
-  background: #438BCD;
+  background: #438BCD !important;
 }
 
 .navbar .navbar-wrapper {
@@ -15,19 +15,29 @@
       -ms-flex-pack: justify;
           justify-content: space-between;
   width: 100%;
+  padding: 0 35px;
 }
 
 .navbar .list-item {
   font-style: normal;
   font-weight: bold;
   font-size: 15px;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
 }
 
 .navbar .list-item:hover {
   text-decoration: none;
   background-color: #438BCD;
   color: #2C2E2F !important;
+}
+
+.navbar .btn-dangtin {
+  margin: 7px 0 0 0;
+  color: #2C2E2F !important;
+}
+
+.navbar .active {
+  color: #0b0b0b !important;
 }
 
 .container-fluid {
@@ -272,4 +282,3 @@
   font-size: 14px;
   color: #000000;
 }
-

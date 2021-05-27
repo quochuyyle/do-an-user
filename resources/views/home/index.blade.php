@@ -127,45 +127,46 @@
             <div class="home-wrapper">
                 <div class="row">
                     <div class="col-9">
-                        <div class="content-wrapper">
+                        <div class="content-wrapper" id="show_motelroom">
                             <div class="title-wrapper">
                                 <h3 class="title">Danh sách đăng tin</h3>
                             </div>
-                            <div class="list-motelroom">
-                                @foreach($motelrooms as $motelroom)
-                                    @php
-                                    $images = (array)(json_decode($motelroom->images));
-                                    @endphp
-                                <div class="motelroom-wrapper">
-                                    <div class="image-wrapper">
-                                        <img class="image" src="{{ asset('uploads/images/'.$images[0]) }}" alt="">
-                                    </div>
-                                    <div class="content-wrapper">
-                                        <div class="name-wrapper">
-                                            <h4 class="name">{{ $motelroom->title }}</h4>
-                                        </div>
-                                        <div class="information-wrapper">
-                                            <div class="price-wrapper">
-                                                  <span class="price">Gía: {{ number_format($motelroom->price, null, ',', '.') }} VND</span>
-                                            </div>
-                                            <div class="area-wrapper">
-                                                <span class="area">Diện tích: {{ $motelroom->area }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="address-wrapper">
-                                            <span class="address">
-                                            Địa chỉ: {{ $motelroom->address }}
-                                            </span>
-                                        </div>
-                                        <p class="description"> {{ $motelroom->description }}</p>
-                                        <div class="contact-wrapper">
-                                            <a href="tel:{{ $motelroom->phone }}" class="btn btn-phone">{{ $motelroom->phone }}</a>
-                                            <a href="" class="btn btn-message">Nhắn Zalo</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
+                            @include('motelroom.paginationData')
+{{--                            <div class="list-motelroom">--}}
+{{--                                @foreach($motelrooms as $motelroom)--}}
+{{--                                    @php--}}
+{{--                                    $images = (array)(json_decode($motelroom->images));--}}
+{{--                                    @endphp--}}
+{{--                                <div class="motelroom-wrapper">--}}
+{{--                                    <div class="image-wrapper">--}}
+{{--                                        <img class="image" src="{{ asset('uploads/images/'.$images[0]) }}" alt="">--}}
+{{--                                    </div>--}}
+{{--                                    <div class="content-wrapper">--}}
+{{--                                        <div class="name-wrapper">--}}
+{{--                                            <h4 class="name">{{ $motelroom->title }}</h4>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="information-wrapper">--}}
+{{--                                            <div class="price-wrapper">--}}
+{{--                                                  <span class="price">Gía: {{ number_format($motelroom->price, null, ',', '.') }} VND</span>--}}
+{{--                                            </div>--}}
+{{--                                            <div class="area-wrapper">--}}
+{{--                                                <span class="area">Diện tích: {{ $motelroom->area }}m2</span>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="address-wrapper">--}}
+{{--                                            <span class="address">--}}
+{{--                                            Địa chỉ: {{ $motelroom->address }}--}}
+{{--                                            </span>--}}
+{{--                                        </div>--}}
+{{--                                        <p class="description"> {{ $motelroom->description }}</p>--}}
+{{--                                        <div class="contact-wrapper">--}}
+{{--                                            <a href="tel:{{ $motelroom->phone }}" class="btn btn-phone">{{ $motelroom->phone }}</a>--}}
+{{--                                            <a href="" class="btn btn-message">Nhắn Zalo</a>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                @endforeach--}}
+{{--                            </div>--}}
                         </div>
                     </div>
                     <div class="col-3">
@@ -174,10 +175,9 @@
                                 <h4 class="title">Danh mục cho thuê</h4>
                             </div>
                             <ul class="list-options">
-                                <li><a href="" class="option">Chọn thuê phòng trọ </a></li>
-                                <li><a href="" class="option">Chọn thuê nguyên căn </a></li>
-                                <li><a href="" class="option">Chọn thuê căn hộ </a></li>
-                                <li><a href="" class="option">Tìm người ở ghép </a></li>
+                                @foreach($postmenus as $postmenu)
+                                <li><a href="{{ route('postmenu.motelroom', $postmenu->slug) }}" class="option">{{ $postmenu->name }} </a></li>
+                                @endforeach
                             </ul>
                         </div>
 
@@ -307,6 +307,29 @@
                         }
                     });
                 })
+
+                {{--$(document).on('click', '.pagination a', function(event){--}}
+                {{--    event.preventDefault();--}}
+                {{--    let page = $(this).attr('href').split('page=')[1];--}}
+                {{--    // console.log(page)--}}
+                {{--    fetch_data(page);--}}
+                {{--});--}}
+
+                {{--function fetch_data(page)--}}
+                {{--{--}}
+                {{--    --}}{{--let url = "{{ route('user.motelroom.fetch_data',':page') }}";--}}
+                {{--    --}}{{--url = url.replace(':page', page);--}}
+
+                {{--    $.ajax({--}}
+                {{--        tpye:'GET',--}}
+                {{--        // url:url,--}}
+                {{--        url:"/pagination/fetch_data?page="+page,--}}
+                {{--        success:function(data)--}}
+                {{--        {--}}
+                {{--            $('#show_motelroom').find('.title-wrapper').insertAfter(data);--}}
+                {{--        }--}}
+                {{--    });--}}
+                {{--}--}}
             })
         </script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSgjO2ZLs29Zmv-GPwKucq0hkrIlrrF-U&callback=initMap"

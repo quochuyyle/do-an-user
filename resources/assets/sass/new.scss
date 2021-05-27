@@ -19,19 +19,20 @@ $color-title: #4a4a4a;
 
 
 .navbar {
-  background: #438BCD;
+  background: #438BCD !important;
 
   .navbar-wrapper {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    padding: 0 35px;
   }
 
   .list-item {
     font-style: normal;
     font-weight: bold;
     font-size: 15px;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
   }
 
   .list-item:hover {
@@ -39,9 +40,19 @@ $color-title: #4a4a4a;
     background-color: #438BCD;
     color: #2C2E2F !important;
   }
+
+   .btn-dangtin {
+    //background: #438BCD !important;
+     margin: 7px 0 0 0;
+     color: #2C2E2F !important;
+  }
+
+  .active{
+    color: #0b0b0b !important;
+  }
 }
 
-.container-fluid{
+.container-fluid {
   background: rgba(229, 229, 229, 0.5);
 }
 
@@ -115,6 +126,7 @@ $color-title: #4a4a4a;
 
 .home-wrapper {
   padding: 30px 0 20px 0;
+
   .content-wrapper {
     background: #FFFFFF;
     border-radius: 8px 8px;
@@ -122,6 +134,7 @@ $color-title: #4a4a4a;
 
     .title-wrapper {
       padding: 0 20px;
+
       .title {
         font-style: normal;
         font-weight: 600;
@@ -235,22 +248,24 @@ $color-title: #4a4a4a;
         }
       }
 
-      .motelroom-wrapper:last-child{
+      .motelroom-wrapper:last-child {
         border-bottom: 1px solid #438BCD;
       }
     }
   }
 
-  .list-filter-wrapper{
+  .list-filter-wrapper {
     background: #FFFFFF;
     border: 1px solid #D1D1D6;
     box-sizing: border-box;
     border-radius: 8px;
     padding: 30px 20px;
     margin: 0 0 30px 0;
-    .title-wrapper{
+
+    .title-wrapper {
       margin: 0 0 15px 0;
-      .title{
+
+      .title {
         font-style: normal;
         font-weight: 600;
         font-size: 18px;
@@ -262,17 +277,18 @@ $color-title: #4a4a4a;
 
       }
     }
-    .list-options{
+
+    .list-options {
       list-style: none;
       padding: 0;
 
-      li{
+      li {
         border-bottom: 1px dashed #D1D1D6;
         padding: 0 0 10px 0;
         margin: 0 0 10px 0;
       }
 
-      .option{
+      .option {
         font-style: normal;
         font-weight: normal;
         font-size: 14px;
@@ -280,4 +296,5 @@ $color-title: #4a4a4a;
       }
     }
   }
+
 }

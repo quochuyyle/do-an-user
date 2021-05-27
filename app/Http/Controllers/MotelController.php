@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 use App\District;
+use App\Events\SendNotification;
+use App\PostCategory;
+use App\PostMenu;
 use App\Province;
+use App\PushNotification;
+use App\PushUser;
 use App\Term;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -11,31 +16,42 @@ use App\Motelroom;
 use App\Categories;
 use App\Reports;
 use App\MotelTradeHistory;
+use Illuminate\Support\Str;
 
 
 class MotelController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $provinces = Province::all();
         $district = District::all();
         $categories = Categories::all();
         $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
         $map_motelroom = Motelroom::where('approve', 1)->get();
-        $motelrooms = Motelroom::where('approve', 1)->paginate(4);
-
-
-//        return view('home.index', [
-//            'district' => $district,
-//            'provinces' => $provinces,
-//            'categories' => $categories,
-//            'hot_motelroom' => $hot_motelroom,
-//            'map_motelroom' => $map_motelroom,
-//            'listmotelroom' => $listmotelroom
-//        ]);
-        return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms'));
+        $motelrooms = Motelroom::where('approve', 1)->orderBy('post_type', 'ASC')->paginate(4);
+        $postmenus = PostMenu::all();
+        return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms','postmenus'));
     }
 
+    public  function fetch_data(Request $request){
+        if($request->ajax()){
+           $motelrooms = Motelroom::where('approve', 1)->orderBy('post_type', 'ASC')->paginate(4);
+           return view('motelroom.paginationData', compact('motelrooms'))->render();
+        }
+    }
+
+    public  function motelroomByPostMenu(Request $request){
+
+        $postMenu = PostMenu::where('slug', $request->slug)->first();
+        $provinces = Province::all();
+        $district = District::all();
+        $categories = Categories::all();
+        $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
+        $map_motelroom = Motelroom::where([['approve', '=', 1],['post_menu', '=', $postMenu->id]])->get();
+        $motelrooms = Motelroom::where([['approve', '=', 1],['post_menu', '=', $postMenu->id]])->orderBy('post_type', 'ASC')->paginate(4);
+        $postmenus = PostMenu::all();
+        return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms','postmenus'));
+    }
 
 	public function SearchMotelAjax(Request $request){
 		$getmotel = Motelroom::where([
@@ -55,6 +71,139 @@ class MotelController extends Controller
 
 		return json_encode($arr_result_search);
 	}
+
+    public function get_dangtin()
+    {
+//        $notifications=PushNotification::where('source_to',Auth::id())->limit(5)->get();
+////        return View::share('notifications',$notifications);
+//   	    dd($notifications);
+        if (Auth::user()->user_type == 2){
+            return redirect()->back();
+        }
+        $district = District::all();
+        $categories = Categories::all();
+        $postCategories = PostCategory::all();
+        $postMenus = PostMenu::all();
+        return view('home.dangtin', compact('district','categories', 'postCategories', 'postMenus'));
+    }
+
+    public function post_dangtin(Request $request)
+    {
+        $request->validate([
+            'txttitle' => 'required',
+            'txtaddress' => 'required',
+            'txtprice' => 'required',
+            'txtarea' => 'required',
+            'txtphone' => 'required',
+            'txtdescription' => 'required',
+            'txtaddress' => 'required',
+            'term' => 'required',
+            'txtfee' => 'required'
+        ],
+            [
+                'txttitle.required' => 'Nhập tiêu đề bài đăng',
+                'txtaddress.required' => 'Nhập địa chỉ phòng trọ',
+                'txtprice.required' => 'Nhập giá thuê phòng trọ',
+                'txtarea.required' => 'Nhập diện tích phòng trọ',
+                'txtphone.required' => 'Nhập SĐT chủ phòng trọ (cần liên hệ)',
+                'txtdescription.required' => 'Nhập mô tả ngắn cho phòng trọ',
+                'txtaddress.required' => 'Nhập hoặc chọn địa chỉ phòng trọ trên bản đồ',
+                'term.required' => 'Nhập thời gian đăng tin',
+            ]);
+
+
+
+        /* Check file */
+        $json_img = "";
+        if ($request->hasFile('hinhanh')) {
+            $arr_images = array();
+            $inputfile = $request->file('hinhanh');
+            foreach ($inputfile as $filehinh) {
+                $namefile = "phongtro-" . str_random(5) . "-" . $filehinh->getClientOriginalName();
+                while (file_exists('uploads/images' . $namefile)) {
+                    $namefile = "phongtro-" . str_random(5) . "-" . $filehinh->getClientOriginalName();
+                }
+                $arr_images[] = $namefile;
+                $filehinh->move('uploads/images', $namefile);
+            }
+            $json_img = json_encode($arr_images, JSON_FORCE_OBJECT);
+        } else {
+            $arr_images[] = "no_img_room.png";
+            $json_img = json_encode($arr_images, JSON_FORCE_OBJECT);
+        }
+        /* tiện ích*/
+        $json_tienich = json_encode($request->tienich, JSON_FORCE_OBJECT);
+        /* ----*/
+        /* get LatLng google map */
+        $arrlatlng = array();
+        $arrlatlng[] = $request->txtlat;
+        $arrlatlng[] = $request->txtlng;
+        $json_latlng = json_encode($arrlatlng, JSON_FORCE_OBJECT);
+
+        /* --- */
+        /* New Phòng trọ */
+        $motel = new Motelroom;
+        $motel->title = $request->txttitle;
+        $motel->description = $request->txtdescription;
+        $motel->price = $request->txtprice;
+        $motel->area = $request->txtarea;
+        $motel->count_view = 0;
+        $motel->address = $request->txtaddress;
+        $motel->latlng = $json_latlng;
+        $motel->utilities = $json_tienich;
+        $motel->images = $json_img;
+        $motel->user_id = Auth::user()->id;
+        $motel->category_id = $request->idcategory;
+        $motel->district_id = $request->iddistrict;
+        $motel->phone = $request->txtphone;
+        $motel->start_date = $request->txtstart_date;
+        $motel->end_date = $request->txtend_date;
+        $motel->approve = 1;
+        $motel->slug = Str::slug($request->txttitle.'-'.uniqid(),'-');
+        $motel->post_type = $request->postCategory;
+//        dd($motel);
+        $motel->save();
+
+        $user = new User();
+        $user->updateWallet($request);
+
+        $term = new Term();
+        $term->user_id = Auth::user()->id;
+        $term->price = $request->txtfee;
+        $term->start_date = $request->txtstart_date;
+        $term->end_date = $request->txtend_date;
+        $term->motelroom_id = $motel->id;
+        $term->save();
+
+
+        $name = "Có thông báo mới từ người dùng " . Auth::user()->name;
+        $content = "1 bài đăng mới bởi người dùng " . Auth::user()->name;
+        $data_notification = [
+            'sender_id' => Auth::id(),
+            'source' => Auth::id(),
+            'source_to' => 2,
+            'name' => $name,
+            'content' => $content,
+            'type_id' => $motel->id,
+            'type' => 1
+
+        ];
+        $push_notification = PushNotification::store($data_notification);
+        $data_user = [
+            'push_id' => $push_notification->id,
+            'user_id' => Auth::id(),
+            'read' => 0,
+            'user_type' => Auth::user()->user_type
+        ];
+//         $motel=['motel_id'=>$motel->id];
+//         $push_notification=array_merge($push_notification,$motel);
+        $push_user = PushUser::store($data_user);
+        \event(new SendNotification($push_user->push_id, $push_notification));
+
+//          \event(new SendNotification(1,['sender_id'=>Auth::id(),'source_to'=>2,'name'=>'Hello','content'=>'Test','created_at'=>"2021-02-24 08:33:50"]));
+        return redirect('/user/dangtin')->with('success', 'Đăng tin thành công.');
+
+    }
 
 	public function user_del_motel($id){
 		if (!Auth::check()) {

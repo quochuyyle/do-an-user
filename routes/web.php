@@ -18,6 +18,7 @@ use App\Province;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', 'MotelController@index')->name('user.index');
+Route::get('/pagination/fetch_data', 'MotelController@fetch_data')->name('user.motelroom.fetch_data');
 Route::get('category/{id}','MotelController@getMotelByCategoryId');
 /* Admin */
 Route::get('admin/login','AdminController@getLogin');
@@ -65,9 +66,9 @@ Route::group(['prefix'=>'user'], function () {
     Route::post('login','UserController@post_login')->name('user.login');
     Route::get('logout','UserController@logout');
 
-    Route::get('dangtin','UserController@get_dangtin')->middleware('dangtinmiddleware');
+    Route::get('dangtin','MotelController@get_dangtin')->middleware('dangtinmiddleware');
     Route::get('dangtin/datatable','UserController@dataTable')->name('user.dangtin.datatable');
-    Route::post('dangtin','UserController@post_dangtin')->name('user.dangtin')->middleware('dangtinmiddleware');
+    Route::post('dangtin','MotelController@post_dangtin')->name('user.dangtin')->middleware('dangtinmiddleware');
     Route::get('hienthi/{id}','UserController@hienThongTinNhaTro')->name('user.dangtin.hienthi')->middleware('dangtinmiddleware');
     Route::post('chinhsua/{id}','UserController@chinhSuaThongTinNhaTro')->name('user.dangtin.sua')->middleware('dangtinmiddleware');
 
@@ -79,6 +80,7 @@ Route::group(['prefix'=>'user'], function () {
 /* ----*/
 
 Route::get('/postcategory','PostCategoryController@index')->name('postcategory.index');
+Route::get('/postmenu/{slug}','MotelController@motelroomByPostMenu')->name('postmenu.motelroom');
 Route::get('/payment','PageController@paymentMethod')->name('payment.index');
 Route::post('searchmotel','MotelController@SearchMotelAjax');
 Route::get('district/{id}','DistrictController@getList')->name('district.list');
