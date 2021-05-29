@@ -58,7 +58,7 @@
 
 
         let i = 0;
-        let user_id ={{\Illuminate\Support\Facades\Auth::id()}};
+        let user_id ={{\Illuminate\Support\Facades\Auth::id() ? \Illuminate\Support\Facades\Auth::id() : 0}} ;
         $('#notification').click(function () {
             // console.log('Hello')
             i = 0

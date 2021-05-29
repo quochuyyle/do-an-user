@@ -186,10 +186,10 @@
                                 <h4 class="title">Xem theo giá</h4>
                             </div>
                             <ul class="list-options">
-                                <li><a href="" class="option">Dưới 1 triệu</a></li>
-                                <li><a href="" class="option">Từ 2 - 3 triệu</a></li>
-                                <li><a href="" class="option">Từ 4 - 5 triệu</a></li>
-                                <li><a href="" class="option">Từ 5 triệu trở lên</a></li>
+                                <li><a href="{{ route('price.motelroom',['min'=>'0','max'=>'1000000']) }}" class="option">Dưới 1 triệu</a></li>
+                                <li><a href="{{ route('price.motelroom',['min'=>'2000000','max'=>'3000000']) }}" class="option">Từ 2 - 3 triệu</a></li>
+                                <li><a href="{{ route('price.motelroom',['min'=>'4000000','max'=>'5000000']) }}" class="option">Từ 4 - 5 triệu</a></li>
+                                <li><a href="{{ route('price.motelroom',['min'=>'5000000','max'=>'']) }}" class="option">Từ 5 triệu trở lên</a></li>
                             </ul>
                         </div>
                     </div>

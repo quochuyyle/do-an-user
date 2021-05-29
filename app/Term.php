@@ -22,7 +22,7 @@ class Term extends Model
            'user_id'=>$request->user_id,
            'price'=>$request->fee,
            'start_date'=>$request->start_date,
-           'end_date'=>$request->end_date,
+           'end_date'=>$request->term,
        ];
 
        $newTerm = $this->store($data);

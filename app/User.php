@@ -66,12 +66,19 @@ class User extends Authenticatable
             $wallet = (int)($user->wallet) - (int)($request->txtfee);
         }
 
-        $data = [
-            'id' => $request->user_id,
-            'wallet' => $wallet
-        ];
+        if($wallet > 0) {
+            $data = [
+                'id' => $request->user_id,
+                'wallet' => $wallet
+            ];
+            return $this->put($data);
+        }
+        else
+        {
+            return redirect()->back()->with(['message'=>'Tài khoản của bạn không đủ tiền để thực hiện']);
+        }
 
-        $this->put($data);
+
 
     }
 
@@ -100,5 +107,9 @@ class User extends Authenticatable
 
         $this->put($data);
 
+    }
+
+    public function favourite(){
+        return $this->hasMany(Favourite::class, 'user_id', 'id');
     }
 }

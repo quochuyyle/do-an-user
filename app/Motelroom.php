@@ -40,6 +40,10 @@ class Motelroom extends Model
         return $this->hasOne(Term::class, 'motelroom_id', 'id')->orderBy('id', 'DESC');
     }
 
+    public function favourtie(){
+        return $this->belongsToMany(User::class, 'favourites', 'motelroom_id','id');
+    }
+
     public function sluggable()
     {
         return [
@@ -56,10 +60,10 @@ class Motelroom extends Model
 
     public function updateMotel($request)
     {
-
         $data = [
             'id'=> $request->motelroom_id,
-            'end_date'=>$request->end_date,
+            'end_date'=>$request->term,
+            'post_type' => $request->post_type
         ];
         $this->put($data);
     }

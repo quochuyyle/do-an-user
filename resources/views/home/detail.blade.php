@@ -180,45 +180,12 @@
                         </div>
                     </div>
                 </div>
-
-{{--                @if(\Illuminate\Support\Facades\Auth::check())--}}
-{{--                    @if(\Illuminate\Support\Facades\Auth::user()->user_type == 2 && !\Illuminate\Support\Facades\Auth::user()->specificTradeHistory($motelroom->id))--}}
-
                         <div class="phone_btn">
-                            <button type="button" id="btn_show_phone" href="#" class="btn btn-primary btn-block"
+                            <a type="button" id="btn_show_phone" href="tel:{{ $motelroom->phone }}" class="btn btn-primary btn-block"
                                     style="font-weight: bold !important;font-size: 14px;">
                                 <i class="fa fa-mobile-phone"></i> Số điện thoại: {{ $motelroom->phone }}
-                            </button>
+                            </a>
                         </div>
-{{--                    @endif--}}
-{{--                @endif--}}
-
-                {{--                <div class="gap"></div>--}}
-
-
-                {{--                @if(session('thongbao'))--}}
-                {{--                    <div class="alert bg-success">--}}
-                {{--                        <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span>--}}
-                {{--                        </button>--}}
-                {{--                        <span class="text-semibold">Well done!</span> {{session('thongbao')}}--}}
-                {{--                    </div>--}}
-                {{--                @else--}}
-                {{--                    <div class="report">--}}
-                {{--                        <h4>BÁO CÁO</h4>--}}
-                {{--                        <form action="{{ route('user.report',['id'=> $motelroom->id]) }}">--}}
-                {{--                            <label class="radio" style="margin-right:15px"> Đã cho thuê--}}
-                {{--                                <input type="radio" checked="checked" name="baocao" value="1">--}}
-                {{--                                <span class="checkround"></span>--}}
-                {{--                            </label>--}}
-                {{--                            <label class="radio"> Sai thông tin--}}
-                {{--                                <input type="radio" name="baocao" value="2">--}}
-                {{--                                <span class="checkround"></span>--}}
-                {{--                            </label>--}}
-                {{--                            <button class="btn btn-danger">Gửi báo cáo</button>--}}
-                {{--                        </form>--}}
-                {{--                    </div>--}}
-                {{--                @endif--}}
-                {{--                <img src="images/banner-1.png" width="100%" style="margin-top: 20px">--}}
             </div>
         </div>
     </div>

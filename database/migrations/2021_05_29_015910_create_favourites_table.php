@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnsToMotelroomsTable extends Migration
+class CreateFavouritesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class AddColumnsToMotelroomsTable extends Migration
      */
     public function up()
     {
-        Schema::table('motelrooms', function (Blueprint $table) {
-            $table->string('start_date');
-            $table->string('end_date');
+        Schema::create('favourites', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('user_id');
+            $table->bigInteger('motelroom_id');
+            $table->timestamps();
         });
     }
 
@@ -26,8 +28,6 @@ class AddColumnsToMotelroomsTable extends Migration
      */
     public function down()
     {
-        Schema::table('motelrooms', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('favourites');
     }
 }

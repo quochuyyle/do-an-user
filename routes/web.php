@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', 'MotelController@index')->name('user.index');
 Route::get('/pagination/fetch_data', 'MotelController@fetch_data')->name('user.motelroom.fetch_data');
+Route::post('/favourite-motel', 'MotelController@favouriteMotel')->name('user.motel.favourite');
+Route::get('/{id}/favourite-motel', 'MotelController@yourFavourtieMotels')->name('user.index.favourite');
 Route::get('category/{id}','MotelController@getMotelByCategoryId');
 /* Admin */
 Route::get('admin/login','AdminController@getLogin');
@@ -52,11 +54,12 @@ Route::get('/phongtro/{slug}',function($slug){
     $room->save();
     $categories = Categories::all();
     return view('home.detail',['motelroom'=>$room, 'categories'=>$categories]);
-});
+})->name('user.motelroom.detail');
 Route::get('/report/{id}','MotelController@userReport')->name('user.report');
 Route::get('/motelroom/show/{id}','MotelController@getMotelById')->name('user.motelroom.show');
 Route::get('/motelroom/del/{id}','MotelController@user_del_motel');
-Route::post('/term/store','TermController@extendTerm')->name('user.term.store');
+Route::get('/term/{id}','MotelController@getExtendTerm')->name('user.motelroom.term');
+Route::post('/term/{motelroom_id}/store','MotelController@extendTerm')->name('user.term.store');
 /* User */
 Route::group(['prefix'=>'user'], function () {
     Route::get('register','UserController@get_register');
@@ -73,7 +76,7 @@ Route::group(['prefix'=>'user'], function () {
     Route::post('chinhsua/{id}','UserController@chinhSuaThongTinNhaTro')->name('user.dangtin.sua')->middleware('dangtinmiddleware');
 
 
-    Route::get('profile','UserController@getprofile')->middleware('dangtinmiddleware');
+    Route::get('profile','UserController@getprofile')->middleware('dangtinmiddleware')->name('user.profile');
     Route::get('profile/edit','UserController@getEditprofile')->middleware('dangtinmiddleware');
     Route::post('profile/edit','UserController@postEditprofile')->name('user.edit')->middleware('dangtinmiddleware');
 });
@@ -81,6 +84,7 @@ Route::group(['prefix'=>'user'], function () {
 
 Route::get('/postcategory','PostCategoryController@index')->name('postcategory.index');
 Route::get('/postmenu/{slug}','MotelController@motelroomByPostMenu')->name('postmenu.motelroom');
+Route::get('/price','MotelController@motelroomByPrice')->name('price.motelroom');
 Route::get('/payment','PageController@paymentMethod')->name('payment.index');
 Route::post('searchmotel','MotelController@SearchMotelAjax');
 Route::get('district/{id}','DistrictController@getList')->name('district.list');

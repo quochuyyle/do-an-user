@@ -134,47 +134,60 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item {{ url()->current() == route('user.index') ? 'active' : '' }}">
-                    <a class="nav-link list-item" href="{{ route('user.index') }}">Trang chủ <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link list-item {{ url()->current() == route('user.index') ? 'active' : '' }}"
+                       href="{{ route('user.index') }}">Trang chủ <span class="sr-only">(current)</span></a>
                 </li>
                 @foreach($postmenus as $postMenu)
-                    <li class="nav-item {{ url()->current() == route('postmenu.motelroom', $postMenu->slug) ? 'active' : '' }}">
-                        <a class="nav-link list-item " href="{{ route('postmenu.motelroom', $postMenu->slug) }}">{{ $postMenu->name }}</a>
+                    <li class="nav-item">
+                        <a class="nav-link list-item {{ url()->current() == route('postmenu.motelroom', $postMenu->slug) ? 'active' : '' }}"
+                           href="{{ route('postmenu.motelroom', $postMenu->slug) }}">{{ $postMenu->name }}</a>
                     </li>
                 @endforeach
-                <li class="nav-item {{ url()->current() == route('postcategory.index') ? 'active' : '' }}">
-                    <a class="nav-link list-item " href="{{ route('postcategory.index') }}">Bảng giá</a>
+                <li class="nav-item">
+                    <a class="nav-link list-item {{ url()->current() == route('postcategory.index') ? 'active' : '' }}"
+                       href="{{ route('postcategory.index') }}">Bảng giá</a>
                 </li>
-                <li class="nav-item {{ url()->current() == route('payment.index') ? 'active' : '' }}">
-                    <a class="nav-link list-item " href="{{ route('payment.index') }}">Phương thức thanh toán</a>
+                <li class="nav-item ">
+                    <a class="nav-link list-item {{ url()->current() == route('payment.index') ? 'active' : '' }}"
+                       href="{{ route('payment.index') }}">Phương thức thanh toán</a>
                 </li>
-
-{{--                @if(\Illuminate\Support\Facades\Auth::check())--}}
-{{--                    @if(\Illuminate\Support\Facades\Auth::user()->user_type != 2)--}}
-{{--                        <li class="nav-item"><a class="list-item list-item">Tài khoản hiện có: <span--}}
-{{--                                        id="user_wallet">{{ number_format(Auth::user()->wallet,2)  }}</span> VND</a>--}}
-{{--                        </li>--}}
-{{--                    @endif--}}
-{{--                    <li class="nav-item dropdown">--}}
-{{--                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"--}}
-{{--                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
-{{--                            Dropdown--}}
-{{--                        </a>--}}
-{{--                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">--}}
-{{--                            <a class="dropdown-item" href="#">Action</a>--}}
-{{--                            <a class="dropdown-item" href="#">Another action</a>--}}
-{{--                            <div class="dropdown-divider"></div>--}}
-{{--                            <a class="dropdown-item" href="#">Something else here</a>--}}
-{{--                        </div>--}}
-{{--                    </li>--}}
-{{--                @else--}}
-{{--                @endif--}}
+                @if(\Illuminate\Support\Facades\Auth::check())
+                    @if(\Illuminate\Support\Facades\Auth::user()->user_type != 3)
+                        <li class="nav-item">
+                            <a class="nav-link list-item {{ url()->current() == route('user.index.favourite', \Illuminate\Support\Facades\Auth::user()->id ) ? 'active' : '' }}"
+                               href="{{ route('user.index.favourite', \Illuminate\Support\Facades\Auth::user()->id) }}">Nhà
+                                trọ yêu thích của bạn <span
+                                        class="sr-only">(current)</span></a>
+                        </li>
+                    @endif
+                @endif
+                {{--                @if(\Illuminate\Support\Facades\Auth::check())--}}
+                {{--                    @if(\Illuminate\Support\Facades\Auth::user()->user_type != 2)--}}
+                {{--                        <li class="nav-item"><a class="list-item list-item">Tài khoản hiện có: <span--}}
+                {{--                                        id="user_wallet">{{ number_format(Auth::user()->wallet,2)  }}</span> VND</a>--}}
+                {{--                        </li>--}}
+                {{--                    @endif--}}
+                {{--                    <li class="nav-item dropdown">--}}
+                {{--                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"--}}
+                {{--                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
+                {{--                            Dropdown--}}
+                {{--                        </a>--}}
+                {{--                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">--}}
+                {{--                            <a class="dropdown-item" href="#">Action</a>--}}
+                {{--                            <a class="dropdown-item" href="#">Another action</a>--}}
+                {{--                            <div class="dropdown-divider"></div>--}}
+                {{--                            <a class="dropdown-item" href="#">Something else here</a>--}}
+                {{--                        </div>--}}
+                {{--                    </li>--}}
+                {{--                @else--}}
+                {{--                @endif--}}
             </ul>
             @if(Auth::user())
                 <ul class="nav navbar-nav navbar-right" style="display: inline">
 
                     @if(Auth::user()->user_type != 2)
-                        <li class="nav-item"><a class="list-item list-item">Tài khoản: <span
+                        <li class="nav-item"><a class="list-item list-item user_wallet-wrapper">Tài khoản: <span
                                         id="user_wallet">{{ number_format(Auth::user()->wallet,2)  }}</span> VND</a>
                         </li>
                     @endif
@@ -191,7 +204,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item list-item" href="user/profile">Thông tin chi tiết</a>
                             @if(Auth::user()->user_type != 2)
-                            <a class="dropdown-item list-item" href="user/dangtin">Đăng tin</a>
+                                <a class="dropdown-item list-item" href="user/dangtin">Đăng tin</a>
                             @endif
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item list-item" href="user/logout">Thoát</a>

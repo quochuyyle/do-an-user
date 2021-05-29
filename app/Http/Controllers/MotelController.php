@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\District;
 use App\Events\SendNotification;
+use App\Favourite;
 use App\PostCategory;
 use App\PostMenu;
 use App\Province;
@@ -16,6 +18,7 @@ use App\Motelroom;
 use App\Categories;
 use App\Reports;
 use App\MotelTradeHistory;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 
 
@@ -30,61 +33,121 @@ class MotelController extends Controller
         $map_motelroom = Motelroom::where('approve', 1)->get();
         $motelrooms = Motelroom::where('approve', 1)->orderBy('post_type', 'ASC')->paginate(4);
         $postmenus = PostMenu::all();
-        return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms','postmenus'));
+        return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms', 'postmenus'));
     }
 
-    public  function fetch_data(Request $request){
-        if($request->ajax()){
-           $motelrooms = Motelroom::where('approve', 1)->orderBy('post_type', 'ASC')->paginate(4);
-           return view('motelroom.paginationData', compact('motelrooms'))->render();
+    public function fetch_data(Request $request)
+    {
+        if ($request->ajax()) {
+            $motelrooms = Motelroom::where('approve', 1)->orderBy('post_type', 'ASC')->paginate(4);
+            return view('motelroom.paginationData', compact('motelrooms'))->render();
         }
     }
 
-    public  function motelroomByPostMenu(Request $request){
+    public function favouriteMotel(Request $request)
+    {
+        if ($request->ajax()) {
+            $request->validate(Favourite::validator());
+            if (!$request->type) {
+                $modelFavourite = new Favourite();
+
+                $favourite = $modelFavourite->addToFavourite($request);
+                if ($favourite) {
+                    return response()->json([
+                        'data' => $favourite,
+                        'message' => 'Add to your favourites successfully'
+                    ]);
+                }
+            } else {
+                $modelFavourite = new Favourite();
+                $favourite = $modelFavourite->removeFromFavourite($request);
+                if ($favourite) {
+                    return response()->json([
+                        'data' => $favourite,
+                        'message' => 'Remove from your favourites successfully'
+                    ]);
+                }
+            }
+        }
+    }
+
+    public function yourFavourtieMotels(Request $request)
+    {
+        $motelroom = new Motelroom();
+        $user = User::with('favourite')->findOrFail($request->id);
+        $ids = [];
+        foreach ($user->favourite as $row) {
+            $ids [] = $row->motelroom_id;
+        }
+        $motelrooms = $motelroom->whereIn('id', $ids)->paginate(4);
+        $provinces = Province::all();
+        $district = District::all();
+        $categories = Categories::all();
+        $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
+        $map_motelroom = Motelroom::whereIn('id', $ids)->get();
+        return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms'));
+    }
+
+    public function motelroomByPostMenu(Request $request)
+    {
 
         $postMenu = PostMenu::where('slug', $request->slug)->first();
         $provinces = Province::all();
         $district = District::all();
         $categories = Categories::all();
         $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
-        $map_motelroom = Motelroom::where([['approve', '=', 1],['post_menu', '=', $postMenu->id]])->get();
-        $motelrooms = Motelroom::where([['approve', '=', 1],['post_menu', '=', $postMenu->id]])->orderBy('post_type', 'ASC')->paginate(4);
+        $map_motelroom = Motelroom::where([['approve', '=', 1], ['post_menu', '=', $postMenu->id]])->get();
+        $motelrooms = Motelroom::where([['approve', '=', 1], ['post_menu', '=', $postMenu->id]])->orderBy('post_type', 'ASC')->paginate(4);
         $postmenus = PostMenu::all();
-        return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms','postmenus'));
+        return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms', 'postmenus'));
     }
 
-	public function SearchMotelAjax(Request $request){
-		$getmotel = Motelroom::where([
-			['district_id',$request->id_district],
-			['price','>=',$request->min_price],
-			['price','<=',$request->max_price],
-			['category_id','like', "%$request->id_category%"],
-			['approve',1]])->get();
+    public function motelroomByPrice(Request $request)
+    {
+        $provinces = Province::all();
+        $district = District::all();
+        $categories = Categories::all();
+        $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
+        $map_motelroom = Motelroom::whereBetween('price', array(Input::get('min'), Input::get('max')))->get();
+        $getMotelrooms = Motelroom::whereBetween('price', array(Input::get('min'), Input::get('max')))->orderBy('price', 'ASC')->paginate(4);
+        $postmenus = PostMenu::all();
+        $motelrooms = $getMotelrooms->appends(Input::except('page'));
+        return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms'));
+    }
 
-		$arr_result_search = array();
-		foreach ($getmotel as $room) {
-			$arrlatlng = json_decode($room->latlng,true);
-			$arrImg = json_decode($room->images,true);
-			$arr_result_search[] = ["id" =>$room->id,"lat"=> $arrlatlng[0],"lng"=> $arrlatlng[1],"title"=>$room->title,"address"=> $room->address,"image"=>$arrImg[0],"phone"=>$room->phone];
-		}
+    public function SearchMotelAjax(Request $request)
+    {
+        $getmotel = Motelroom::where([
+            ['district_id', $request->id_district],
+            ['price', '>=', $request->min_price],
+            ['price', '<=', $request->max_price],
+            ['category_id', 'like', "%$request->id_category%"],
+            ['approve', 1]])->get();
+
+        $arr_result_search = array();
+        foreach ($getmotel as $room) {
+            $arrlatlng = json_decode($room->latlng, true);
+            $arrImg = json_decode($room->images, true);
+            $arr_result_search[] = ["id" => $room->id, "lat" => $arrlatlng[0], "lng" => $arrlatlng[1], "title" => $room->title, "address" => $room->address, "image" => $arrImg[0], "phone" => $room->phone];
+        }
 
 
-		return json_encode($arr_result_search);
-	}
+        return json_encode($arr_result_search);
+    }
 
     public function get_dangtin()
     {
 //        $notifications=PushNotification::where('source_to',Auth::id())->limit(5)->get();
 ////        return View::share('notifications',$notifications);
 //   	    dd($notifications);
-        if (Auth::user()->user_type == 2){
+        if (Auth::user()->user_type == 2) {
             return redirect()->back();
         }
         $district = District::all();
         $categories = Categories::all();
         $postCategories = PostCategory::all();
         $postMenus = PostMenu::all();
-        return view('home.dangtin', compact('district','categories', 'postCategories', 'postMenus'));
+        return view('home.dangtin', compact('district', 'categories', 'postCategories', 'postMenus'));
     }
 
     public function post_dangtin(Request $request)
@@ -110,7 +173,6 @@ class MotelController extends Controller
                 'txtaddress.required' => 'Nhập hoặc chọn địa chỉ phòng trọ trên bản đồ',
                 'term.required' => 'Nhập thời gian đăng tin',
             ]);
-
 
 
         /* Check file */
@@ -159,7 +221,7 @@ class MotelController extends Controller
         $motel->start_date = $request->txtstart_date;
         $motel->end_date = $request->txtend_date;
         $motel->approve = 1;
-        $motel->slug = Str::slug($request->txttitle.'-'.uniqid(),'-');
+        $motel->slug = Str::slug($request->txttitle . '-' . uniqid(), '-');
         $motel->post_type = $request->postCategory;
 //        dd($motel);
         $motel->save();
@@ -205,108 +267,139 @@ class MotelController extends Controller
 
     }
 
-	public function user_del_motel($id){
-		if (!Auth::check()) {
-			return redirect('user/login');
-		}
-		else 
-		{
-			$getmotel = Motelroom::find($id);
-			if(Auth::id() != $getmotel->user_id )
-				return redirect('user/profile')->with('thongbao','Bạn không có quyền xóa bài đăng không phải là của bạn!');
-			else
-			{
-				$getmotel->delete();
-				return redirect('user/profile')->with('thongbao','Đã xóa bài đăng của bạn');
-			}
-		}
-	}
-
-	public function getMotelByCategoryId($id){
-		$getmotel = Motelroom::where([['category_id',$id],['approve',1]])->paginate(3);
-		$Categories = Categories::all();
-		return view('home.category',['listmotel'=>$getmotel,'categories'=>$Categories]);
-	}
-
-	public function getMotelById(Request $request, Motelroom $modelMotelroom, Term $modelTerm){
-	    if($request->ajax()){
-
-	        $motelroom = $modelMotelroom->with('term')->where('id', $request->id)->first();
-	        $term = $motelroom->term;
-	        $terms = $modelTerm->where('motelroom_id', $request->id)->get();
-
-	        return response()->json([
-	            'motelroom'=>$motelroom,
-                'term'=>$term,
-                'view'=> view('motelroom.viewData', compact('terms'))->render()
-            ]);
+    public function user_del_motel($id)
+    {
+        if (!Auth::check()) {
+            return redirect('user/login');
+        } else {
+            $getmotel = Motelroom::find($id);
+            if (Auth::id() != $getmotel->user_id)
+                return redirect('user/profile')->with('thongbao', 'Bạn không có quyền xóa bài đăng không phải là của bạn!');
+            else {
+                $getmotel->delete();
+                return redirect('user/profile')->with('thongbao', 'Đã xóa bài đăng của bạn');
+            }
         }
+    }
 
+    public function getMotelByCategoryId($id)
+    {
+        $getmotel = Motelroom::where([['category_id', $id], ['approve', 1]])->paginate(3);
+        $Categories = Categories::all();
+        return view('home.category', ['listmotel' => $getmotel, 'categories' => $Categories]);
+    }
+
+    public function getExtendTerm(Request $request)
+    {
+        $modelMotelroom = new Motelroom();
+        $motelroom = $modelMotelroom->with(['term'])->where('id', $request->id)->first();
+        $postCategories = PostCategory::all();
+//        dd($motelroom);
+        return view('motelroom.term.index', compact('motelroom', 'postCategories'));
+    }
+
+    public function extendTerm(Request $request, Term $term, User $user, Motelroom $modelMotelroom)
+    {
+        $validate = [
+            'motelroom_id' => 'required|numeric',
+            'user_id' => 'required|numeric',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'fee' => 'required|numeric',
+            'post_type' => 'required|numeric',
+        ];
+        $request->validate($validate);
+
+
+        $user->updateWallet($request);
+        $modelMotelroom->updateMotel($request);
+        $newTerm = $term->createNewTerm($request);
+
+        if ($newTerm) {
+            return redirect()->route('user.profile')->with(['message' => 'Gia hạn thành công']);
+        } else {
+            return redirect()->route('user.profile')->with(['message' => 'Đã có lỗi xảy ra !']);
+        }
+    }
+
+//    public function getMotelById(Request $request, Motelroom $modelMotelroom, Term $modelTerm)
+//    {
+//        if ($request->ajax()) {
+//            $motelroom = $modelMotelroom->with('term')->where('id', $request->id)->first();
+//            $term = $motelroom->term;
+//            $terms = $modelTerm->where('motelroom_id', $request->id)->get();
+//
+//            return response()->json([
+//                'motelroom' => $motelroom,
+//                'term' => $term,
+//                'view' => view('motelroom.viewData', compact('terms'))->render()
+//            ]);
+//        }
+//
+//
+//    }
+
+
+    public function userReport($id, Request $request)
+    {
+        $ipaddress = '';
+        if (getenv('HTTP_CLIENT_IP'))
+            $ipaddress = getenv('HTTP_CLIENT_IP');
+        else if (getenv('HTTP_X_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+        else if (getenv('HTTP_X_FORWARDED'))
+            $ipaddress = getenv('HTTP_X_FORWARDED');
+        else if (getenv('HTTP_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_FORWARDED_FOR');
+        else if (getenv('HTTP_FORWARDED'))
+            $ipaddress = getenv('HTTP_FORWARDED');
+        else if (getenv('REMOTE_ADDR'))
+            $ipaddress = getenv('REMOTE_ADDR');
+        else
+            $ipaddress = 'UNKNOWN';
+        $report = new Reports;
+        $report->ip_address = $ipaddress;
+        $report->id_motelroom = $id;
+        $report->status = $request->baocao;
+        $report->save();
+        $getmotel = Motelroom::find($id);
+        return redirect('phongtro/' . $getmotel->slug)->with('thongbao', 'Cảm ơn bạn đã báo cáo, đội ngũ chúng tôi sẽ xem xét');
+    }
+
+    public function rentMotel(Request $request)
+    {
 
     }
 
-
-	public function userReport($id,Request $request){
-		$ipaddress = '';
-	    if (getenv('HTTP_CLIENT_IP'))
-	        $ipaddress = getenv('HTTP_CLIENT_IP');
-	    else if(getenv('HTTP_X_FORWARDED_FOR'))
-	        $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
-	    else if(getenv('HTTP_X_FORWARDED'))
-	        $ipaddress = getenv('HTTP_X_FORWARDED');
-	    else if(getenv('HTTP_FORWARDED_FOR'))
-	        $ipaddress = getenv('HTTP_FORWARDED_FOR');
-	    else if(getenv('HTTP_FORWARDED'))
-	       $ipaddress = getenv('HTTP_FORWARDED');
-	    else if(getenv('REMOTE_ADDR'))
-	        $ipaddress = getenv('REMOTE_ADDR');
-	    else
-	        $ipaddress = 'UNKNOWN';
-	    $report = new Reports;
-	    $report->ip_address = $ipaddress;
-	    $report->id_motelroom = $id;
-	    $report->status = $request->baocao;
-	    $report->save();
-	    $getmotel = Motelroom::find($id);
-		return redirect('phongtro/'.$getmotel->slug)->with('thongbao','Cảm ơn bạn đã báo cáo, đội ngũ chúng tôi sẽ xem xét');
-	}
-
-	public function rentMotel(Request $request){
-
-    }
-
-    public function showMotelInformations(Request $request, Motelroom $modelMotelroom, User $user, MotelTradeHistory $motelTradeHistory){
-	    if ($request->ajax()) {
-	        if ($request->has('type')) {
-	            if ($request->get('type') == 0) {
+    public function showMotelInformations(Request $request, Motelroom $modelMotelroom, User $user, MotelTradeHistory $motelTradeHistory)
+    {
+        if ($request->ajax()) {
+            if ($request->has('type')) {
+                if ($request->get('type') == 0) {
 //                    $motelroom = $modelMotelroom->where('id', $request->motelroom_id)->first();
 //                    return $motelroom;
-                }
-	            else{
-	                $validate = [
-	                    'user_id'=>'required|numeric',
-                        'motelroom_id'=>'required|numeric',
-                        'type'=>'required|numeric',
-                        'fee'=>'required|numeric',
-                        'owner_id'=>'required|numeric',
+                } else {
+                    $validate = [
+                        'user_id' => 'required|numeric',
+                        'motelroom_id' => 'required|numeric',
+                        'type' => 'required|numeric',
+                        'fee' => 'required|numeric',
+                        'owner_id' => 'required|numeric',
 //                        'user_id'=>'required|numeric',
 //                        'user_id'=>'required|numeric',
                     ];
 
-	                $request->validate($validate);
+                    $request->validate($validate);
 
 //	                $user->updateWallet($request);
                     $newMotelTradeHistory = $motelTradeHistory->createMotelTradeHistory($request);
-                    if ($newMotelTradeHistory)
-                    {
+                    if ($newMotelTradeHistory) {
                         return response()->json([
-                            'message'=>'Updated successfully'
+                            'message' => 'Updated successfully'
                         ]);
-                    }
-                    else
-                    {
+                    } else {
                         return response()->json([
-                            'error'=>'Something went wrong'
+                            'error' => 'Something went wrong'
                         ]);
                     }
                 }

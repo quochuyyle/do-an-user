@@ -117,16 +117,15 @@
                                                     <td>{{ $elapsed }}</td>
                                                     <td>
                                                         @if($post->status == 1)
-                                                            <span class="label label-danger">Đã cho thuê</span>
-                                                        @elseif($post->status == 0)
                                                             <span class="label label-success">Chưa cho thuê</span>
+                                                        @elseif($post->status == 0)
+                                                            <span class="label label-danger">Đã cho thuê</span>
                                                         @endif
                                                     </td>
-                                                    <td>
+                                                    <td style="display: flex;justify-content: space-between">
                                                         <input type="hidden" value="{{ $post->end_date }}"
                                                                class="old_endDate" name="old_endDate"/>
-                                                        <a href="#" class="btn-editTerm" data-toggle="modal"
-                                                           data-id="{{ $post->id }}" data-target="#editTerm">Gia hạn</a>
+                                                        <a href="{{ route('user.motelroom.term', $post->id) }}">Gia hạn</a>
                                                         <a href="{{ route('user.dangtin.hienthi', $post->id) }}" class="btn-edit" data-id="{{ $post->id }}">Sửa thông tin</a>
                                                         <a href="phongtro/{{ $post->slug }}"><i class="fas fa-eye"></i>
                                                             Xem</a>
@@ -138,22 +137,6 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    {{--                            <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap"--}}
-                                    {{--                                   style="width: 100%;">--}}
-                                    {{--                                <thead>--}}
-                                    {{--                                <tr style="text-align: center">--}}
-                                    {{--                                    <th style="font-weight: bold; width:5px;">{{ __('Số thứ tự') }}</th>--}}
-                                    {{--                                    <th style="font-weight: bold; width:20px;">{{ __('Tên phòng trọ') }}</th>--}}
-                                    {{--                                    <th style="font-weight: bold; width:20px;">{{ __('Loại phòng trọ') }}</th>--}}
-                                    {{--                                    <th style="font-weight: bold; width:20px;">{{ __('Gía phòng') }}</th>--}}
-                                    {{--                                    <th style="font-weight: bold; width:20px;">{{ __('Lượt xem') }}</th>--}}
-                                    {{--                                    <th style="font-weight: bold; width:40px;">{{ __('Trạng thái') }}</th>--}}
-                                    {{--                                    <th style="font-weight: bold; width:30px;">{{ __('Action') }}</th>--}}
-                                    {{--                                </tr>--}}
-                                    {{--                                </thead>--}}
-                                    {{--                                <tbody>--}}
-                                    {{--                                </tbody>--}}
-                                    {{--                            </table>--}}
                                 @endif
                             </div>
                         @endif
@@ -295,84 +278,6 @@
             }
         });
         $(document).ready(function () {
-
-            {{--let datatable = $('#datatable').DataTable({--}}
-            {{--    dom: 'Bfrtip',--}}
-            {{--    "bLengthChange": false,--}}
-            {{--    "bFilter": false,--}}
-            {{--    "bInfo": false,--}}
-            {{--    "bAutoWidth": false,--}}
-            {{--    buttons: [--}}
-            {{--        {--}}
-            {{--            text: 'Add new button',--}}
-            {{--            action: function (e, dt, node, config) {--}}
-            {{--                dt.button().add(1, {--}}
-            {{--                    text: 'Button ' + (counter++),--}}
-            {{--                    action: function () {--}}
-            {{--                        this.remove();--}}
-            {{--                    }--}}
-            {{--                });--}}
-            {{--            }--}}
-            {{--        }--}}
-            {{--    ],--}}
-            {{--    processing: true,--}}
-            {{--    serverSide: true,--}}
-            {{--    orderable: true,--}}
-
-            {{--    ajax: {--}}
-            {{--        url: '{{ route('user.dangtin.datatable') }}',--}}
-            {{--        data: function (d) {--}}
-            {{--            // d.search = $('input[name=search]').val()--}}
-            {{--            // d.user_type = $('#user_type option:selected').val()--}}
-
-            {{--        }--}}
-            {{--    },--}}
-            {{--    columns: [--}}
-            {{--        {--}}
-            {{--            data: 'DT_RowIndex',--}}
-            {{--            name: 'DT_RowIndex',--}}
-            {{--            searchable: false,--}}
-            {{--            width: '6%',--}}
-            {{--            className: 'text-center align-middle'--}}
-            {{--        },--}}
-            {{--        {data: 'username', name: 'username', className: 'text-center align-middle'},--}}
-            {{--        {data: 'name', name: 'name', className: 'text-center align-middle'},--}}
-            {{--        {data: 'email', name: 'email', className: 'text-center align-middle'},--}}
-            {{--        {data: 'posts', name: 'posts', className: 'text-center align-middle'},--}}
-            {{--        {data: 'tinhtrang', name: 'tinhtrang', className: 'text-center align-middle'},--}}
-            {{--        {--}}
-            {{--            data: 'action',--}}
-            {{--            name: 'action',--}}
-            {{--            width: '10%',--}}
-            {{--            className: 'text-center align-middle',--}}
-            {{--            orderable: false,--}}
-            {{--            searchable: false--}}
-            {{--        },--}}
-            {{--    ]--}}
-            {{--});--}}
-
-            // let minDate = $('input[name = old_endDate]').val()
-            // $('#extend_term').daterangepicker({
-            //     singleDatePicker: true,
-            //     opens: 'left',
-            //     locale: {
-            //         format: 'DD-MM-YYYY'
-            //     },
-            //     autoUpdateInput: false,
-            //     // minDate: moment(minDate, "DDMMYYYY")
-            // }, function (start, end, label) {
-            //     let oldEnd_date = $('input[name="end_date"]').val(),
-            //         newEnd_date = start.format('DD-MM-YYYY');
-            //     console.log(oldEnd_date)
-            //     let a = moment(oldEnd_date, 'DDMMYYYY'),
-            //         b = moment(newEnd_date, 'DDMMYYYY');
-            //     let diff = b.diff(a, 'days'),
-            //         feePerDay = 50000,
-            //         fee = feePerDay * diff;
-            //     $('#fee').val(fee)
-            // });
-
-
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -402,7 +307,6 @@
                 }, function (start, end, label) {
                     let oldEnd_date = $('input[name="end_date"]').val(),
                         newEnd_date = start.format('DD-MM-YYYY');
-                    // console.log(oldEnd_date)
                     let a = moment(oldEnd_date, 'DDMMYYYY'),
                         b = moment(newEnd_date, 'DDMMYYYY');
                     let diff = b.diff(a, 'days'),
@@ -443,49 +347,49 @@
             })
 
 
-            $(document).on('click', '.btn-save', function (e) {
-                e.preventDefault()
-                // console.log('Hello')
+            {{--$(document).on('click', '.btn-save', function (e) {--}}
+            {{--    e.preventDefault()--}}
+            {{--    // console.log('Hello')--}}
 
-                let url = '{{ route('user.term.store') }}',
-                    id = $('#motelroom_id').val(),
-                    price = $('#fee').val(),
-                    user_id = {{ \Illuminate\Support\Facades\Auth::user()->id }},
-                    start_date = $('input[name = start_date]').val(),
-                    end_date = $('#extend_term').val();
-                url = url.replace(':id', id);
+            {{--    let url = '{{ route('user.term.store') }}',--}}
+            {{--        id = $('#motelroom_id').val(),--}}
+            {{--        price = $('#fee').val(),--}}
+            {{--        user_id = {{ \Illuminate\Support\Facades\Auth::user()->id }},--}}
+            {{--        start_date = $('input[name = start_date]').val(),--}}
+            {{--        end_date = $('#extend_term').val();--}}
+            {{--    url = url.replace(':id', id);--}}
 
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: {
-                        motelroom_id: id,
-                        fee: price,
-                        user_id: user_id,
-                        start_date: start_date,
-                        end_date: end_date
-                    },
-                    success: function (res) {
-                        if (res.message) {
-                            swalWithBootstrapButtons.fire(
-                                'Thông báo',
-                                res.message,
-                                'success'
-                            )
-                            $('#editTerm').modal('hide')
-                        } else {
-                            swalWithBootstrapButtons.fire(
-                                'Thông báo',
-                                res.error,
-                                'error'
-                            )
-                            $('#editTerm').modal('hide')
-                        }
+            {{--    $.ajax({--}}
+            {{--        url: url,--}}
+            {{--        type: 'POST',--}}
+            {{--        data: {--}}
+            {{--            motelroom_id: id,--}}
+            {{--            fee: price,--}}
+            {{--            user_id: user_id,--}}
+            {{--            start_date: start_date,--}}
+            {{--            end_date: end_date--}}
+            {{--        },--}}
+            {{--        success: function (res) {--}}
+            {{--            if (res.message) {--}}
+            {{--                swalWithBootstrapButtons.fire(--}}
+            {{--                    'Thông báo',--}}
+            {{--                    res.message,--}}
+            {{--                    'success'--}}
+            {{--                )--}}
+            {{--                $('#editTerm').modal('hide')--}}
+            {{--            } else {--}}
+            {{--                swalWithBootstrapButtons.fire(--}}
+            {{--                    'Thông báo',--}}
+            {{--                    res.error,--}}
+            {{--                    'error'--}}
+            {{--                )--}}
+            {{--                $('#editTerm').modal('hide')--}}
+            {{--            }--}}
 
-                    }
-                })
+            {{--        }--}}
+            {{--    })--}}
 
-            })
+            {{--})--}}
         })
 
     </script>
