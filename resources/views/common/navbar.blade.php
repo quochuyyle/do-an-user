@@ -184,7 +184,7 @@
                 {{--                @endif--}}
             </ul>
             @if(Auth::user())
-                <ul class="nav navbar-nav navbar-right" style="display: inline">
+                <ul class="nav navbar-nav navbar-right">
 
                     @if(Auth::user()->user_type != 2)
                         <li class="nav-item"><a class="list-item list-item user_wallet-wrapper">Tài khoản: <span
@@ -225,10 +225,10 @@
                             <ul class="dropdown-menu dropdown-menu-left pull-right" id="dropDownList" role="menu"
                                 aria-labelledby="dropdownMenu1">
                                 <li role="presentation">
-                                    <a href="#" class="dropdown-menu-header">Thông báo</a>
+                                    <div href="#" class="dropdown-menu-header">Thông báo</div>
                                 </li>
                                 <ul class="timeline timeline-icons timeline-sm" id="list-noti"
-                                    style="margin:10px;width:250px">
+                                    style="margin:10px;width:267px;overflow-y: scroll;height: 400px;">
                                     @empty(!$notifications)
                                         @foreach($notifications as $notification)
                                             <li class="list-item">
@@ -248,9 +248,6 @@
                                         </li>
                                     @endempty
                                 </ul>
-                                <li role="presentation">
-                                    <a href="#" class="dropdown-menu-header list-item"></a>
-                                </li>
                             </ul>
                         </div>
                     </li>
@@ -258,7 +255,7 @@
                 </ul>
 
             @else
-                <ul class="nav navbar-nav navbar-right" style="display: inline">
+                <ul class="nav navbar-nav navbar-right">
                     @if(\Illuminate\Support\Facades\Auth::check())
                         <li><a class="list-item" class="btn-dangtin" href="user/dangtin"><i class="fas fa-edit"></i>
                                 Đăng tin ngay</a></li>

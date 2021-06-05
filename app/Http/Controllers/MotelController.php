@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\District;
 use App\Events\SendNotification;
 use App\Favourite;
+use App\Libraries\Ultilities;
 use App\PostCategory;
 use App\PostMenu;
 use App\Province;
 use App\PushNotification;
 use App\PushUser;
 use App\Term;
+use App\Ultility;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -33,6 +35,10 @@ class MotelController extends Controller
         $map_motelroom = Motelroom::where('approve', 1)->get();
         $motelrooms = Motelroom::where('approve', 1)->orderBy('post_type', 'ASC')->paginate(4);
         $postmenus = PostMenu::all();
+
+        if($request->ajax()){
+            return view('motelroom.paginationData', compact( 'motelrooms'));
+        }
         return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms', 'postmenus'));
     }
 
@@ -99,6 +105,9 @@ class MotelController extends Controller
         $map_motelroom = Motelroom::where([['approve', '=', 1], ['post_menu', '=', $postMenu->id]])->get();
         $motelrooms = Motelroom::where([['approve', '=', 1], ['post_menu', '=', $postMenu->id]])->orderBy('post_type', 'ASC')->paginate(4);
         $postmenus = PostMenu::all();
+        if($request->ajax()){
+            return view('motelroom.paginationData', compact( 'motelrooms'));
+        }
         return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms', 'postmenus'));
     }
 
@@ -112,6 +121,9 @@ class MotelController extends Controller
         $getMotelrooms = Motelroom::whereBetween('price', array(Input::get('min'), Input::get('max')))->orderBy('price', 'ASC')->paginate(4);
         $postmenus = PostMenu::all();
         $motelrooms = $getMotelrooms->appends(Input::except('page'));
+        if($request->ajax()){
+            return view('motelroom.paginationData', compact( 'motelrooms'));
+        }
         return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms'));
     }
 
@@ -152,6 +164,7 @@ class MotelController extends Controller
 
     public function post_dangtin(Request $request)
     {
+//        dd($request->all());
         $request->validate([
             'txttitle' => 'required',
             'txtaddress' => 'required',
@@ -159,7 +172,7 @@ class MotelController extends Controller
             'txtarea' => 'required',
             'txtphone' => 'required',
             'txtdescription' => 'required',
-            'txtaddress' => 'required',
+//            'txtaddress' => 'required',
             'term' => 'required',
             'txtfee' => 'required'
         ],
@@ -170,7 +183,7 @@ class MotelController extends Controller
                 'txtarea.required' => 'Nhập diện tích phòng trọ',
                 'txtphone.required' => 'Nhập SĐT chủ phòng trọ (cần liên hệ)',
                 'txtdescription.required' => 'Nhập mô tả ngắn cho phòng trọ',
-                'txtaddress.required' => 'Nhập hoặc chọn địa chỉ phòng trọ trên bản đồ',
+//                'txtaddress.required' => 'Nhập hoặc chọn địa chỉ phòng trọ trên bản đồ',
                 'term.required' => 'Nhập thời gian đăng tin',
             ]);
 
@@ -223,7 +236,10 @@ class MotelController extends Controller
         $motel->approve = 1;
         $motel->slug = Str::slug($request->txttitle . '-' . uniqid(), '-');
         $motel->post_type = $request->postCategory;
+        $motel->post_menu = $request->post_menu;
+        $motel->status = 1;
 //        dd($motel);
+////        dd($motel);
         $motel->save();
 
         $user = new User();
@@ -322,22 +338,18 @@ class MotelController extends Controller
         }
     }
 
-//    public function getMotelById(Request $request, Motelroom $modelMotelroom, Term $modelTerm)
-//    {
-//        if ($request->ajax()) {
-//            $motelroom = $modelMotelroom->with('term')->where('id', $request->id)->first();
-//            $term = $motelroom->term;
-//            $terms = $modelTerm->where('motelroom_id', $request->id)->get();
-//
-//            return response()->json([
-//                'motelroom' => $motelroom,
-//                'term' => $term,
-//                'view' => view('motelroom.viewData', compact('terms'))->render()
-//            ]);
-//        }
-//
-//
-//    }
+
+    public function show(Request $request, Ultility $modelUltilities)
+    {
+        $motelroom = Motelroom::with(['term', 'postMenu'])->where('slug', $request->slug)->first();
+        $motelroom->count_view = $motelroom->count_view + 1;
+        $motelroom->save();
+        $categories = Categories::all();
+        $ids = (array)json_decode($motelroom->utilities);
+
+        $ultitlities = $modelUltilities->whereIn('id', $ids)->get();
+        return view('motelroom.detail', compact('motelroom', 'ultitlities'));
+    }
 
 
     public function userReport($id, Request $request)
@@ -405,5 +417,10 @@ class MotelController extends Controller
                 }
             }
         }
+    }
+
+    public function uploadImages(Request $request, Motelroom $modelMotelroom){
+//        dd($request->all());
+        $modelMotelroom->uploadFiles($request->hinhanh);
     }
 }

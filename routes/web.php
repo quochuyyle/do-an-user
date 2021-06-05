@@ -47,14 +47,16 @@ Route::group(['prefix'=>'admin','middleware'=>'adminmiddleware'], function () {
     });
 });
 /* End Admin */
-Route::get('/phongtro/{slug}',function($slug){
-   // $room = Motelroom::findBySlug($slug)->with('term');
-    $room = Motelroom::with('term')->where('slug', $slug)->first();
-    $room->count_view = $room->count_view +1;
-    $room->save();
-    $categories = Categories::all();
-    return view('home.detail',['motelroom'=>$room, 'categories'=>$categories]);
-})->name('user.motelroom.detail');
+//Route::get('/phongtro/{slug}',function($slug){
+//   // $room = Motelroom::findBySlug($slug)->with('term');
+//    $room = Motelroom::with('term')->where('slug', $slug)->first();
+//    $room->count_view = $room->count_view +1;
+//    $room->save();
+//    $categories = Categories::all();
+//    return view('home.detail',['motelroom'=>$room, 'categories'=>$categories]);
+//})->name('user.motelroom.detail');
+
+Route::get('/phongtro/{slug}','MotelController@show')->name('user.motelroom.detail');
 Route::get('/report/{id}','MotelController@userReport')->name('user.report');
 Route::get('/motelroom/show/{id}','MotelController@getMotelById')->name('user.motelroom.show');
 Route::get('/motelroom/del/{id}','MotelController@user_del_motel');
@@ -85,6 +87,7 @@ Route::group(['prefix'=>'user'], function () {
 Route::get('/postcategory','PostCategoryController@index')->name('postcategory.index');
 Route::get('/postmenu/{slug}','MotelController@motelroomByPostMenu')->name('postmenu.motelroom');
 Route::get('/price','MotelController@motelroomByPrice')->name('price.motelroom');
+Route::post('/upload-file/{id}','MotelController@uploadImages')->name('motelroom.upload.file');
 Route::get('/payment','PageController@paymentMethod')->name('payment.index');
 Route::post('searchmotel','MotelController@SearchMotelAjax');
 Route::get('district/{id}','DistrictController@getList')->name('district.list');

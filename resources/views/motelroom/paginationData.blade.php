@@ -1,4 +1,4 @@
-<div class="list-motelroom">
+
     @foreach($motelrooms as $motelroom)
         @php
             $images = (array)(json_decode($motelroom->images));
@@ -93,15 +93,19 @@
                 </div>
                 <p class="description"> {{ $motelroom->description }}</p>
                 <div class="contact-wrapper">
-                    <a href="tel:{{ $motelroom->phone }}" class="btn btn-phone">{{ $motelroom->phone }}</a>
-                    <a href="" class="btn btn-message">Nhắn Zalo</a>
+                    <div class="left-wrapper">
+                        <img class="user-avatar rounded-circle mr-2" src="{{ asset('uploads/avatars/'.$motelroom->user->avatar) }}" alt="">
+                        <h5 class="user-name">{{ $motelroom->user->name }}</h5>
+                    </div>
+                    <div class="right-wrapper">
+                    <a href="tel:{{ $motelroom->phone }}" class="btn btn-phone">Gọi {{ $motelroom->phone }}</a>
+                    <a href="#" class="btn btn-message">Nhắn Zalo</a>
+                    </div>
                 </div>
             </div>
         </div>
     @endforeach
-    {!! $motelrooms->render() !!}
-</div>
-
+{!! $motelrooms->render() !!}
 @push('after-script')
     <script>
         $.ajaxSetup({
@@ -112,7 +116,8 @@
         $(document).ready(function () {
             $('.toggle').click(function () {
                 let motelroom_id = $(this).data('id'),
-                    user_id = {{ \Illuminate\Support\Facades\Auth::user()->id }},
+                    user_id = 0,
+{{--                        {{ \Illuminate\Support\Facades\Auth::user()->id ? \Illuminate\Support\Facades\Auth::user()->id : 0  }},--}}
                     url = "{{ route('user.motel.favourite') }}",
                     type = 1;
 

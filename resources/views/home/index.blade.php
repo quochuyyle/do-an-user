@@ -55,9 +55,9 @@
                 <form onsubmit="return false">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="form-group">
-                        <div class="d-flex">
+                        <div class="d-flex justify-content-between">
                             <div class="col-xs-6">
-                                <select class="selectpicker" data-live-search="true" id="selectprovince">
+                                <select class="select-option-custom form-control h-100" data-live-search="true" id="selectprovince">
                                     <option data-tokens="" value="">Chọn tỉnh/thành phố</option>
                                     @foreach($provinces as $province)
                                         <option data-tokens="{{$province->slug}}"
@@ -67,7 +67,7 @@
                             </div>
 
                             <div class="col-xs-6">
-                                <select class="selectpicker" data-live-search="true" id="selectdistrict">
+                                <select class="select-option-custom form-control" data-live-search="true" id="selectdistrict">
                                     <option value="">Chọn quận/huyện</option>
                                     @foreach($district as $quan)
                                         <option data-tokens="{{$quan->slug}}"
@@ -76,7 +76,7 @@
                                 </select>
                             </div>
                             <div class="col-xs-6">
-                                <select class="selectpicker" data-live-search="true" id="selectcategory">
+                                <select class="select-option-custom form-control" data-live-search="true" id="selectcategory">
                                     <option value="">Chọn loại phòng trọ</option>
                                     @foreach($categories as $category)
                                         <option data-tokens="{{ $category->slug }}"
@@ -85,18 +85,21 @@
                                 </select>
                             </div>
                             <div class="col-xs-6">
-                                <select class="selectpicker" id="selectprice" data-live-search="true">
+                                <select class="select-option-custom form-control" id="selectprice" data-live-search="true">
                                     <option data-tokens="khoang gia" min="1" max="10000000">Khoảng giá</option>
-                                    <option data-tokens="Tu 500.000 VNĐ - 700.000 VNĐ" min="500000" max="700000">Từ 500.000
+                                    <option data-tokens="Tu 500.000 VNĐ - 700.000 VNĐ" min="500000" max="700000">Từ
+                                        500.000
                                         VNĐ - 700.000 VNĐ
                                     </option>
                                     <option data-tokens="Tu 700.000 VNĐ - 1.000.000 VNĐ" min="700000" max="1000000">Từ
                                         700.000 VNĐ - 1.000.000 VNĐ
                                     </option>
-                                    <option data-tokens="Tu 1.000.000 VNĐ - 1.500.000 VNĐ" min="1000000" max="1500000">Từ
+                                    <option data-tokens="Tu 1.000.000 VNĐ - 1.500.000 VNĐ" min="1000000" max="1500000">
+                                        Từ
                                         1.000.000 VNĐ - 1.500.000 VNĐ
                                     </option>
-                                    <option data-tokens="Tu 1.500.000 VNĐ - 3.000.000 VNĐ" min="1500000" max="3000000">Từ
+                                    <option data-tokens="Tu 1.500.000 VNĐ - 3.000.000 VNĐ" min="1500000" max="3000000">
+                                        Từ
                                         1.500.000 VNĐ - 3.000.000 VNĐ
                                     </option>
                                     <option data-tokens="Tren 3.000.000 VNĐ" min="3000000" max="10000000">Trên 3.000.000
@@ -131,40 +134,46 @@
                             <div class="title-wrapper">
                                 <h3 class="title">Danh sách đăng tin</h3>
                             </div>
+                            @if(count($motelrooms) > 0)
+                                <div class="list-motelroom">
                             @include('motelroom.paginationData')
+                                </div>
+                            @else
+                            @endif
 {{--                            <div class="list-motelroom">--}}
 {{--                                @foreach($motelrooms as $motelroom)--}}
 {{--                                    @php--}}
-{{--                                    $images = (array)(json_decode($motelroom->images));--}}
+{{--                                        $images = (array)(json_decode($motelroom->images));--}}
 {{--                                    @endphp--}}
-{{--                                <div class="motelroom-wrapper">--}}
-{{--                                    <div class="image-wrapper">--}}
-{{--                                        <img class="image" src="{{ asset('uploads/images/'.$images[0]) }}" alt="">--}}
-{{--                                    </div>--}}
-{{--                                    <div class="content-wrapper">--}}
-{{--                                        <div class="name-wrapper">--}}
-{{--                                            <h4 class="name">{{ $motelroom->title }}</h4>--}}
+{{--                                    <div class="motelroom-wrapper">--}}
+{{--                                        <div class="image-wrapper">--}}
+{{--                                            <img class="image" src="{{ asset('uploads/images/'.$images[0]) }}" alt="">--}}
 {{--                                        </div>--}}
-{{--                                        <div class="information-wrapper">--}}
-{{--                                            <div class="price-wrapper">--}}
-{{--                                                  <span class="price">Gía: {{ number_format($motelroom->price, null, ',', '.') }} VND</span>--}}
+{{--                                        <div class="content-wrapper">--}}
+{{--                                            <div class="name-wrapper">--}}
+{{--                                                <h4 class="name">{{ $motelroom->title }}</h4>--}}
 {{--                                            </div>--}}
-{{--                                            <div class="area-wrapper">--}}
-{{--                                                <span class="area">Diện tích: {{ $motelroom->area }}m2</span>--}}
+{{--                                            <div class="information-wrapper">--}}
+{{--                                                <div class="price-wrapper">--}}
+{{--                                                    <span class="price">Gía: {{ number_format($motelroom->price, null, ',', '.') }} VND</span>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="area-wrapper">--}}
+{{--                                                    <span class="area">Diện tích: {{ $motelroom->area }}m2</span>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                            <div class="address-wrapper">--}}
+{{--                                                                        <span class="address">--}}
+{{--                                                                        Địa chỉ: {{ $motelroom->address }}--}}
+{{--                                                                        </span>--}}
+{{--                                            </div>--}}
+{{--                                            <p class="description"> {{ $motelroom->description }}</p>--}}
+{{--                                            <div class="contact-wrapper">--}}
+{{--                                                <a href="tel:{{ $motelroom->phone }}"--}}
+{{--                                                   class="btn btn-phone">{{ $motelroom->phone }}</a>--}}
+{{--                                                <a href="" class="btn btn-message">Nhắn Zalo</a>--}}
 {{--                                            </div>--}}
 {{--                                        </div>--}}
-{{--                                        <div class="address-wrapper">--}}
-{{--                                            <span class="address">--}}
-{{--                                            Địa chỉ: {{ $motelroom->address }}--}}
-{{--                                            </span>--}}
-{{--                                        </div>--}}
-{{--                                        <p class="description"> {{ $motelroom->description }}</p>--}}
-{{--                                        <div class="contact-wrapper">--}}
-{{--                                            <a href="tel:{{ $motelroom->phone }}" class="btn btn-phone">{{ $motelroom->phone }}</a>--}}
-{{--                                            <a href="" class="btn btn-message">Nhắn Zalo</a>--}}
-{{--                                        </div>--}}
 {{--                                    </div>--}}
-{{--                                </div>--}}
 {{--                                @endforeach--}}
 {{--                            </div>--}}
                         </div>
@@ -176,7 +185,8 @@
                             </div>
                             <ul class="list-options">
                                 @foreach($postmenus as $postmenu)
-                                <li><a href="{{ route('postmenu.motelroom', $postmenu->slug) }}" class="option">{{ $postmenu->name }} </a></li>
+                                    <li><a href="{{ route('postmenu.motelroom', $postmenu->slug) }}"
+                                           class="option {{ request()->slug == $postmenu->slug ? 'text-danger' : '' }}">{{ $postmenu->name }} </a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -186,10 +196,14 @@
                                 <h4 class="title">Xem theo giá</h4>
                             </div>
                             <ul class="list-options">
-                                <li><a href="{{ route('price.motelroom',['min'=>'0','max'=>'1000000']) }}" class="option">Dưới 1 triệu</a></li>
-                                <li><a href="{{ route('price.motelroom',['min'=>'2000000','max'=>'3000000']) }}" class="option">Từ 2 - 3 triệu</a></li>
-                                <li><a href="{{ route('price.motelroom',['min'=>'4000000','max'=>'5000000']) }}" class="option">Từ 4 - 5 triệu</a></li>
-                                <li><a href="{{ route('price.motelroom',['min'=>'5000000','max'=>'']) }}" class="option">Từ 5 triệu trở lên</a></li>
+                                <li><a href="{{ route('price.motelroom',['min'=>'0','max'=>'1000000']) }}"
+                                       class="option">Dưới 1 triệu</a></li>
+                                <li><a href="{{ route('price.motelroom',['min'=>'2000000','max'=>'3000000']) }}"
+                                       class="option">Từ 2 - 3 triệu</a></li>
+                                <li><a href="{{ route('price.motelroom',['min'=>'4000000','max'=>'5000000']) }}"
+                                       class="option">Từ 4 - 5 triệu</a></li>
+                                <li><a href="{{ route('price.motelroom',['min'=>'5000000','max'=>'']) }}"
+                                       class="option">Từ 5 triệu trở lên</a></li>
                             </ul>
                         </div>
                     </div>
@@ -197,141 +211,149 @@
             </div>
 
         </div>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"
-                integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
-                crossorigin="anonymous"></script>
-        <script>
-
-
-            var map;
-
-            function initMap() {
-                map = new google.maps.Map(document.getElementById('map'), {
-                    center: {lat: 21.028511, lng: 105.804817},
-                    zoom: 15,
-                    draggable: true
-                });
-                /* Get latlng list phòng trọ */
-                <?php
-                $arrmergeLatln = array();
-                foreach ($map_motelroom as $room) {
-                    $arrlatlng = json_decode($room->latlng, true);
-                    $arrImg = json_decode($room->images, true);
-                    $arrmergeLatln[] = ["slug" => $room->slug, "lat" => $arrlatlng[0], "lng" => $arrlatlng[1], "title" => $room->title, "address" => $room->address, "image" => $arrImg[0], "phone" => $room->phone];
-
-                }
-
-                $js_array = json_encode($arrmergeLatln);
-                echo "var javascript_array = " . $js_array . ";\n";
-
-                ?>
-                /* ---------------  */
-                // console.log(javascript_array);
-
-                var listphongtro = [
-                    {
-                        lat: 16.067011,
-                        lng: 108.214388,
-                        title: '33 Hoàng diệu',
-                        content: 'bbbb'
-                    },
-                    {
-                        lat: 16.066330603904397,
-                        lng: 108.2066632380371,
-                        title: '33 Hoàng diệu',
-                        content: 'bbbb'
+        @endsection
+        @push('after-script')
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.5/js/fileinput.min.js"
+                    integrity="sha512-1FvXwt9wkKd29ilILHy0zei6ScE5vdEKqZ6BSW+gmM7mfqC4T4256OmUfFzl1FkaNS3FUQ/Kdzrrs8SD83bCZA=="
+                    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"
+                    integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+                    crossorigin="anonymous"></script>
+            <script type="text/javascript">
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
-                ];
-                // console.log(javascript_array);
-
-                for (i in javascript_array) {
-                    var data = javascript_array[i];
-                    // console.log(data.lng)
-                    var latlng = new google.maps.LatLng(data.lat, data.lng);
-                    // console.log(latlng)
-                    var phongtro = new google.maps.Marker({
-                        position: latlng,
-                        map: map,
-                        title: data.title,
-                        icon: "images/gps.png",
-                        content: 'dgfdgfdg'
+                });
+                $(function () {
+                    $('body').on('click', '.pagination a', function (e) {
+                        e.preventDefault();
+                        $('#load').append('<img style="position: absolute; left: 0; top: 0; z-index: 10000;" src="https://i.imgur.com/v3KWF05.gif />');
+                        var url = $(this).attr('href');
+                        window.history.pushState("", "", url);
+                        loadData(url);
                     });
-                    var infowindow = new google.maps.InfoWindow();
-                    (function (phongtro, data) {
-                        var content = '<div id="iw-container" style="width: 350px;">' +
-                            '<img  style="height: 200px;width: 100%" src="uploads/images/' + data.image + '">' +
-                            '<a href="phongtro/' + data.slug + '"><div class="iw-title">' + data.title + '</div></a>' +
-                            '<p><i class="fas fa-map-marker" style="color:#003352"></i> ' + data.address + '<br>' +
-                            '<br>Phone. ' + data.phone + '</div>';
 
-                        google.maps.event.addListener(phongtro, "click", function (e) {
-
-                            infowindow.setContent(content);
-                            infowindow.open(map, phongtro);
-                            // alert(data.title);
+                    function loadData(url) {
+                        $.ajax({
+                            url: url
+                        }).done(function (data) {
+                            $('.list-motelroom').html(data);
+                        }).fail(function () {
+                            console.log("Failed to load data!");
                         });
-                    })(phongtro, data);
+                    }
+                });
+            </script>
+            <script>
+                $('.select-option-custom').select2();
+                var map;
 
-                }
-                // google.maps.event.addListener(map, 'mousemove', function (e) {
-                // 	document.getElementById("flat").innerHTML = e.latLng.lat().toFixed(6);
-                // 	document.getElementById("lng").innerHTML = e.latLng.lng().toFixed(6);
-                //
-                // });
-
-
-            }
-
-        </script>
-        <script>
-            $(document).ready(function () {
-                $("#selectprovince").change(function (e) {
-                    e.preventDefault();
-
-                    let province_id = $('#selectprovince').val(),
-                        url = '{{route('district.list',':id')}}';
-                    url = url.replace(':id', province_id)
-
-                    $.ajax({
-                        type: "GET",
-                        url: url,
-                        data: {province_id: province_id},
-                        success: function (result) {
-                            // console.log(result)
-                            $('#selectdistrict').find('option:not(:first)').remove();
-                            for (item in result)
-                                $("#selectdistrict").append('<option data-tokens="' + result[item].slug + '" value=' + result[item].id + '>' + result[item].name + '</option>').selectpicker('refresh');
-                        },
-                        error: function (result) {
-                        }
+                function initMap() {
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: {lat: 21.028511, lng: 105.804817},
+                        zoom: 15,
+                        draggable: true
                     });
+                    /* Get latlng list phòng trọ */
+                    <?php
+                    $arrmergeLatln = array();
+                    foreach ($map_motelroom as $room) {
+                        $arrlatlng = json_decode($room->latlng, true);
+                        $arrImg = json_decode($room->images, true);
+                        $arrmergeLatln[] = ["slug" => $room->slug, "lat" => $arrlatlng[0], "lng" => $arrlatlng[1], "title" => $room->title, "address" => $room->address, "image" => $arrImg[0], "phone" => $room->phone];
+
+                    }
+
+                    $js_array = json_encode($arrmergeLatln);
+                    echo "var javascript_array = " . $js_array . ";\n";
+
+                    ?>
+                    /* ---------------  */
+                    // console.log(javascript_array);
+
+                    var listphongtro = [
+                        {
+                            lat: 16.067011,
+                            lng: 108.214388,
+                            title: '33 Hoàng diệu',
+                            content: 'bbbb'
+                        },
+                        {
+                            lat: 16.066330603904397,
+                            lng: 108.2066632380371,
+                            title: '33 Hoàng diệu',
+                            content: 'bbbb'
+                        }
+                    ];
+                    // console.log(javascript_array);
+
+                    for (i in javascript_array) {
+                        var data = javascript_array[i];
+                        // console.log(data.lng)
+                        var latlng = new google.maps.LatLng(data.lat, data.lng);
+                        // console.log(latlng)
+                        var phongtro = new google.maps.Marker({
+                            position: latlng,
+                            map: map,
+                            title: data.title,
+                            icon: "images/gps.png",
+                            content: 'dgfdgfdg'
+                        });
+                        var infowindow = new google.maps.InfoWindow();
+                        (function (phongtro, data) {
+                            var content = '<div id="iw-container" style="width: 350px;">' +
+                                '<img  style="height: 200px;width: 100%" src="uploads/images/' + data.image + '">' +
+                                '<a href="phongtro/' + data.slug + '"><div class="iw-title">' + data.title + '</div></a>' +
+                                '<p><i class="fas fa-map-marker" style="color:#003352"></i> ' + data.address + '<br>' +
+                                '<br>Phone. ' + data.phone + '</div>';
+
+                            google.maps.event.addListener(phongtro, "click", function (e) {
+
+                                infowindow.setContent(content);
+                                infowindow.open(map, phongtro);
+                                // alert(data.title);
+                            });
+                        })(phongtro, data);
+
+                    }
+                    // google.maps.event.addListener(map, 'mousemove', function (e) {
+                    // 	document.getElementById("flat").innerHTML = e.latLng.lat().toFixed(6);
+                    // 	document.getElementById("lng").innerHTML = e.latLng.lng().toFixed(6);
+                    //
+                    // });
+                }
+
+            </script>
+            <script>
+                $(document).ready(function () {
+                    $("#selectprovince").change(function (e) {
+                        e.preventDefault();
+
+                        let province_id = $('#selectprovince').val(),
+                            url = '{{route('district.list',':id')}}';
+                        url = url.replace(':id', province_id)
+
+                        $.ajax({
+                            type: "GET",
+                            url: url,
+                            data: {province_id: province_id},
+                            success: function (result) {
+                                $('#selectdistrict').find('option:not(:first)').remove();
+                                for (item in result)
+                                    $("#selectdistrict").append('<option data-tokens="' + result[item].slug + '" value=' + result[item].id + '>' + result[item].name + '</option>');
+                            },
+                            error: function (result) {
+                            }
+                        });
+                    })
+
                 })
-
-                {{--$(document).on('click', '.pagination a', function(event){--}}
-                {{--    event.preventDefault();--}}
-                {{--    let page = $(this).attr('href').split('page=')[1];--}}
-                {{--    // console.log(page)--}}
-                {{--    fetch_data(page);--}}
-                {{--});--}}
-
-                {{--function fetch_data(page)--}}
-                {{--{--}}
-                {{--    --}}{{--let url = "{{ route('user.motelroom.fetch_data',':page') }}";--}}
-                {{--    --}}{{--url = url.replace(':page', page);--}}
-
-                {{--    $.ajax({--}}
-                {{--        tpye:'GET',--}}
-                {{--        // url:url,--}}
-                {{--        url:"/pagination/fetch_data?page="+page,--}}
-                {{--        success:function(data)--}}
-                {{--        {--}}
-                {{--            $('#show_motelroom').find('.title-wrapper').insertAfter(data);--}}
-                {{--        }--}}
-                {{--    });--}}
-                {{--}--}}
-            })
-        </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSgjO2ZLs29Zmv-GPwKucq0hkrIlrrF-U&callback=initMap"
-                async defer></script>
-@endsection
+            </script>
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD541vsuvBAzV7RqE2U6iZEZn-9u5JJpgw&callback=initMap"
+                    async defer></script>
+    @endpush

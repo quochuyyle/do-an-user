@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Ultility;
 use App\PostMenu;
 use App\PushNotification;
 
@@ -36,7 +37,8 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*',function (){
             $notifications=PushNotification::where('source_to', Auth::id())->orderBy('id','desc')->limit(5)->get();
             $postmenus = PostMenu::all();
-            return \Illuminate\Support\Facades\View::share(compact('postmenus','notifications'));
+            $ultilities = \App\Ultility::all();
+            return \Illuminate\Support\Facades\View::share(compact('postmenus','notifications', 'ultilities'));
         });
 
     }

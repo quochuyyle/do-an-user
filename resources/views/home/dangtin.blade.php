@@ -126,23 +126,21 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="usr">Danh mục:</label>
-                                            <select class="select-option-custom pull-right" data-live-search="true"
-                                                    class="form-control" name="idcategory">
+                                            <select class="select-option-custom pull-right form-control" data-live-search="true"
+                                                    name="idcategory">
                                                 @foreach($categories as $category)
-                                                    <option data-tokens="{{$category->slug}}"
-                                                            value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    <option data-tokens="{{$category->slug}}" value="{{ $category->id }}">{{ $category->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="usr">Danh mục bài đăng:</label>
-                                            <select class="select-option-custom pull-right" data-live-search="true"
-                                                    class="form-control" name="idcategory">
+                                            <label for="post_menu">Danh mục bài đăng:</label>
+                                            <select class="select-option-custom pull-right form-control" data-live-search="true"
+                                                     name="postMenu" id="post_menu">
                                                 @foreach($postMenus as $postMenu)
-                                                    <option data-tokens="{{$postMenu->slug}}"
-                                                            value="{{ $postMenu->id }}">{{ $postMenu->name }}</option>
+                                                    <option data-tokens="{{$postMenu->slug}}" value="{{ $postMenu->id }}">{{ $postMenu->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -150,17 +148,12 @@
                                 </div>
                                 <div class="form-group">
                                     <!-- ************** Max Items Demo ************** -->
-                                    <label>Các tiện ích có trong phòng trọ:</label>
-                                    <select id="select-state" name="tienich[]" multiple class="demo-default"
+                                    <label for="select-state">Các tiện ích có trong phòng trọ:</label>
+                                    <select id="select-state" name="tienich[]" multiple class="demo-default select-option-custom form-control"
                                             placeholder="Chọn các tiện ích phòng trọ">
-                                        <option value="Wifi miễn phí">Wifi miễn phí</option>
-                                        <option value="Có gác lửng">Có gác lửng</option>
-                                        <option value="Tủ + giường">Tủ + giường</option>
-                                        <option value="Không chung chủ">Không chung chủ</option>
-                                        <option value="Chung chủ">Chung chủ</option>
-                                        <option value="Giờ giấc tự do">Giờ giấc tự do</option>
-                                        <option value="Vệ sinh riêng">Vệ sinh riêng</option>
-                                        <option value="Vệ sinh chung">Vệ sinh chung</option>
+                                        @foreach($ultilities as $ultitlity)
+                                            <option value="{{ $ultitlity->id }}">{{ $ultitlity->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -209,9 +202,11 @@
             </div>
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.5/js/fileinput.min.js" integrity="sha512-1FvXwt9wkKd29ilILHy0zei6ScE5vdEKqZ6BSW+gmM7mfqC4T4256OmUfFzl1FkaNS3FUQ/Kdzrrs8SD83bCZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript">
         $('#file-5').fileinput({
             theme: 'fa',
@@ -258,7 +253,7 @@
     </script>
 
     <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSgjO2ZLs29Zmv-GPwKucq0hkrIlrrF-U&callback=initialize&libraries=geometry,places"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD541vsuvBAzV7RqE2U6iZEZn-9u5JJpgw&callback=initialize&libraries=geometry,places"
             async defer></script>
     <script>
         var map;
@@ -447,12 +442,4 @@
         // google.maps.event.addDomListener(window, 'load', initialize);
     </script>
     <script type="text/javascript" src="assets/js/selectize.js"></script>
-    <script>
-        $(function () {
-            $('select').selectize(options);
-        });
-        $('#select-state').selectize({
-            maxItems: null
-        });
-    </script>
 @endsection

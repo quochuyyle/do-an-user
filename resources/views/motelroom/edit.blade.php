@@ -1,21 +1,23 @@
 @extends('layouts.master')
+@section('style-css')
+
+@endsection
 @section('content')
     <div class="gap"></div>
     <div class="container">
         <div class="row">
             <?php
-             $latLng = (array)json_decode($motelroom->latlng);
-             $previewImages = [];
-             $images = (array)json_decode($motelroom->images);
-             foreach ($images as $image){
-                $previewImages [] = ("<img src='".asset("/uploads/images/$image")."' class='file-preview-image' alt='Image' title='Image' />");
-             }
-//             $previewImages = json_encode($previewImages);
+            $latLng = (array)json_decode($motelroom->latlng);
+            $previewImages = [];
+            $images = json_decode($motelroom->images);
+            foreach ($images as $image) {
+//                $previewImages [] = html_entity_decode("<img src='" . asset("/uploads/images/$image") . "' class='file-preview-image' alt='Image' title='Image' />");
+                $previewImages []=  asset("/uploads/images/$image");
+            }
 
 
-//             dd($previewImages);
-//             dd($images);
-//             dd($latLng[0]);
+//            dd($previewImages);
+
             ?>
             <div class="col-md-8">
                 <h1 class="entry-title entry-prop">Chỉnh sửa thông tin Phòng trọ</h1>
@@ -48,12 +50,14 @@
                             </div>
                         @endif
                         @if(Auth::user()->tinhtrang != 0)
-                            <form action="{{ route ('user.dangtin.sua', $motelroom->id) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route ('user.dangtin.sua', $motelroom->id) }}" method="POST"
+                                  enctype="multipart/form-data">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-{{--                                <input type="hidden" name="motelroom_id" value="{{ \Illuminate\Support\Facades\Auth::user()->id }}">--}}
+                                {{--                                <input type="hidden" name="motelroom_id" value="{{ \Illuminate\Support\Facades\Auth::user()->id }}">--}}
                                 <div class="form-group">
                                     <label for="usr">Tiêu đề bài đăng:</label>
-                                    <input type="text" class="form-control" name="txttitle" value="{{ $motelroom->title }}">
+                                    <input type="text" class="form-control" name="txttitle"
+                                           value="{{ $motelroom->title }}">
                                 </div>
                                 <div class="form-group">
                                     <label>Địa chỉ phòng trọ:</label> Bạn có thể nhập hoặc chọn ví trí trên bản đồ
@@ -63,20 +67,26 @@
                                         điều chỉnh bằng cách kéo điểm màu xanh trên bản đồ tới vị trí chính xác.</p>
                                     <input type="hidden" id="txtaddress" name="txtaddress" value=""
                                            class="form-control"/>
-                                    <input type="hidden" id="txtlat" value="{{ $latLng[0] }}" name="txtlat" class="form-control" />
-                                    <input type="hidden" id="txtlng" value="{{ $latLng[1] }}" name="txtlng" class="form-control"/>
+                                    <input type="hidden" id="txtlat" value="{{ $latLng[0] }}" name="txtlat"
+                                           class="form-control"/>
+                                    <input type="hidden" id="txtlng" value="{{ $latLng[1] }}" name="txtlng"
+                                           class="form-control"/>
                                 </div>
                                 <div id="map-canvas" style="width: auto; height: 400px;"></div>
                                 <div class="row">
                                     <div class="col-md-9">
                                         <label for="term">Ngày bắt đầu và kết thúc:</label>
-                                        <input  class="form-control" id="term" type="text" name="term"  value="{{ $motelroom->start_date .' - '.$motelroom->end_date }}"/>
-                                        <input type="hidden" name="txtstart_date" id="txtstart_date"  value="{{ $motelroom->start_date }}"  />
-                                        <input type="hidden" name="txtend_date" id="txtend_date"  value="{{ $motelroom->end_date }}"/>
+                                        <input class="form-control" id="term" type="text" name="term"
+                                               value="{{ $motelroom->start_date .' - '.$motelroom->end_date }}"/>
+                                        <input type="hidden" name="txtstart_date" id="txtstart_date"
+                                               value="{{ $motelroom->start_date }}"/>
+                                        <input type="hidden" name="txtend_date" id="txtend_date"
+                                               value="{{ $motelroom->end_date }}"/>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="fee">Phí đăng tin</label>
-                                        <input  class="form-control" id="fee" type="text" name="txtfee"  value="{{ old('txtfee') }}" />
+                                        <input class="form-control" id="fee" type="text" name="txtfee"
+                                               value="{{ old('txtfee', $motelroom->term()->first()->price) }}"/>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -84,13 +94,14 @@
                                         <div class="form-group">
                                             <label for="usr">Giá phòng( vnđ ):</label>
                                             <input type="number" name="txtprice" class="form-control"
-                                                   placeholder="750000" value="{{ $motelroom->price }}" >
+                                                   placeholder="750000" value="{{ $motelroom->price }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="usr">Diện tích( m<sup>2</sup> ):</label>
-                                            <input type="number" name="txtarea" class="form-control" placeholder="16" value="{{ $motelroom->area }}" >
+                                            <input type="number" name="txtarea" class="form-control" placeholder="16"
+                                                   value="{{ $motelroom->area }}">
                                         </div>
                                     </div>
                                 </div>
@@ -98,7 +109,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="usr">Quận/ Huyện:</label>
-                                            <select class="selectpicker pull-right" data-live-search="true"
+                                            <select class="select-option-custom form-control" data-live-search="true"
                                                     name="iddistrict" id="selectdistrict">
                                                 @foreach($districts as $district)
                                                     <option data-tokens="{{$district->slug}}"
@@ -110,7 +121,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="usr">Danh mục:</label>
-                                            <select class="selectpicker pull-right" data-live-search="true"
+                                            <select class="select-option-custom form-control" data-live-search="true"
                                                     class="form-control" name="idcategory">
                                                 @foreach($categories as $category)
                                                     <option data-tokens="{{$category->slug}}"
@@ -128,18 +139,23 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <!-- ************** Max Items Demo ************** -->
-                                    <label>Các tiện ích có trong phòng trọ:</label>
-                                    <select id="select-state" name="tienich[]" multiple class="demo-default"
+                                @php
+                                    $ultility_id = (array)json_decode($motelroom->utilities);
+
+                                    if(!empty($tag->categoryTags)){
+                                    foreach ($tag->categoryTags as $value) {
+                                        $cat_id[] = $value->getOriginal('pivot_category_id');
+                                      }
+                                    }
+                                @endphp
+                                <!-- ************** Max Items Demo ************** -->
+                                    <label for="select-state">Các tiện ích có trong phòng trọ:</label>
+                                    <select id="select-state" name="tienich[]" multiple
+                                            class="select-option-custom form-control"
                                             placeholder="Chọn các tiện ích phòng trọ">
-                                        <option value="Wifi miễn phí">Wifi miễn phí</option>
-                                        <option value="Có gác lửng">Có gác lửng</option>
-                                        <option value="Tủ + giường">Tủ + giường</option>
-                                        <option value="Không chung chủ">Không chung chủ</option>
-                                        <option value="Chung chủ">Chung chủ</option>
-                                        <option value="Giờ giấc tự do">Giờ giấc tự do</option>
-                                        <option value="Vệ sinh riêng">Vệ sinh riêng</option>
-                                        <option value="Vệ sinh chung">Vệ sinh chung</option>
+                                        @foreach($ultilities as $ultitlity)
+                                            <option value="{{ $ultitlity->id }}" {{ !$errors->get('tienich') && in_array($ultitlity->id,  $ultility_id) ? 'selected' : '' }}>{{ $ultitlity->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -147,12 +163,8 @@
                                     <textarea class="form-control" rows="5" name="txtdescription"
                                               style=" resize: none;">{{ $motelroom->description  }}</textarea>
                                 </div>
-                                <div class="form-group">
-                                    <label for="comment">Thêm hình ảnh:</label>
-                                    <div class="file-loading">
-                                        <input id="file-5" type="file" class="file" name="hinhanh[]" multiple
-                                               data-preview-file-type="any" data-upload-url="#">
-                                    </div>
+                                <div class="file-loading">
+                                    <input id="file-5" name="hinhanh[]" type="file" multiple>
                                 </div>
                                 <div class="form-group">
                                     <label for="comment" class="mr-2">Trạng thái phòng trọ:</label>
@@ -164,12 +176,6 @@
 
                                 <button class="btn btn-primary">Chỉnh sửa thông tin</button>
                             </form>
-                        @else
-                            <div class="alert bg-danger">
-                                <button type="button" class="close" data-dismiss="alert"><span>×</span><span
-                                            class="sr-only">Close</span></button>
-                                <span class="text-semibold">Error!</span> Tài khoản của bạn đang bị khóa đăng tin.
-                            </div>
                         @endif
                     </div>
                 </div>
@@ -195,255 +201,302 @@
             </div>
         </div>
     </div>
+@endsection
+
+@push('after-script')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.5/js/fileinput.min.js"
+            integrity="sha512-1FvXwt9wkKd29ilILHy0zei6ScE5vdEKqZ6BSW+gmM7mfqC4T4256OmUfFzl1FkaNS3FUQ/Kdzrrs8SD83bCZA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.5/js/plugins/sortable.min.js" integrity="sha512-ELgdXEUQM5x+vB2mycmnSCsiDZWQYXKwlzh9+p+Hff4f5LA+uf0w2pOp3j7UAuSAajxfEzmYZNOOLQuiotrt9Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.0/js/plugins/piexif.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.0/themes/fas/theme.min.js"></script>
+    <!-- optionally if you need translation for your language then include the locale file as mentioned below (replace LANG.js with your language locale) -->
+    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.0/js/locales/LANG.js"></script>
     <script type="text/javascript">
-        {{--let previewImages = {{ json_encode($images) }};--}}
-        // console.log(previewImages)
-        {{--console.log({{$previewImages [0]}} );--}}
-        console.log({!! $previewImages [0] !!};
-        let previewImages = [];
-            {{--previewImages.push({{ $previewImages [0] }});--}}
-
-        $('#file-5').fileinput({
-            theme: 'fa',
-            language: 'vi',
-            showUpload: false,
-            allowedFileExtensions: ['jpg', 'png', 'gif'],
-            // uploadUrl: "https://mcdn.wallpapersafari.com/medium/4/26/oNjunF.jpg",
-            initialPreviewAsData: false,
-            initialPreview: [''], //,
-            initialPreviewConfig: [
-                {
-                    caption: 'desert.jpg',
-                    width: '120px',
-                    url: 'http://localhost/avatar/delete', // server delete action
-                    key: 100,
-                    extra: {id: 100}
-                }]
-{{--            {{$images [1]}},{{$images [2]}},{{$images [3]}},]--}}
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         });
+        $(document).ready(function () {
+            $('.select-option-custom').select2();
+
+            let previewImagesArr = [];
+            <?php foreach($previewImages as $key => $val){ ?>
+            previewImagesArr.push('<?php echo $val; ?>');
+            <?php } ?>
+            $("#file-5").fileinput({
+                uploadUrl: "{{ route('motelroom.upload.file', $motelroom->id ) }}",
+                uploadAsync: false,
+                minFileCount: 2,
+                maxFileCount: 5,
+                overwriteInitial: true,
+                initialPreview: previewImagesArr,
+                initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+                initialPreviewFileType: 'image', // image is the default and can be overridden in config below
+                append:true
+            }).on('filesorted', function(e, params) {
+                console.log('File sorted params', params);
+            }).on('fileuploaded', function(e, params) {
+                console.log('File uploaded params', params);
+            });
+            $('input[name="term"]').daterangepicker({
+                opens: 'left',
+                locale: {
+                    format: 'DD-MM-YYYY'
+                },
+                autoUpdateInput: false,
+                // maxDate:'3d',
+                // minDate: -3
+            }, function (start, end, label) {
+                let diff = end.diff(start, 'days'),
+                    feePerDay = $('#postCategory').find(':selected').data('value');
+                // console.log(feePerDay)
+                $('#txtstart_date').val(start.format('DD-MM-YYYY'))
+                $('#txtend_date').val(end.format('DD-MM-YYYY'))
+                let fee = feePerDay * diff;
+                $('#fee').val(fee)
+            });
 
 
+            $('input[name="term"]').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+            });
 
-        $('input[name="term"]').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
-        });
+            $('input[name="term"]').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
 
-        $('input[name="term"]').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
+            });
 
-        });
+            var support = (function () {
+                if (!window.DOMParser) return false;
+                var parser = new DOMParser();
+                try {
+                    parser.parseFromString('x', 'text/html');
+                } catch(err) {
+                    return false;
+                }
+                return true;
+            })();
 
-    </script>
+            var textToHTML= function (str) {
 
-    <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSgjO2ZLs29Zmv-GPwKucq0hkrIlrrF-U&callback=initialize&libraries=geometry,places"
-            async defer></script>
-    <script>
-        var map;
-        var marker;
+                // check for DOMParser support
+                if (support) {
+                    var parser = new DOMParser();
+                    var doc = parser.parseFromString(str, 'text/html');
+                    return doc.body.innerHTML;
+                }
 
+                // Otherwise, create div and append HTML
+                var dom = document.createElement('div');
+                dom.innerHTML = str;
+                return dom;
 
-        function initialize() {
-            let latitude = 0,
-                longitude = 0;
-
-
-
-            var mapOptions = {
-                center: {lat: 16.070372, lng: 108.214388},
-                zoom: 12
             };
-            map = new google.maps.Map(document.getElementById('map-canvas'),
-                mapOptions);
-
-            // Get GEOLOCATION
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    let lat = {{ $latLng[0] }},
-                        lng = {{ $latLng[1] }}
+        })
+    </script>
+        <script>
+            var map;
+            var marker;
 
 
-                    var pos = new google.maps.LatLng(lat,
-                        lng);
-                    var geocoder = new google.maps.Geocoder();
-                    geocoder.geocode({
-                        'latLng': pos
-                    }, function (results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            if (results[0]) {
+            function initialize() {
+                let latitude = 0,
+                    longitude = 0;
 
-                                // console.log(position.coords.latitude)
-                                // console.log(position.coords.longitude)
-                                // console.log(results[0])
-                                // console.log(results[0].formatted_address);
+
+                var mapOptions = {
+                    center: {lat: 16.070372, lng: 108.214388},
+                    zoom: 12
+                };
+                map = new google.maps.Map(document.getElementById('map-canvas'),
+                    mapOptions);
+
+                // Get GEOLOCATION
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        let lat = {{ $latLng[0] }},
+                            lng = {{ $latLng[1] }}
+
+
+                        var pos = new google.maps.LatLng(lat,
+                            lng);
+                        var geocoder = new google.maps.Geocoder();
+                        geocoder.geocode({
+                            'latLng': pos
+                        }, function (results, status) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                if (results[0]) {
+
+                                    // console.log(position.coords.latitude)
+                                    // console.log(position.coords.longitude)
+                                    // console.log(results[0])
+                                    // console.log(results[0].formatted_address);
+                                } else {
+                                    console.log('No results found');
+                                }
                             } else {
-                                console.log('No results found');
+                                console.log('Geocoder failed due to: ' + status);
                             }
-                        } else {
-                            console.log('Geocoder failed due to: ' + status);
-                        }
+                        });
+                        map.setCenter(pos);
+                        marker = new google.maps.Marker({
+                            position: pos,
+                            map: map,
+                            draggable: true
+                        });
+                    }, function () {
+                        handleNoGeolocation(true);
                     });
-                    map.setCenter(pos);
-                    marker = new google.maps.Marker({
-                        position: pos,
+                } else {
+                    // Browser doesn't support Geolocation
+                    handleNoGeolocation(false);
+                }
+
+                function handleNoGeolocation(errorFlag) {
+                    if (errorFlag) {
+                        var content = 'Error: The Geolocation service failed.';
+                    } else {
+                        var content = 'Error: Your browser doesn\'t support geolocation.';
+                    }
+
+                    var options = {
                         map: map,
+                        zoom: 19,
+                        position: new google.maps.LatLng(16.070372, 108.214388),
+                        content: content
+                    };
+
+                    map.setCenter(options.position);
+                    marker = new google.maps.Marker({
+                        position: options.position,
+                        map: map,
+                        zoom: 19,
+                        icon: "images/gps.png",
                         draggable: true
                     });
-                }, function () {
-                    handleNoGeolocation(true);
-                });
-            } else {
-                // Browser doesn't support Geolocation
-                handleNoGeolocation(false);
-            }
-
-            function handleNoGeolocation(errorFlag) {
-                if (errorFlag) {
-                    var content = 'Error: The Geolocation service failed.';
-                } else {
-                    var content = 'Error: Your browser doesn\'t support geolocation.';
-                }
-
-                var options = {
-                    map: map,
-                    zoom: 19,
-                    position: new google.maps.LatLng(16.070372, 108.214388),
-                    content: content
-                };
-
-                map.setCenter(options.position);
-                marker = new google.maps.Marker({
-                    position: options.position,
-                    map: map,
-                    zoom: 19,
-                    icon: "images/gps.png",
-                    draggable: true
-                });
-                /* Dragend Marker */
-                google.maps.event.addListener(marker, 'dragend', function () {
-                    var geocoder = new google.maps.Geocoder();
-                    geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            if (results[0]) {
-                                // console.log('Here')
-                                $('#location-text-box').val(results[0].formatted_address);
-                                $('#txtaddress').val(results[0].formatted_address);
-                                $('#txtlat').val(marker.getPosition().lat());
-                                $('#txtlng').val(marker.getPosition().lng());
-                                infowindow.setContent(results[0].formatted_address);
-                                infowindow.open(map, marker);
-                            }
-                        }
-                    });
-                });
-                /* End Dragend */
-
-            }
-
-            // get places auto-complete when user type in location-text-box
-            var input = /** @type {HTMLInputElement} */
-                (
-                    document.getElementById('location-text-box'));
-
-
-            var autocomplete = new google.maps.places.Autocomplete(input);
-            autocomplete.bindTo('bounds', map);
-
-            var infowindow = new google.maps.InfoWindow();
-            marker = new google.maps.Marker({
-                map: map,
-                icon: "images/gps.png",
-                anchorPoint: new google.maps.Point(0, -29),
-                draggable: true
-            });
-
-            google.maps.event.addListener(autocomplete, 'place_changed', function () {
-                infowindow.close();
-                marker.setVisible(false);
-                var place = autocomplete.getPlace();
-                if (!place.geometry) {
-                    return;
-                }
-                var geocoder = new google.maps.Geocoder();
-                geocoder.geocode({'latLng': place.geometry.location}, function (results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
-                        if (results[0]) {
-                            let count=results[0].address_components.length
-                            let districts=document.getElementById('selectdistrict')
-                            let districtName=results[0].address_components[count-3].long_name;
-                            for (let i=0;i<districts.length;i++){
-
-                                if(districtName.match(districts[i].innerText)){
-                                    console.log('Helloe here')
-                                    console.log(districts[i].innerText)
+                    /* Dragend Marker */
+                    google.maps.event.addListener(marker, 'dragend', function () {
+                        var geocoder = new google.maps.Geocoder();
+                        geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                if (results[0]) {
+                                    // console.log('Here')
+                                    $('#location-text-box').val(results[0].formatted_address);
+                                    $('#txtaddress').val(results[0].formatted_address);
+                                    $('#txtlat').val(marker.getPosition().lat());
+                                    $('#txtlng').val(marker.getPosition().lng());
+                                    infowindow.setContent(results[0].formatted_address);
+                                    infowindow.open(map, marker);
                                 }
                             }
-                            // $('#selectdistrict').each(function (){
-                            //     $(this).val()
-                            // })
-                            // console.log(results[count-3])
-                            // console.log(results[0].address_components[count-3].long_name)
-                            $('#txtaddress').val(results[0].formatted_address);
-                            infowindow.setContent(results[0].formatted_address);
-                            infowindow.open(map, marker);
-                        }
-                    }
-                });
-                // If the place has a geometry, then present it on a map.
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(17); // Why 17? Because it looks good.
-                }
-                marker.setIcon( /** @type {google.maps.Icon} */ ({
-                    url: "images/gps.png"
-                }));
-                document.getElementById('txtlat').value = place.geometry.location.lat();
-                document.getElementById('txtlng').value = place.geometry.location.lng();
-                // console.log(place.geometry.location.lat());
-                marker.setPosition(place.geometry.location);
-                marker.setVisible(true);
+                        });
+                    });
+                    /* End Dragend */
 
-                var address = '';
-                if (place.address_components) {
-                    address = [
-                        (place.address_components[0] && place.address_components[0].short_name || ''), (place.address_components[1] && place.address_components[1].short_name || ''), (place.address_components[2] && place.address_components[2].short_name || '')
-                    ].join(' ');
                 }
-                /* Dragend Marker */
-                google.maps.event.addListener(marker, 'dragend', function () {
+
+                // get places auto-complete when user type in location-text-box
+                var input = /** @type {HTMLInputElement} */
+                    (
+                        document.getElementById('location-text-box'));
+
+
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.bindTo('bounds', map);
+
+                var infowindow = new google.maps.InfoWindow();
+                marker = new google.maps.Marker({
+                    map: map,
+                    icon: "images/gps.png",
+                    anchorPoint: new google.maps.Point(0, -29),
+                    draggable: true
+                });
+
+                google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                    infowindow.close();
+                    marker.setVisible(false);
+                    var place = autocomplete.getPlace();
+                    if (!place.geometry) {
+                        return;
+                    }
                     var geocoder = new google.maps.Geocoder();
-                    geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
+                    geocoder.geocode({'latLng': place.geometry.location}, function (results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
                             if (results[0]) {
+                                let count = results[0].address_components.length
+                                let districts = document.getElementById('selectdistrict')
+                                let districtName = results[0].address_components[count - 3].long_name;
+                                for (let i = 0; i < districts.length; i++) {
 
-                                $('#location-text-box').val(results[0].formatted_address);
-                                $('#txtlat').val(marker.getPosition().lat());
-                                $('#txtlng').val(marker.getPosition().lng());
+                                    if (districtName.match(districts[i].innerText)) {
+                                        console.log('Helloe here')
+                                        console.log(districts[i].innerText)
+                                    }
+                                }
+                                // $('#selectdistrict').each(function (){
+                                //     $(this).val()
+                                // })
+                                // console.log(results[count-3])
+                                // console.log(results[0].address_components[count-3].long_name)
+                                $('#txtaddress').val(results[0].formatted_address);
                                 infowindow.setContent(results[0].formatted_address);
                                 infowindow.open(map, marker);
                             }
                         }
                     });
+                    // If the place has a geometry, then present it on a map.
+                    if (place.geometry.viewport) {
+                        map.fitBounds(place.geometry.viewport);
+                    } else {
+                        map.setCenter(place.geometry.location);
+                        map.setZoom(17); // Why 17? Because it looks good.
+                    }
+                    marker.setIcon( /** @type {google.maps.Icon} */ ({
+                        url: "images/gps.png"
+                    }));
+                    document.getElementById('txtlat').value = place.geometry.location.lat();
+                    document.getElementById('txtlng').value = place.geometry.location.lng();
+                    // console.log(place.geometry.location.lat());
+                    marker.setPosition(place.geometry.location);
+                    marker.setVisible(true);
+
+                    var address = '';
+                    if (place.address_components) {
+                        address = [
+                            (place.address_components[0] && place.address_components[0].short_name || ''), (place.address_components[1] && place.address_components[1].short_name || ''), (place.address_components[2] && place.address_components[2].short_name || '')
+                        ].join(' ');
+                    }
+                    /* Dragend Marker */
+                    google.maps.event.addListener(marker, 'dragend', function () {
+                        var geocoder = new google.maps.Geocoder();
+                        geocoder.geocode({'latLng': marker.getPosition()}, function (results, status) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                if (results[0]) {
+
+                                    $('#location-text-box').val(results[0].formatted_address);
+                                    $('#txtlat').val(marker.getPosition().lat());
+                                    $('#txtlng').val(marker.getPosition().lng());
+                                    infowindow.setContent(results[0].formatted_address);
+                                    infowindow.open(map, marker);
+                                }
+                            }
+                        });
+                    });
+                    /* End Dragend */
                 });
-                /* End Dragend */
-            });
 
-        }
+            }
 
 
-        // google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-    <script type="text/javascript" src="assets/js/selectize.js"></script>
-    <script>
-        $(function () {
-            $('select').selectize(options);
-        });
-        $('#select-state').selectize({
-            maxItems: null
-        });
-    </script>
-@endsection
+            // google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+        <script type="text/javascript"
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD541vsuvBAzV7RqE2U6iZEZn-9u5JJpgw&callback=initialize&libraries=geometry,places"
+                async defer></script>
+@endpush

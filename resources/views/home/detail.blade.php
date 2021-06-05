@@ -367,6 +367,6 @@
         }
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSgjO2ZLs29Zmv-GPwKucq0hkrIlrrF-U&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQK6QF5hggGOIfcDwdksWmANSfxe_R55g&callback=initMap"
             async defer></script>
 @endsection
