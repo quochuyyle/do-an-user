@@ -260,7 +260,7 @@
                         <li><a class="list-item" class="btn-dangtin" href="user/dangtin"><i class="fas fa-edit"></i>
                                 Đăng tin ngay</a></li>
                     @endif
-                    <li><a class="list-item" href="user/login"><i class="fas fa-user-circle"></i> Đăng Nhập</a></li>
+                    <li class="mr-2"><a class="list-item" href="user/login"><i class="fas fa-user-circle"></i> Đăng Nhập</a></li>
 
                     <li><a class="list-item" href="user/register"><i class="fas fa-sign-in-alt"></i> Đăng Kí</a></li>
                 </ul>

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\WalletHistory;
 use App\MotelTradeHistory;
 use App\PostCategory;
+use App\PostMenu;
 use App\Role;
 use App\Term;
 use App\PushNotification;
@@ -238,15 +239,18 @@ class UserController extends Controller
         $motelroom = $modelMotelroom->where('id', $request->id)->first();
         $districts = $district->get();
         $categories = $category->get();
-       return \view('motelroom.edit', compact('motelroom', 'districts', 'categories'));
+        $postMenus = PostMenu::all();
+        $postCategories = PostCategory::all();
+       return \view('motelroom.edit', compact('motelroom', 'districts', 'categories', 'postMenus', 'postCategories'));
     }
 
-    public function chinhSuaThongTinNhaTro(Request  $request, Motelroom $modelMotelroom, User $user){
-        dd($request->all());
+    public function chinhSuaThongTinNhaTro(Request  $request, Motelroom $modelMotelroom, Term $modelTerm){
          $motelroom = $modelMotelroom->updateMotelInformation($request);
-
-//        $motelroom = $modelMotelroom->where('id', $request->id)->first();
-//        dd($motelroom);
-//        return \view('motelroom.edit', compact('motelroom'));
+         if($request->has('term')) {
+             $term = $modelTerm->createNewTerm($request);
+         }
+         if($motelroom){
+             return redirect()->route('user.profile')->with(['message'=>'Cập nhật thành công !', 'alert-type'=>'success']);
+         }
     }
 }

@@ -196,9 +196,7 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="gap"></div>
-                {{--                <img src="images/banner-1.png" width="100%">--}}
             </div>
         </div>
     </div>
@@ -253,7 +251,7 @@
     </script>
 
     <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD541vsuvBAzV7RqE2U6iZEZn-9u5JJpgw&callback=initialize&libraries=geometry,places"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7UMd51lRd_Sv4Ws0Go8V8vgS-NHv1VwA&callback=initialize&libraries=geometry,places"
             async defer></script>
     <script>
         var map;
@@ -441,5 +439,5 @@
 
         // google.maps.event.addDomListener(window, 'load', initialize);
     </script>
-    <script type="text/javascript" src="assets/js/selectize.js"></script>
+
 @endsection

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Term extends Model
 {
@@ -18,11 +19,11 @@ class Term extends Model
 
     public function createNewTerm($request){
        $data = [
-           'motelroom_id'=>$request->motelroom_id,
-           'user_id'=>$request->user_id,
+           'motelroom_id'=>$request->motelroom_id ? $request->motelroom_id : $request->id,
+           'user_id'=>$request->user_id ? $request->user_id : Auth::user()->id,
            'price'=>$request->fee,
            'start_date'=>$request->start_date,
-           'end_date'=>$request->term,
+           'end_date'=>$request->end_date,
        ];
 
        $newTerm = $this->store($data);

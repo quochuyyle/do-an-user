@@ -18,6 +18,28 @@ body {
   font-family: Source Sans Pro;
 }
 
+@media screen and (min-width: $break-small) {
+
+}
+
+@media screen and (min-width: $break-mobile) {
+
+}
+@media screen and (min-width: $break-375) {
+
+}
+@media screen and (min-width: $break-tablet) {
+
+}
+@media screen and (min-width: $break-1024) {
+
+}
+
+@media screen and (min-width: $break-large) {
+
+}
+
+
 .navbar {
   background: #438BCD !important;
 
@@ -70,7 +92,7 @@ body {
     justify-content: space-between;
   }
 
-  #dropDownList{
+  #dropDownList {
     width: 281px;
     height: auto;
     position: absolute;
@@ -89,7 +111,7 @@ body {
     }
   }
 
-  .dropdown-menu-header{
+  .dropdown-menu-header {
     background: #f7f9fe;
     font-weight: bold;
     border-bottom: 1px solid #e3e3e3;
@@ -103,17 +125,94 @@ body {
 
 .box-search {
   position: absolute;
-  bottom: 58px;
-  right: 50%;
   background: #438BCD;
   -webkit-box-shadow: 13px 7px 52px 12px;
   box-shadow: 13px 7px 52px 12px;
-  width: 1200px;
-  padding: 15px;
   border: 1px solid transparent;
   border-radius: 4px;
   -webkit-transform: translate(50%, 50%);
   transform: translate(50%, 50%);
+
+  .box-search-wrapper {
+
+    .box-search-select{
+      @media screen and (min-width: $break-small) {
+        padding: 1px;
+      }
+
+      @media screen and (min-width: $break-mobile) {
+
+      }
+      @media screen and (min-width: $break-375) {
+
+      }
+      @media screen and (min-width: $break-tablet) {
+
+      }
+      @media screen and (min-width: $break-1024) {
+
+      }
+
+      @media screen and (min-width: $break-large) {
+        padding: 0 10px;
+      }
+    }
+
+    @media screen and (min-width: $break-small) {
+
+    }
+
+    @media screen and (min-width: $break-mobile) {
+
+    }
+    @media screen and (min-width: $break-375) {
+
+    }
+    @media screen and (min-width: $break-tablet) {
+
+    }
+    @media screen and (min-width: $break-1024) {
+
+    }
+
+    @media screen and (min-width: $break-large) {
+      display: flex;
+    }
+  }
+
+  span.select2.select2-container.select2-container--default {
+    width: 185px !important;
+
+  }
+  @media screen and (min-width: $break-small) {
+    width: 212px;
+    bottom: 94px;
+    left: -105px;
+    height: 174px;
+    padding: 10px;
+  }
+
+  @media screen and (min-width: $break-mobile) {
+
+  }
+  @media screen and (min-width: $break-375) {
+
+  }
+  @media screen and (min-width: $break-tablet) {
+
+  }
+  @media screen and (min-width: $break-1024) {
+
+  }
+
+  @media screen and (min-width: $break-large) {
+    width: 977px;
+    bottom: 80px;
+    right: 50%;
+    left: unset;
+    height: 72px;
+    padding: 15px 0;
+  }
 }
 
 .footer {
@@ -190,16 +289,58 @@ body {
 
     .list-motelroom {
       .motelroom-wrapper {
-        display: flex;
+
         border-top: 1px solid #438BCD;
         transform: rotate(0deg);
         background: #FFF9F3;
+
+        @media screen and (min-width: $break-small) {
+          display: block;
+        }
+
+        @media screen and (min-width: $break-mobile) {
+
+        }
+        @media screen and (min-width: $break-375) {
+
+        }
+        @media screen and (min-width: $break-tablet) {
+
+        }
+        @media screen and (min-width: $break-1024) {
+
+        }
+
+        @media screen and (min-width: $break-large) {
+          display: flex;
+        }
 
         .image-wrapper {
           width: 300px;
           height: 100%;
           padding: 20px;
           position: relative;
+
+          @media screen and (min-width: $break-small) {
+            width: 100%;
+          }
+
+          @media screen and (min-width: $break-mobile) {
+
+          }
+          @media screen and (min-width: $break-375) {
+
+          }
+          @media screen and (min-width: $break-tablet) {
+
+          }
+          @media screen and (min-width: $break-1024) {
+
+          }
+
+          @media screen and (min-width: $break-large) {
+            width: 300px;
+          }
 
           .image {
             height: 100%;
@@ -224,9 +365,28 @@ body {
           }
 
           .information-wrapper {
-            display: flex;
-            width: 100%;
 
+            width: 100%;
+            @media screen and (min-width: $break-small) {
+              display: block;
+            }
+
+            @media screen and (min-width: $break-mobile) {
+
+            }
+            @media screen and (min-width: $break-375) {
+
+            }
+            @media screen and (min-width: $break-tablet) {
+
+            }
+            @media screen and (min-width: $break-1024) {
+
+            }
+
+            @media screen and (min-width: $break-large) {
+              display: flex;
+            }
             .price-wrapper {
               margin: 0 20px 0 0;
 
@@ -272,19 +432,40 @@ body {
           }
 
           .contact-wrapper {
-            display: flex;
-            justify-content: space-between;
 
-            .left-wrapper{
+            justify-content: space-between;
+            @media screen and (min-width: $break-small) {
+              display: block;
+            }
+
+            @media screen and (min-width: $break-mobile) {
+
+            }
+            @media screen and (min-width: $break-375) {
+
+            }
+            @media screen and (min-width: $break-tablet) {
+
+            }
+            @media screen and (min-width: $break-1024) {
+
+            }
+
+            @media screen and (min-width: $break-large) {
+              display: flex;
+            }
+
+            .left-wrapper {
               display: flex;
               align-items: center;
-              .user-avatar{
+
+              .user-avatar {
                 width: 30px;
                 height: 30px;
                 object-fit: cover;
               }
 
-              .user-name{
+              .user-name {
                 font-style: normal;
                 font-weight: bold;
                 font-size: 16px;
@@ -292,7 +473,7 @@ body {
               }
             }
 
-            .right-wrapper{
+            .right-wrapper {
 
             }
 
@@ -305,6 +486,27 @@ body {
               height: 30px;
               background: #438BCD;
               border-radius: 8px;
+
+              @media screen and (min-width: $break-small) {
+
+              }
+
+              @media screen and (min-width: $break-mobile) {
+
+              }
+              @media screen and (min-width: $break-375) {
+
+              }
+              @media screen and (min-width: $break-tablet) {
+
+              }
+              @media screen and (min-width: $break-1024) {
+
+              }
+
+              @media screen and (min-width: $break-large) {
+
+              }
             }
 
             .btn-message {
@@ -316,6 +518,27 @@ body {
               border: 1px solid #438BCD;
               box-sizing: border-box;
               border-radius: 8px;
+
+              @media screen and (min-width: $break-small) {
+                width: 143px;
+              }
+
+              @media screen and (min-width: $break-mobile) {
+
+              }
+              @media screen and (min-width: $break-375) {
+
+              }
+              @media screen and (min-width: $break-tablet) {
+
+              }
+              @media screen and (min-width: $break-1024) {
+
+              }
+
+              @media screen and (min-width: $break-large) {
+
+              }
             }
           }
         }
@@ -669,45 +892,12 @@ body {
         height: 31px;
         background: #FFFFFF;
         border: 1px solid #000000;
+        -webkit-box-sizing: border-box;
         box-sizing: border-box;
         border-radius: 5px;
-        position: relative;
-
-        .heart-wrapper {
-          position: absolute;
-
-          #twitter-heart {
-
-            background: url('https://abs.twimg.com/a/1454637594/img/t1/web_heart_animation.png');
-            background-position: 0px;
-            background-repeat: no-repeat;
-            height: 100px;
-            width: 100px;
-            top: -40px;
-            left: -40px;
-            pointer-events: none;
-          }
-
-          //Here, we're using a checkbox to toggle the animation and just scaling it to be massive to cover our desired click area. There might be a more elegant way to do this, but this makes it easy imo.
-          .toggle {
-            opacity: 0; //Change to see checkbox area
-            transform: scale(3);
-            position: absolute;
-
-            &:checked + #twitter-heart {
-              //Steps splits the animation into equal keyframes vs. a smooth slide
-              //Forwards keeps the animation on it's final state
-              animation: heart-animate 0.8s steps(28) forwards;
-            }
-          }
-
-
-          @keyframes heart-animate {
-            100% {
-              background-position: -2800px;
-            }
-          }
-        }
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
       }
     }
@@ -816,3 +1006,7 @@ body {
   }
 }
 
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: #438BCD !important;
+  color: #ffffff;
+}

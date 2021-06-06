@@ -41,11 +41,13 @@ class Motelroom extends Model
         return $this->hasOne(Term::class, 'motelroom_id', 'id')->orderBy('id', 'DESC');
     }
 
-    public function favourtie(){
-        return $this->belongsToMany(User::class, 'favourites', 'motelroom_id','id');
+    public function favourtie()
+    {
+        return $this->belongsToMany(User::class, 'favourites', 'motelroom_id', 'id');
     }
 
-    public function postMenu(){
+    public function postMenu()
+    {
         return $this->belongsTo(PostMenu::class, 'post_menu', 'id');
     }
 
@@ -63,57 +65,57 @@ class Motelroom extends Model
         return self::where('id', $data['id'])->update($data);
     }
 
-    public function updateMotelInformation($request){
+    public function updateMotelInformation($request)
+    {
         $data = [
-            'title'=> $request->txttitle,
-            'description'=> $request->txtdescription,
-            'price'=> $request->txtprice,
-            'area'=> $request->txtarea,
-            'address'=> $request->txtaddress,
-            'post_type'=> $request->post_type,
-            'post_menu'=> $request->post_menu,
-            'start_date' =>$request->txtstart_date,
-            'end_date' =>$request->txtend_date,
-            'disctrict_id'=> $request->iddistrict,
-            'category_id'=> $request->idcategory,
-            'phone'=> $request->txtphone,
+            'id' => $request->id,
+            'title' => $request->txttitle,
+            'description' => $request->txtdescription,
+            'price' => $request->txtprice,
+            'area' => $request->txtarea,
+            'address' => $request->txtaddress,
+            'post_menu' => $request->postMenu,
+            'district_id' => $request->iddistrict,
+            'category_id' => $request->idcategory,
+            'phone' => $request->txtphone,
         ];
 
         $latlngArr = [
-            0=>$request->txtlat,
-            1=>$request->txtlng,
+            0 => $request->txtlat,
+            1 => $request->txtlng,
         ];
         $data['latlng'] = json_encode($latlngArr);
         $data['utilities'] = json_encode($request->tienich);
-        $data['images'] = json_encode($request->hinhanh);
-        if ($request->has('status')){
-             $data['status'] = 1;
+        if ($request->has('hinhanh')) {
+            $data['images'] = json_encode($request->hinhanh);
         }
-        else
-        {
+
+        if ($request->has('status')) {
+            $data['status'] = 1;
+        } else {
             $data['status'] = 0;
         }
-        dd($data);
+        if ($request->has('start_date')) {
+            $data['start_date'] = $request->txtstart_date;
+        }
+        if ($request->has('end_date')) {
+            $data['end_date'] = $request->txtend_date;
+        }
+        if ($request->has('postCategory')) {
+            $data['post_type'] = $request->postCategory;
+        }
+        return $this->put($data);
     }
 
     public function updateMotel($request)
     {
         $data = [
-            'id'=> $request->motelroom_id,
-            'end_date'=>$request->term,
+            'id' => $request->motelroom_id,
+            'end_date' => $request->term,
             'post_type' => $request->post_type
         ];
         $this->put($data);
     }
 
-    public function uploadFiles($request){
-        $images = [];
-        $data = [];
-        foreach ($request->hinhanh as $row){
-           $images[] = Ultilities::uploadFile($row);
-        }
-        $data['id'] = $request->id;
-        $data['images'] = json_encode($images);
-        return $this->put($data);
-    }
+
 }

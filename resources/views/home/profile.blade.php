@@ -111,7 +111,7 @@
                                                 <tr>
                                                     <td>{{ $post->title }}</td>
                                                     <td>{{ $post->category->name }}</td>
-                                                    <td>{{ $post->price }}</td>
+                                                    <td>{{ number_format($post->price, 2 , ',', '.') }}</td>
                                                     <td>{{ $post->count_view }}</td>
                                                     @php
                                                         date_default_timezone_set('Asia/Ho_Chi_Minh');
@@ -132,8 +132,10 @@
                                                     <td style="display: flex;justify-content: space-between">
                                                         <input type="hidden" value="{{ $post->end_date }}"
                                                                class="old_endDate" name="old_endDate"/>
+                                                        @if($interval->days <= 0)
                                                         <a href="{{ route('user.motelroom.term', $post->id) }}">Gia
                                                             hạn</a>
+                                                        @endif
                                                         <a href="{{ route('user.dangtin.hienthi', $post->id) }}"
                                                            class="btn-edit" data-id="{{ $post->id }}">Sửa thông tin</a>
                                                         <a href="phongtro/{{ $post->slug }}"><i class="fas fa-eye"></i>

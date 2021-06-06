@@ -163,25 +163,20 @@
                             <h3 class="name">{{ $motelroom->user->name }}</h3>
                         </div>
                         <div class="phone-wrapper">
-                            <a href="tel:{{ $motelroom->phone }}" class="btn btn-phone"><img class="image-icon"
-                                                                                             src="{{ asset('/images/phone_icon.png') }}"
-                                                                                             alt="">{{ $motelroom->phone }}
+                            <a href="tel:{{ $motelroom->phone }}" class="btn btn-phone">
+                                <img class="image-icon  mr-2" src="{{ asset('/images/phone_icon.png') }}" alt="">{{ $motelroom->phone }}
                             </a>
                         </div>
                         <div class="message-wrapper">
-                            <button class="btn btn-message"><img class="image-icon"
-                                                                 src="{{ asset('/images/zalo_icon.png') }}" alt="">Nhắn
-                                zalo
+                            <button class="btn btn-message">
+                                <img class="image-icon mr-2" src="{{ asset('/images/zalo_icon.png') }}" alt="">
+                                Nhắn zalo
                             </button>
                         </div>
                         <div class="favourite-wrapper">
-                            <button class="btn btn-favourite">
-                                <div class="heart-wrapper">
-                                    <input type="checkbox" data-id="{{ $motelroom->id }}"
-                                           {{ \Illuminate\Support\Facades\Auth::user()->favourite->where('motelroom_id', $motelroom->id)->first() ? 'checked' : '' }} class="toggle">
-                                    <div id="twitter-heart"></div>
-                                    </input>
-                                </div>
+                            <button class="btn btn-favourite" type="button">
+                                <img class="image-icon mr-2" src="{{ asset('/images/heart.png') }}" alt="">
+                                Yêu thích
                             </button>
                         </div>
                     </div>
@@ -219,7 +214,7 @@
     </div>
 @endsection
 @push('after-script')
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD541vsuvBAzV7RqE2U6iZEZn-9u5JJpgw&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7UMd51lRd_Sv4Ws0Go8V8vgS-NHv1VwA&callback=initMap"
             async defer></script>
     <script>
         $(document).ready(function () {

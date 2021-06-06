@@ -46,7 +46,7 @@
         return $string ? implode(', ', $string) . ' trước' : 'Vừa xong';
     }
     ?>
-    <div class="container-fluid" style=" -left: 0px;padding-right: 0px;">
+    <div class="container-fluid">
         <div class="search-map hidden-xs">
             <div id="map"></div>
             <div class="box-search">
@@ -55,8 +55,8 @@
                 <form onsubmit="return false">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="form-group">
-                        <div class="d-flex justify-content-between">
-                            <div class="col-xs-6">
+                        <div class="box-search-wrapper  mb-2">
+                            <div class="box-search-select">
                                 <select class="select-option-custom form-control h-100" data-live-search="true" id="selectprovince">
                                     <option data-tokens="" value="">Chọn tỉnh/thành phố</option>
                                     @foreach($provinces as $province)
@@ -65,8 +65,7 @@
                                     @endforeach
                                 </select>
                             </div>
-
-                            <div class="col-xs-6">
+                            <div class="box-search-select">
                                 <select class="select-option-custom form-control" data-live-search="true" id="selectdistrict">
                                     <option value="">Chọn quận/huyện</option>
                                     @foreach($district as $quan)
@@ -75,7 +74,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="box-search-select">
                                 <select class="select-option-custom form-control" data-live-search="true" id="selectcategory">
                                     <option value="">Chọn loại phòng trọ</option>
                                     @foreach($categories as $category)
@@ -84,7 +83,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="box-search-select">
                                 <select class="select-option-custom form-control" id="selectprice" data-live-search="true">
                                     <option data-tokens="khoang gia" min="1" max="10000000">Khoảng giá</option>
                                     <option data-tokens="Tu 500.000 VNĐ - 700.000 VNĐ" min="500000" max="700000">Từ
@@ -107,11 +106,10 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="box-search-select">
                                 <button class="btn btn-success" onclick="searchMotelajax()">Tìm kiếm ngay</button>
                             </div>
                         </div>
-
                     </div>
                 </form>
 
@@ -140,42 +138,6 @@
                                 </div>
                             @else
                             @endif
-{{--                            <div class="list-motelroom">--}}
-{{--                                @foreach($motelrooms as $motelroom)--}}
-{{--                                    @php--}}
-{{--                                        $images = (array)(json_decode($motelroom->images));--}}
-{{--                                    @endphp--}}
-{{--                                    <div class="motelroom-wrapper">--}}
-{{--                                        <div class="image-wrapper">--}}
-{{--                                            <img class="image" src="{{ asset('uploads/images/'.$images[0]) }}" alt="">--}}
-{{--                                        </div>--}}
-{{--                                        <div class="content-wrapper">--}}
-{{--                                            <div class="name-wrapper">--}}
-{{--                                                <h4 class="name">{{ $motelroom->title }}</h4>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="information-wrapper">--}}
-{{--                                                <div class="price-wrapper">--}}
-{{--                                                    <span class="price">Gía: {{ number_format($motelroom->price, null, ',', '.') }} VND</span>--}}
-{{--                                                </div>--}}
-{{--                                                <div class="area-wrapper">--}}
-{{--                                                    <span class="area">Diện tích: {{ $motelroom->area }}m2</span>--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="address-wrapper">--}}
-{{--                                                                        <span class="address">--}}
-{{--                                                                        Địa chỉ: {{ $motelroom->address }}--}}
-{{--                                                                        </span>--}}
-{{--                                            </div>--}}
-{{--                                            <p class="description"> {{ $motelroom->description }}</p>--}}
-{{--                                            <div class="contact-wrapper">--}}
-{{--                                                <a href="tel:{{ $motelroom->phone }}"--}}
-{{--                                                   class="btn btn-phone">{{ $motelroom->phone }}</a>--}}
-{{--                                                <a href="" class="btn btn-message">Nhắn Zalo</a>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                @endforeach--}}
-{{--                            </div>--}}
                         </div>
                     </div>
                     <div class="col-3">
@@ -354,6 +316,6 @@
 
                 })
             </script>
-            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD541vsuvBAzV7RqE2U6iZEZn-9u5JJpgw&callback=initMap"
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7UMd51lRd_Sv4Ws0Go8V8vgS-NHv1VwA&callback=initMap"
                     async defer></script>
     @endpush

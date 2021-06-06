@@ -97,17 +97,58 @@
 
 .box-search {
   position: absolute;
-  bottom: 58px;
-  right: 50%;
   background: #438BCD;
   -webkit-box-shadow: 13px 7px 52px 12px;
   box-shadow: 13px 7px 52px 12px;
-  width: 1200px;
-  padding: 15px;
   border: 1px solid transparent;
   border-radius: 4px;
   -webkit-transform: translate(50%, 50%);
   transform: translate(50%, 50%);
+}
+
+@media screen and (min-width: 320px) {
+  .box-search .box-search-wrapper .box-search-select {
+    padding: 1px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .box-search .box-search-wrapper .box-search-select {
+    padding: 0 10px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .box-search .box-search-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+}
+
+.box-search span.select2.select2-container.select2-container--default {
+  width: 185px !important;
+}
+
+@media screen and (min-width: 320px) {
+  .box-search {
+    width: 212px;
+    bottom: 94px;
+    left: -105px;
+    height: 174px;
+    padding: 10px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .box-search {
+    width: 977px;
+    bottom: 80px;
+    right: 50%;
+    left: unset;
+    height: 72px;
+    padding: 15px 0;
+  }
 }
 
 .footer {
@@ -176,13 +217,24 @@
 }
 
 .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   border-top: 1px solid #438BCD;
   -webkit-transform: rotate(0deg);
           transform: rotate(0deg);
   background: #FFF9F3;
+}
+
+@media screen and (min-width: 320px) {
+  .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
 }
 
 .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .image-wrapper {
@@ -190,6 +242,18 @@
   height: 100%;
   padding: 20px;
   position: relative;
+}
+
+@media screen and (min-width: 320px) {
+  .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .image-wrapper {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .image-wrapper {
+    width: 300px;
+  }
 }
 
 .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .image-wrapper .image {
@@ -215,10 +279,21 @@
 }
 
 .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .information-wrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   width: 100%;
+}
+
+@media screen and (min-width: 320px) {
+  .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .information-wrapper {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .information-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
 }
 
 .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .information-wrapper .price-wrapper {
@@ -263,12 +338,23 @@
 }
 
 .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .contact-wrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+}
+
+@media screen and (min-width: 320px) {
+  .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .contact-wrapper {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .contact-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
 }
 
 .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .contact-wrapper .left-wrapper {
@@ -315,6 +401,12 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   border-radius: 8px;
+}
+
+@media screen and (min-width: 320px) {
+  .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper .content-wrapper .contact-wrapper .btn-message {
+    width: 143px;
+  }
 }
 
 .home-wrapper .content-wrapper .list-motelroom .motelroom-wrapper:last-child {
@@ -677,42 +769,17 @@
   background: #FFFFFF;
   border: 1px solid #000000;
   -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   border-radius: 5px;
-  position: relative;
-}
-
-.detail-wrapper .onwner_info-wrapper .favourite-wrapper .btn-favourite .heart-wrapper {
-  position: absolute;
-}
-
-.detail-wrapper .onwner_info-wrapper .favourite-wrapper .btn-favourite .heart-wrapper #twitter-heart {
-  background: url("https://abs.twimg.com/a/1454637594/img/t1/web_heart_animation.png");
-  background-position: 0px;
-  background-repeat: no-repeat;
-  height: 100px;
-  width: 100px;
-  top: -40px;
-  left: -40px;
-  pointer-events: none;
-}
-
-.detail-wrapper .onwner_info-wrapper .favourite-wrapper .btn-favourite .heart-wrapper .toggle {
-  opacity: 0;
-  -webkit-transform: scale(3);
-          transform: scale(3);
-  position: absolute;
-}
-
-.detail-wrapper .onwner_info-wrapper .favourite-wrapper .btn-favourite .heart-wrapper .toggle:checked + #twitter-heart {
-  -webkit-animation: heart-animate 0.8s steps(28) forwards;
-          animation: heart-animate 0.8s steps(28) forwards;
-}
-
-@keyframes heart-animate {
-  100% {
-    background-position: -2800px;
-  }
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .carousel-item {
@@ -828,5 +895,10 @@
   border-radius: 0 0 10px 10px;
   padding: 10px 0;
   background: #ffffff;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: #438BCD !important;
+  color: #ffffff;
 }
 

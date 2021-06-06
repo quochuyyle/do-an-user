@@ -91,6 +91,9 @@ class MotelController extends Controller
         $categories = Categories::all();
         $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
         $map_motelroom = Motelroom::whereIn('id', $ids)->get();
+        if($request->ajax()){
+            return view('motelroom.paginationData', compact( 'motelrooms'));
+        }
         return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms'));
     }
 
@@ -149,9 +152,6 @@ class MotelController extends Controller
 
     public function get_dangtin()
     {
-//        $notifications=PushNotification::where('source_to',Auth::id())->limit(5)->get();
-////        return View::share('notifications',$notifications);
-//   	    dd($notifications);
         if (Auth::user()->user_type == 2) {
             return redirect()->back();
         }
@@ -164,7 +164,6 @@ class MotelController extends Controller
 
     public function post_dangtin(Request $request)
     {
-//        dd($request->all());
         $request->validate([
             'txttitle' => 'required',
             'txtaddress' => 'required',
@@ -236,7 +235,7 @@ class MotelController extends Controller
         $motel->approve = 1;
         $motel->slug = Str::slug($request->txttitle . '-' . uniqid(), '-');
         $motel->post_type = $request->postCategory;
-        $motel->post_menu = $request->post_menu;
+        $motel->post_menu = $request->postMenu;
         $motel->status = 1;
 //        dd($motel);
 ////        dd($motel);
