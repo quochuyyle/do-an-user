@@ -25,12 +25,15 @@ body {
 @media screen and (min-width: $break-mobile) {
 
 }
+
 @media screen and (min-width: $break-375) {
 
 }
+
 @media screen and (min-width: $break-tablet) {
 
 }
+
 @media screen and (min-width: $break-1024) {
 
 }
@@ -44,18 +47,114 @@ body {
   background: #438BCD !important;
 
   .navbar-wrapper {
-    display: flex;
     justify-content: space-between;
     width: 100%;
-    padding: 0 35px;
+
+
+    @media screen and (min-width: $break-small) {
+      display: unset;
+      padding: 0;
+    }
+
+    @media screen and (min-width: $break-mobile) {
+
+    }
+    @media screen and (min-width: $break-375) {
+
+    }
+    @media screen and (min-width: $break-tablet) {
+
+    }
+    @media screen and (min-width: $break-1024) {
+
+    }
+
+    @media screen and (min-width: $break-large) {
+      display: flex;
+      padding: 0 35px;
+    }
   }
 
+  .navbar-brand {
+    @media screen and (min-width: $break-small) {
+      display: none;
+    }
+
+    @media screen and (min-width: $break-mobile) {
+
+    }
+    @media screen and (min-width: $break-375) {
+
+    }
+    @media screen and (min-width: $break-tablet) {
+
+    }
+    @media screen and (min-width: $break-1024) {
+
+    }
+
+    @media screen and (min-width: $break-large) {
+      display: inherit;
+    }
+  }
+
+  .navbar-nav.navbar-right {
+    @media screen and (min-width: $break-small) {
+      align-items: unset !important;
+    }
+
+    @media screen and (min-width: $break-mobile) {
+
+    }
+    @media screen and (min-width: $break-375) {
+
+    }
+    @media screen and (min-width: $break-tablet) {
+
+    }
+    @media screen and (min-width: $break-1024) {
+
+    }
+
+    @media screen and (min-width: $break-large) {
+      align-items: center !important;
+    }
+  }
+
+  .nav-item{
+    padding: 0 5px;
+  }
 
   .list-item {
     font-style: normal;
     font-weight: bold;
-    font-size: 15px;
     color: #FFFFFF !important;
+
+
+    @media screen and (min-width: $break-small) {
+
+    }
+
+    @media screen and (min-width: $break-mobile) {
+
+    }
+    @media screen and (min-width: $break-375) {
+
+    }
+    @media screen and (min-width: $break-tablet) {
+
+    }
+    @media screen and (min-width: $break-1024) {
+
+    }
+
+    @media screen and (min-width: $break-large) {
+      font-size: 11px;
+    }
+
+    @media screen and (min-width: 1400px) {
+      font-size: 11px;
+    }
   }
 
   .list-item:hover {
@@ -135,7 +234,7 @@ body {
 
   .box-search-wrapper {
 
-    .box-search-select{
+    .box-search-select {
       @media screen and (min-width: $break-small) {
         padding: 1px;
       }
@@ -184,6 +283,7 @@ body {
     width: 185px !important;
 
   }
+
   @media screen and (min-width: $break-small) {
     width: 212px;
     bottom: 94px;
@@ -387,6 +487,7 @@ body {
             @media screen and (min-width: $break-large) {
               display: flex;
             }
+
             .price-wrapper {
               margin: 0 20px 0 0;
 
@@ -954,6 +1055,28 @@ body {
       color: #000000;
     }
   }
+
+  @media screen and (min-width: $break-small) {
+    display: none;
+  }
+
+  @media screen and (min-width: $break-mobile) {
+
+  }
+  @media screen and (min-width: $break-375) {
+
+  }
+  @media screen and (min-width: $break-tablet) {
+
+  }
+  @media screen and (min-width: $break-1024) {
+    display: inherit;
+  }
+
+  @media screen and (min-width: $break-large) {
+
+  }
+
 }
 
 .login-wrapper {
@@ -965,7 +1088,26 @@ body {
     justify-content: center;
 
     .panel.panel-primary {
-      width: 500px;
+      @media screen and (min-width: $break-small) {
+        width: 100%;
+      }
+
+      @media screen and (min-width: $break-mobile) {
+
+      }
+      @media screen and (min-width: $break-375) {
+
+      }
+      @media screen and (min-width: $break-tablet) {
+        width: 500px;
+      }
+      @media screen and (min-width: $break-1024) {
+
+      }
+
+      @media screen and (min-width: $break-large) {
+
+      }
     }
 
     .panel-heading {
@@ -990,7 +1132,26 @@ body {
     justify-content: center;
 
     .panel.panel-primary {
-      width: 500px;
+      @media screen and (min-width: $break-small) {
+        width: 100%;
+      }
+
+      @media screen and (min-width: $break-mobile) {
+
+      }
+      @media screen and (min-width: $break-375) {
+
+      }
+      @media screen and (min-width: $break-tablet) {
+        width: 500px;
+      }
+      @media screen and (min-width: $break-1024) {
+
+      }
+
+      @media screen and (min-width: $break-large) {
+
+      }
     }
 
     .panel-heading {

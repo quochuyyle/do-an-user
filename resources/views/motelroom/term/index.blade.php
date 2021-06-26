@@ -6,7 +6,39 @@
     <div class="gap"></div>
     <div class="container">
         <div class="row">
+           <div class="col-md-12">
+               @if ($errors->any())
+                   <div class="alert alert-danger">
+                       <ul>
+                           @foreach ($errors->all() as $error)
+                               <li>{{ $error }}</li>
+                           @endforeach
+                       </ul>
+                   </div>
+               @endif
+               @if(session('warn'))
+                   <div class="alert bg-danger">
+                       <button type="button" class="close" data-dismiss="alert"><span>×</span><span
+                                   class="sr-only">Close</span></button>
+                       <span class="text-semibold">Error!</span> {{session('warn')}}
+                   </div>
+               @endif
+               @if(session('success'))
+                   <div class="alert bg-success">
+                       <button type="button" class="close" data-dismiss="alert"><span>×</span><span
+                                   class="sr-only">Close</span></button>
+                       <span class="text-semibold">Done!</span> {{session('success')}}
+                   </div>
+               @endif
+           </div>
             <div class="col-md-12">
+                <div class="row">
+                    <div class="col-12">
+                        @if(Session::has('message'))
+                            <p id="alert-message" class="alert alert-{{ Session::get('alert-type') }}">{{ Session::get('message') }}</p>
+                        @endif
+                    </div>
+                </div>
                 <h1 class="entry-title entry-prop">Gia hạn bài đăng</h1>
                 <hr>
                 <div class="panel panel-default">
@@ -40,7 +72,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="term">Ngày bắt đầu và kết thúc:</label>
+                                        <label for="term">Chọn ngày:</label>
                                         <input class="form-control" id="term" type="text" name="term" value="{{ old('term') }}"
                                                autocomplete="off"/>
                                     </div>
@@ -50,11 +82,12 @@
                                         <label for="fee">Phí đăng tin</label>
                                         <input class="form-control" id="fee" type="text" name="fee"
                                                value="{{ old('fee') }}"/>
+                                        <span class="validate-fee text-danger"></span>
                                     </div>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Gia hạn</button>
+                            <button id="btn-extend" type="submit" class="btn btn-primary">Gia hạn</button>
                             <a href="user/profile" class="btn btn-danger">Quay lại</a>
                         </form>
 
@@ -86,7 +119,7 @@
                     format: 'DD-MM-YYYY'
                 },
                 autoUpdateInput: false,
-                 minDate: moment({{ $motelroom->end_date }}, "DDMMYYYY").add(1, 'd')
+                 minDate: moment()
             }, function (start, end, label) {
                 let oldEnd_date = $('input[name="end_date"]').val(),
                     newEnd_date = start.format('DD-MM-YYYY');
@@ -95,9 +128,20 @@
                     b = moment(newEnd_date, 'DDMMYYYY');
                 let diff = b.diff(a, 'days'),
                     feePerDay = $('#postCategory').find(':selected').data('value'),//50000
-                    fee = feePerDay * diff;
-                console.log(feePerDay)
-                $('#fee').val(fee)
+                    fee = feePerDay * diff,
+                    wallet = "{{ \Illuminate\Support\Facades\Auth::user()->wallet }}";
+                    if(wallet < fee){
+                        $('#fee').val(fee)
+                        $('.validate-fee').text('Tài khoản của bạn không đủ tiền, vui lòng thử lại !');
+                        $('#btn-extend').attr('disabled', true)
+                    }
+                    else
+                    {
+                        $('.validate-fee').text('');
+                        $('#btn-extend').attr('disabled', false)
+                        $('#fee').val(fee)
+                    }
+
             });
 
             $('#term').on('apply.daterangepicker', function (ev, picker) {

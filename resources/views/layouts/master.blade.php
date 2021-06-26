@@ -90,12 +90,6 @@
                     $('#list-noti').prepend(html)
 
                 }
-                // data.data
-                // console.log(data)
-                // alert(data)
-                // console.log(data.actionId)
-                // console.log(data.actionData)
-                // $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
             });
 
         function timeDifference(created_at) {
@@ -106,12 +100,6 @@
             // let seconds = (currentDate.getTime()/1000-created_date.getTime()/1000)/(24*3600);
             const diffDays = Math.round(Math.abs((currentDate - created_date) / oneDay));
             const seconds = diffDays / oneDay;
-            //  console.log(currentDate)
-            // console.log(diffDays)
-            // console.log(currentDate.getTime()/1000)
-            // console.log(created_date.getTime()/1000)
-            // more that two days
-            // console.log(seconds)
             if (seconds > 2 * 24 * 3600) {
 
                 return "a few days ago";

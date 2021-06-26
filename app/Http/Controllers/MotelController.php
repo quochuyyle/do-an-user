@@ -14,12 +14,14 @@ use App\PushUser;
 use App\Term;
 use App\Ultility;
 use App\User;
+use Dompdf\Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Motelroom;
 use App\Categories;
 use App\Reports;
 use App\MotelTradeHistory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 
@@ -33,11 +35,11 @@ class MotelController extends Controller
         $categories = Categories::all();
         $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
         $map_motelroom = Motelroom::where('approve', 1)->get();
-        $motelrooms = Motelroom::where('approve', 1)->orderBy('post_type', 'ASC')->paginate(4);
+        $motelrooms = Motelroom::where([['approve', '=', 1], ['status', '=', 1]])->orderBy('post_type', 'ASC')->paginate(6);
         $postmenus = PostMenu::all();
 
-        if($request->ajax()){
-            return view('motelroom.paginationData', compact( 'motelrooms'));
+        if ($request->ajax()) {
+            return view('motelroom.paginationData', compact('motelrooms'));
         }
         return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms', 'postmenus'));
     }
@@ -45,7 +47,7 @@ class MotelController extends Controller
     public function fetch_data(Request $request)
     {
         if ($request->ajax()) {
-            $motelrooms = Motelroom::where('approve', 1)->orderBy('post_type', 'ASC')->paginate(4);
+            $motelrooms = Motelroom::where('approve', 1)->orderBy('post_type', 'ASC')->paginate(6);
             return view('motelroom.paginationData', compact('motelrooms'))->render();
         }
     }
@@ -85,14 +87,14 @@ class MotelController extends Controller
         foreach ($user->favourite as $row) {
             $ids [] = $row->motelroom_id;
         }
-        $motelrooms = $motelroom->whereIn('id', $ids)->paginate(4);
+        $motelrooms = $motelroom->where([['approve', '=', 1], ['status', '=', 1]])->whereIn('id', $ids)->paginate(6);
         $provinces = Province::all();
         $district = District::all();
         $categories = Categories::all();
         $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
         $map_motelroom = Motelroom::whereIn('id', $ids)->get();
-        if($request->ajax()){
-            return view('motelroom.paginationData', compact( 'motelrooms'));
+        if ($request->ajax()) {
+            return view('motelroom.paginationData', compact('motelrooms'));
         }
         return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms'));
     }
@@ -106,10 +108,10 @@ class MotelController extends Controller
         $categories = Categories::all();
         $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
         $map_motelroom = Motelroom::where([['approve', '=', 1], ['post_menu', '=', $postMenu->id]])->get();
-        $motelrooms = Motelroom::where([['approve', '=', 1], ['post_menu', '=', $postMenu->id]])->orderBy('post_type', 'ASC')->paginate(4);
+        $motelrooms = Motelroom::where([['approve', '=', 1], ['status', '=', 1], ['post_menu', '=', $postMenu->id]])->orderBy('post_type', 'ASC')->paginate(6);
         $postmenus = PostMenu::all();
-        if($request->ajax()){
-            return view('motelroom.paginationData', compact( 'motelrooms'));
+        if ($request->ajax()) {
+            return view('motelroom.paginationData', compact('motelrooms'));
         }
         return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms', 'postmenus'));
     }
@@ -121,31 +123,54 @@ class MotelController extends Controller
         $categories = Categories::all();
         $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
         $map_motelroom = Motelroom::whereBetween('price', array(Input::get('min'), Input::get('max')))->get();
-        $getMotelrooms = Motelroom::whereBetween('price', array(Input::get('min'), Input::get('max')))->orderBy('price', 'ASC')->paginate(4);
+        $getMotelrooms = Motelroom::whereBetween('price', array(Input::get('min'), Input::get('max')))->where([['approve', '=', 1], ['status', '=', 1]])->orderBy('price', 'ASC')->paginate(6);
         $postmenus = PostMenu::all();
         $motelrooms = $getMotelrooms->appends(Input::except('page'));
-        if($request->ajax()){
-            return view('motelroom.paginationData', compact( 'motelrooms'));
+        if ($request->ajax()) {
+            return view('motelroom.paginationData', compact('motelrooms'));
+        }
+        return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms'));
+    }
+
+    public function mostSeenMotelrooms(Request $request)
+    {
+        $provinces = Province::all();
+        $district = District::all();
+        $categories = Categories::all();
+        $hot_motelroom = Motelroom::where('approve', 1)->limit(6)->orderBy('count_view', 'desc')->get();
+        $map_motelroom = Motelroom::whereBetween('price', array(Input::get('min'), Input::get('max')))->get();
+        $motelrooms = Motelroom::where([['approve', '=', 1], ['status', '=', 1]])->orderBy('count_view', 'desc')->paginate(6);
+        if ($request->ajax()) {
+            return view('motelroom.paginationData', compact('motelrooms'));
         }
         return view('home.index', compact('district', 'provinces', 'categories', 'hot_motelroom', 'map_motelroom', 'motelrooms'));
     }
 
     public function SearchMotelAjax(Request $request)
     {
-        $getmotel = Motelroom::where([
-            ['district_id', $request->id_district],
+        $conditions = [
             ['price', '>=', $request->min_price],
             ['price', '<=', $request->max_price],
             ['category_id', 'like', "%$request->id_category%"],
-            ['approve', 1]])->get();
+            ['approve', 1], ['status', 1]
+        ];
+
+        if(!empty($request->id_district)){
+           $district_id = [
+               ['district_id', $request->id_district ],
+           ];
+
+           $conditions = array_merge($conditions, $district_id);
+        }
+
+        $getmotel = Motelroom::where($conditions)->get();
 
         $arr_result_search = array();
         foreach ($getmotel as $room) {
             $arrlatlng = json_decode($room->latlng, true);
             $arrImg = json_decode($room->images, true);
-            $arr_result_search[] = ["id" => $room->id, "lat" => $arrlatlng[0], "lng" => $arrlatlng[1], "title" => $room->title, "address" => $room->address, "image" => $arrImg[0], "phone" => $room->phone];
+            $arr_result_search[] = ["id" => $room->id, 'slug'=> $room->slug, "lat" => $arrlatlng[0], "lng" => $arrlatlng[1], "title" => $room->title, "address" => $room->address, "image" => $arrImg[0], "phone" => $room->phone];
         }
-
 
         return json_encode($arr_result_search);
     }
@@ -164,6 +189,7 @@ class MotelController extends Controller
 
     public function post_dangtin(Request $request)
     {
+//        dd($request->all());
         $request->validate([
             'txttitle' => 'required',
             'txtaddress' => 'required',
@@ -171,9 +197,9 @@ class MotelController extends Controller
             'txtarea' => 'required',
             'txtphone' => 'required',
             'txtdescription' => 'required',
-//            'txtaddress' => 'required',
+            'hinhanh' => 'required',
             'term' => 'required',
-            'txtfee' => 'required'
+            'txtfee' => 'required',
         ],
             [
                 'txttitle.required' => 'Nhập tiêu đề bài đăng',
@@ -182,8 +208,9 @@ class MotelController extends Controller
                 'txtarea.required' => 'Nhập diện tích phòng trọ',
                 'txtphone.required' => 'Nhập SĐT chủ phòng trọ (cần liên hệ)',
                 'txtdescription.required' => 'Nhập mô tả ngắn cho phòng trọ',
-//                'txtaddress.required' => 'Nhập hoặc chọn địa chỉ phòng trọ trên bản đồ',
+                'txtfee.required' => 'Phí đăng tin không thể bỏ trống',
                 'term.required' => 'Nhập thời gian đăng tin',
+                'hinhanh.required' => 'Vui lòng tải lên hình ảnh',
             ]);
 
 
@@ -227,18 +254,16 @@ class MotelController extends Controller
         $motel->utilities = $json_tienich;
         $motel->images = $json_img;
         $motel->user_id = Auth::user()->id;
-        $motel->category_id = $request->idcategory;
+        $motel->category_id = $request->idcategory ? $request->idcategory : null;
         $motel->district_id = $request->iddistrict;
         $motel->phone = $request->txtphone;
         $motel->start_date = $request->txtstart_date;
         $motel->end_date = $request->txtend_date;
-        $motel->approve = 1;
+        $motel->approve = 0;
         $motel->slug = Str::slug($request->txttitle . '-' . uniqid(), '-');
         $motel->post_type = $request->postCategory;
         $motel->post_menu = $request->postMenu;
         $motel->status = 1;
-//        dd($motel);
-////        dd($motel);
         $motel->save();
 
         $user = new User();
@@ -322,8 +347,13 @@ class MotelController extends Controller
             'end_date' => 'required',
             'fee' => 'required|numeric',
             'post_type' => 'required|numeric',
+            'term' => 'required',
         ];
-        $request->validate($validate);
+        $request->validate($validate,
+            [
+                'fee.required' => 'Phí gia hạn không thể bỏ trống !',
+                'term.required' => 'Vui lòng chọn thời gian gia hạn !',
+            ]);
 
 
         $user->updateWallet($request);
@@ -331,9 +361,9 @@ class MotelController extends Controller
         $newTerm = $term->createNewTerm($request);
 
         if ($newTerm) {
-            return redirect()->route('user.profile')->with(['message' => 'Gia hạn thành công']);
+            return redirect()->route('user.profile')->with(['message' => 'Gia hạn thành công', 'alert-type' => 'success']);
         } else {
-            return redirect()->route('user.profile')->with(['message' => 'Đã có lỗi xảy ra !']);
+            return redirect()->back()->with(['danger' => 'Đã có lỗi xảy ra !']);
         }
     }
 
@@ -418,8 +448,71 @@ class MotelController extends Controller
         }
     }
 
-    public function uploadImages(Request $request, Motelroom $modelMotelroom){
+    public function uploadImages(Request $request, Motelroom $modelMotelroom)
+    {
 //        dd($request->all());
         $modelMotelroom->uploadFiles($request->hinhanh);
+    }
+
+    public function hienThongTinNhaTro(Request $request, Motelroom $modelMotelroom, District $district, Categories $category)
+    {
+
+        $motelroom = $modelMotelroom->where('id', $request->id)->first();
+        $districts = $district->get();
+        $categories = $category->get();
+        $postMenus = PostMenu::all();
+        $postCategories = PostCategory::all();
+        return \view('motelroom.edit', compact('motelroom', 'districts', 'categories', 'postMenus', 'postCategories'));
+    }
+
+    public function chinhSuaThongTinNhaTro(Request $request, Motelroom $modelMotelroom, Term $modelTerm, User $modelUser)
+    {
+//        dd($request->all());
+        $request->validate([
+            'txttitle' => 'required',
+            'txtaddress' => 'required',
+            'txtprice' => 'required',
+            'txtarea' => 'required',
+            'txtphone' => 'required',
+            'txtdescription' => 'required',
+            'term' => 'nullable',
+            'txtfee' => 'required_with:term'
+        ],
+            [
+                'txttitle.required' => 'Nhập tiêu đề bài đăng',
+                'txtaddress.required' => 'Nhập địa chỉ phòng trọ',
+                'txtprice.required' => 'Nhập giá thuê phòng trọ',
+                'txtarea.required' => 'Nhập diện tích phòng trọ',
+                'txtphone.required' => 'Nhập SĐT chủ phòng trọ (cần liên hệ)',
+                'txtdescription.required' => 'Nhập mô tả ngắn cho phòng trọ',
+                'txtfee.required' => 'Phí đăng tin không thể bỏ trống',
+                'term.required' => 'Nhập thời gian đăng tin',
+            ]);
+
+
+        try {
+            DB::beginTransaction();
+            $motelroom = $modelMotelroom->updateMotelInformation($request);
+
+
+            if ($request->has('txtfee')) {
+                $modelUser->updateWallet($request);
+            }
+
+            if (!$motelroom) {
+                return redirect()->back()->with(['message' => 'Cập nhật không thành công !', 'alert-type' => 'error']);
+            }
+            if ($request->has('term')) {
+                $modelTerm->createNewTerm($request);
+            }
+            DB::commit();
+            return redirect()->route('user.profile')->with(['message' => 'Cập nhật thành công !', 'alert-type' => 'success']);
+
+
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+
     }
 }

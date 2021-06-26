@@ -52,23 +52,32 @@ class User extends Authenticatable
         return User::where('id', $data['id'])->update($data);
     }
 
-    public function updateWallet($request, $user_id = null, $user_type = null)
+    public function updateWallet($request = null, $user_id = null, $user_type = null, $returnFee = null)
     {
         $user_id = $user_id ? $user_id : $request->user_id;
         $user = self::where('id', $user_id)->first();
-        if ($request->has('money')) {
-            $wallet = (int)($user->wallet) + (int)($request->money);
+        $wallet = 0;
+        if (!empty($request)) {
+            if ($request->has('money')) {
+                $wallet = (int)($user->wallet) + (int)($request->money);
+            }
+            if ($request->has('fee')) {
+                $wallet = (int)($user->wallet) - (int)($request->fee);
+            }
+            if ($request->has('txtfee')) {
+                $wallet = (int)($user->wallet) - (int)($request->txtfee);
+            }
+
         }
-        if ($request->has('fee')) {
-            $wallet = (int)($user->wallet) - (int)($request->fee);
+        if (!empty($returnFee)) {
+            $wallet = (int)($user->wallet) + (int)($returnFee);
         }
-        if ($request->has('txtfee')) {
-            $wallet = (int)($user->wallet) - (int)($request->txtfee);
-        }
+
+
 
         if($wallet > 0) {
             $data = [
-                'id' => $request->user_id,
+                'id' => isset($request) ? $request->user_id : $user_id,
                 'wallet' => $wallet
             ];
             return $this->put($data);

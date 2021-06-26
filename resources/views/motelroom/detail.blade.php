@@ -173,12 +173,12 @@
                                 Nhắn zalo
                             </button>
                         </div>
-                        <div class="favourite-wrapper">
-                            <button class="btn btn-favourite" type="button">
-                                <img class="image-icon mr-2" src="{{ asset('/images/heart.png') }}" alt="">
-                                Yêu thích
-                            </button>
-                        </div>
+{{--                        <div class="favourite-wrapper">--}}
+{{--                            <button class="btn btn-favourite" type="button">--}}
+{{--                                <img class="image-icon mr-2" src="{{ asset('/images/heart.png') }}" alt="">--}}
+{{--                                Yêu thích--}}
+{{--                            </button>--}}
+{{--                        </div>--}}
                     </div>
                     <div class="list-filter-wrapper">
                         <div class="title-wrapper">
@@ -214,7 +214,7 @@
     </div>
 @endsection
 @push('after-script')
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7UMd51lRd_Sv4Ws0Go8V8vgS-NHv1VwA&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYJTsar1ApHjtBUiOwUNR3iBkBF4L14kg&callback=initMap"
             async defer></script>
     <script>
         $(document).ready(function () {

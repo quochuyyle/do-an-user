@@ -21,6 +21,7 @@ Route::get('/', 'MotelController@index')->name('user.index');
 Route::get('/pagination/fetch_data', 'MotelController@fetch_data')->name('user.motelroom.fetch_data');
 Route::post('/favourite-motel', 'MotelController@favouriteMotel')->name('user.motel.favourite');
 Route::get('/{id}/favourite-motel', 'MotelController@yourFavourtieMotels')->name('user.index.favourite');
+Route::get('/mostseen', 'MotelController@mostSeenMotelrooms')->name('user.index.mostseen');
 Route::get('category/{id}','MotelController@getMotelByCategoryId');
 /* Admin */
 Route::get('admin/login','AdminController@getLogin');
@@ -74,8 +75,8 @@ Route::group(['prefix'=>'user'], function () {
     Route::get('dangtin','MotelController@get_dangtin')->middleware('dangtinmiddleware');
     Route::get('dangtin/datatable','UserController@dataTable')->name('user.dangtin.datatable');
     Route::post('dangtin','MotelController@post_dangtin')->name('user.dangtin')->middleware('dangtinmiddleware');
-    Route::get('hienthi/{id}','UserController@hienThongTinNhaTro')->name('user.dangtin.hienthi')->middleware('dangtinmiddleware');
-    Route::post('chinhsua/{id}','UserController@chinhSuaThongTinNhaTro')->name('user.dangtin.sua')->middleware('dangtinmiddleware');
+    Route::get('hienthi/{id}','MotelController@hienThongTinNhaTro')->name('user.dangtin.hienthi')->middleware('dangtinmiddleware');
+    Route::post('chinhsua/{id}','MotelController@chinhSuaThongTinNhaTro')->name('user.dangtin.sua')->middleware('dangtinmiddleware');
 
 
     Route::get('profile','UserController@getprofile')->middleware('dangtinmiddleware')->name('user.profile');

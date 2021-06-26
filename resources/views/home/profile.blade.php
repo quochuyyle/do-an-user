@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('style-css')
     <style>
-        body{
+        body {
             font-size: 12px;
         }
     </style>
@@ -75,6 +75,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12">
+                        @if(Session::has('message'))
+                            <p id="alert-message"
+                               class="alert alert-{{ Session::get('alert-type') }}">{{ Session::get('message') }}</p>
+                        @endif
+                    </div>
+                </div>
                 <div class="mypage">
                     @if(session('thongbao'))
                         <div class="alert bg-danger">
@@ -97,12 +105,13 @@
                                         <table class="table">
                                             <thead>
                                             <tr>
-                                                <th>Tiêu đề</th>
-                                                <th>Danh mục</th>
-                                                <th>Gía phòng</th>
+                                                <th style="width: 200px;">Tiêu đề</th>
+                                                <th style="width: 150px;">Danh mục</th>
+                                                <th style="width: 150px;">Gía phòng(VND)</th>
                                                 <th>Lượt xem</th>
                                                 <th>Thời hạn</th>
                                                 <th>Tình trạng</th>
+                                                <th>Trạng thái phê duyệt</th>
                                                 <th></th>
                                             </tr>
                                             </thead>
@@ -110,31 +119,33 @@
                                             @foreach($mypost as $post)
                                                 <tr>
                                                     <td>{{ $post->title }}</td>
-                                                    <td>{{ $post->category->name }}</td>
+                                                    <td>{{ $post->category ? $post->category->name : 'Không' }}</td>
                                                     <td>{{ number_format($post->price, 2 , ',', '.') }}</td>
                                                     <td>{{ $post->count_view }}</td>
                                                     @php
                                                         date_default_timezone_set('Asia/Ho_Chi_Minh');
                                                             $datetime1 = new DateTime();
                                                             $datetime2 = new DateTime($post->end_date);
-                                                            $interval = $datetime2->diff($datetime1);
+                                                            $interval = $datetime1->diff($datetime2);
                                                             $elapsed = $interval->format('%a ngày');
 
                                                     @endphp
-                                                    <td>{{ $elapsed }}</td>
+                                                    <td>{{ $datetime1 > $datetime2 ? 'Hết hạn' : $elapsed }}</td>
                                                     <td>
                                                         @if($post->status == 1)
-                                                            <span class="label label-success">Chưa cho thuê</span>
+                                                            <span style="padding: 5px;" class="badge badge-success">Chưa cho thuê</span>
                                                         @elseif($post->status == 0)
-                                                            <span class="label label-danger">Đã cho thuê</span>
+                                                            <span style="padding: 5px;" class="badge badge-danger">Đã cho thuê</span>
                                                         @endif
                                                     </td>
+                                                    <td>Trạng thái phê duyệt</td>
                                                     <td style="display: flex;justify-content: space-between">
                                                         <input type="hidden" value="{{ $post->end_date }}"
                                                                class="old_endDate" name="old_endDate"/>
-                                                        @if($interval->days <= 0)
-                                                        <a href="{{ route('user.motelroom.term', $post->id) }}">Gia
-                                                            hạn</a>
+                                                        @if($datetime1 > $datetime2)
+
+                                                            <a href="{{ route('user.motelroom.term', $post->id) }}">Gia
+                                                                hạn</a>
                                                         @endif
                                                         <a href="{{ route('user.dangtin.hienthi', $post->id) }}"
                                                            class="btn-edit" data-id="{{ $post->id }}">Sửa thông tin</a>
@@ -151,59 +162,61 @@
                                 @endif
                             </div>
                         @endif
-{{--                        <div style="margin: 30px 0 0 0;" class="mainpage">--}}
-{{--                            <h4>Giao dịch gần nhất</h4>--}}
-{{--                            <div class="table-responsive">--}}
-{{--                                <table class="table">--}}
-{{--                                    <thead>--}}
-{{--                                    <tr>--}}
-{{--                                        <th>Tên phòng trọ</th>--}}
-{{--                                        <th>Gía phòng</th>--}}
-{{--                                        <th>Phí nhận được (25% chi phí)</th>--}}
-{{--                                        <th>Loại giao dịch</th>--}}
-{{--                                        <th>Người giao dịch</th>--}}
-{{--                                        <th>Ngày giao dịch</th>--}}
-{{--                                    </tr>--}}
-{{--                                    </thead>--}}
-{{--                                    <tbody>--}}
-{{--                                    @foreach($motelTradeHistories as $motelTradeHistory)--}}
-{{--                                        <tr>--}}
-{{--                                            <td>{{ $motelTradeHistory->motelroom->title }}</td>--}}
-{{--                                            <td>{{ $motelTradeHistory->motelroom->price }}</td>--}}
-{{--                                            <td>{{ $motelTradeHistory->commission }}</td>--}}
-{{--                                            <td>{{ $motelTradeHistory->type == 1 ? 'Xem thông tin phòng trọ' : 'Thuê phòng trọ' }}</td>--}}
-{{--                                            <td>{{ $motelTradeHistory->user->username }}</td>--}}
-{{--                                            <td>{{ $motelTradeHistory->created_at->format('d M Y') }}</td>--}}
-{{--                                        </tr>--}}
-{{--                                    @endforeach--}}
-{{--                                    </tbody>--}}
-{{--                                </table>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-                        @if($walletHistories)
-                            <div style="margin: 30px 0 0 0;" class="mainpage">
-                                <h4>Lịch sử nạp tiền</h4>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Tên giao dịch</th>
-                                            <th>Số tiền</th>
-                                            <th>Ngày giao dịch</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($walletHistories as $walletHistory)
+                        {{--                        <div style="margin: 30px 0 0 0;" class="mainpage">--}}
+                        {{--                            <h4>Giao dịch gần nhất</h4>--}}
+                        {{--                            <div class="table-responsive">--}}
+                        {{--                                <table class="table">--}}
+                        {{--                                    <thead>--}}
+                        {{--                                    <tr>--}}
+                        {{--                                        <th>Tên phòng trọ</th>--}}
+                        {{--                                        <th>Gía phòng</th>--}}
+                        {{--                                        <th>Phí nhận được (25% chi phí)</th>--}}
+                        {{--                                        <th>Loại giao dịch</th>--}}
+                        {{--                                        <th>Người giao dịch</th>--}}
+                        {{--                                        <th>Ngày giao dịch</th>--}}
+                        {{--                                    </tr>--}}
+                        {{--                                    </thead>--}}
+                        {{--                                    <tbody>--}}
+                        {{--                                    @foreach($motelTradeHistories as $motelTradeHistory)--}}
+                        {{--                                        <tr>--}}
+                        {{--                                            <td>{{ $motelTradeHistory->motelroom->title }}</td>--}}
+                        {{--                                            <td>{{ $motelTradeHistory->motelroom->price }}</td>--}}
+                        {{--                                            <td>{{ $motelTradeHistory->commission }}</td>--}}
+                        {{--                                            <td>{{ $motelTradeHistory->type == 1 ? 'Xem thông tin phòng trọ' : 'Thuê phòng trọ' }}</td>--}}
+                        {{--                                            <td>{{ $motelTradeHistory->user->username }}</td>--}}
+                        {{--                                            <td>{{ $motelTradeHistory->created_at->format('d M Y') }}</td>--}}
+                        {{--                                        </tr>--}}
+                        {{--                                    @endforeach--}}
+                        {{--                                    </tbody>--}}
+                        {{--                                </table>--}}
+                        {{--                            </div>--}}
+                        {{--                        </div>--}}
+                        @if(\Illuminate\Support\Facades\Auth::user()->user_type != 2)
+                            @if($walletHistories)
+                                <div style="margin: 30px 0 0 0;" class="mainpage">
+                                    <h4>Lịch sử nạp tiền</h4>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
                                             <tr>
-                                                <td>Nạp tiền vào tài khoản</td>
-                                                <td>{{ $walletHistory->money }}</td>
-                                                <td>{{ $walletHistory->created_at->format('d M Y') }}</td>
+                                                <th>Tên giao dịch</th>
+                                                <th>Số tiền(VND)</th>
+                                                <th>Ngày giao dịch</th>
                                             </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                            @foreach($walletHistories as $walletHistory)
+                                                <tr>
+                                                    <td>Nạp tiền vào tài khoản</td>
+                                                    <td>{{ number_format($walletHistory->money, 2, ',', '.') }}</td>
+                                                    <td>{{ $walletHistory->created_at->format('d-m-Y') }}</td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         @endif
                     @endif
                     <div class="modal fade" id="editTerm" tabindex="-1" role="dialog"
@@ -289,6 +302,11 @@
             }
         });
         $(document).ready(function () {
+
+            $("#alert-message").fadeTo(2000, 500).slideUp(500, function () {
+                $("#alert-message").slideUp(500);
+            });
+
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',

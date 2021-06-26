@@ -6,6 +6,7 @@ use App\Libraries\Ultilities;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+use Illuminate\Support\Facades\Auth;
 
 class Motelroom extends Model
 {
@@ -51,6 +52,11 @@ class Motelroom extends Model
         return $this->belongsTo(PostMenu::class, 'post_menu', 'id');
     }
 
+    public function postCategory()
+    {
+        return $this->belongsTo(PostCategory::class, 'post_type', 'id');
+    }
+
     public function sluggable()
     {
         return [
@@ -66,7 +72,7 @@ class Motelroom extends Model
     }
 
     public function updateMotelInformation($request)
-    {
+    {  date_default_timezone_set('Asia/Ho_Chi_Minh');
         $data = [
             'id' => $request->id,
             'title' => $request->txttitle,
@@ -80,6 +86,10 @@ class Motelroom extends Model
             'phone' => $request->txtphone,
         ];
 
+
+
+
+        $detailMotelroom = $this->with('postCategory')->where('id', $data['id'])->first();
         $latlngArr = [
             0 => $request->txtlat,
             1 => $request->txtlng,
@@ -90,19 +100,34 @@ class Motelroom extends Model
             $data['images'] = json_encode($request->hinhanh);
         }
 
-        if ($request->has('status')) {
-            $data['status'] = 1;
-        } else {
-            $data['status'] = 0;
-        }
-        if ($request->has('start_date')) {
+
+        if ($request->has('txtstart_date')) {
             $data['start_date'] = $request->txtstart_date;
         }
-        if ($request->has('end_date')) {
+        if ($request->has('txtend_date')) {
             $data['end_date'] = $request->txtend_date;
         }
         if ($request->has('postCategory')) {
             $data['post_type'] = $request->postCategory;
+        }
+        if ($request->has('status')) {
+            $data['status'] = 1;
+        } else {
+            $datetime1 = new \DateTime();
+            $datetime2 = new \DateTime($detailMotelroom->end_date);
+            $interval = $datetime2->diff($datetime1);
+            $daysLeft = $interval->days;
+            ;
+            if($daysLeft > 0){
+                $returnFee = $daysLeft * $detailMotelroom->postCategory->price;
+                $modelUser = new User();
+                $modelUser->updateWallet(null, Auth::user()->id, null, $returnFee);
+                $currentDateTime = date('d-m-Y');
+                $data['start_date'] = $currentDateTime;
+                $data['end_date'] = $currentDateTime;
+//                dd($data);
+            }
+            $data['status'] = 0;
         }
         return $this->put($data);
     }

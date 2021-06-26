@@ -21,9 +21,9 @@ class Term extends Model
        $data = [
            'motelroom_id'=>$request->motelroom_id ? $request->motelroom_id : $request->id,
            'user_id'=>$request->user_id ? $request->user_id : Auth::user()->id,
-           'price'=>$request->fee,
-           'start_date'=>$request->start_date,
-           'end_date'=>$request->end_date,
+           'price'=>$request->fee ? $request->fee : $request->txtfee,
+           'start_date'=>$request->start_date ? $request->start_date : $request->txtstart_date,
+           'end_date'=>$request->end_date ? $request->end_date : $request->txtend_date,
        ];
 
        $newTerm = $this->store($data);

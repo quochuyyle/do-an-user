@@ -1,16 +1,16 @@
 @extends('layouts.master')
 @section('style-css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 @endsection
 @section('content')
     <div class="gap"></div>
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <h1 class="entry-title entry-prop">Đăng tin Phòng trọ</h1>
+                <h1 class="entry-title entry-prop">Đăng tin</h1>
                 <hr>
                 <div class="panel panel-default">
-                    <div class="panel-heading">Thông tin bắt buộc*</div>
+                    <div class="panel-heading">Thông tin bắt buộc<span class="text-danger">*</span></div>
                     <div class="panel-body">
                         <div class="gap"></div>
                         @if ($errors->any())
@@ -42,12 +42,13 @@
                                 <input type="hidden" name="user_id"
                                        value="{{ \Illuminate\Support\Facades\Auth::user()->id }}">
                                 <div class="form-group">
-                                    <label for="usr">Tiêu đề bài đăng:</label>
+                                    <label for="usr">Tiêu đề bài đăng<span class="text-danger">*</span>:</label>
                                     <input type="text" class="form-control" name="txttitle"
                                            value="{{ old('txttitle') }}">
                                 </div>
                                 <div class="form-group">
-                                    <label>Địa chỉ phòng trọ:</label> Bạn có thể nhập hoặc chọn ví trí trên bản đồ
+                                    <label>Địa chỉ phòng trọ,nhà bạn muốn cho thuê<span class="text-danger">*</span>:</label> <p>Bạn có thể nhập hoặc chọn ví
+                                    trí trên bản đồ</p>
                                     <input type="text" id="location-text-box" name="txtaddress" class="form-control"
                                            value="{{ old('txtaddress') }}"/>
                                     <p><i class="far fa-bell"></i> Nếu địa chỉ hiển thị bên bản đồ không đúng bạn có thể
@@ -60,7 +61,7 @@
                                 <div id="map-canvas" style="width: auto; height: 400px;"></div>
                                 <div class="row">
                                     <div class="col-md-9">
-                                        <label for="postCategory">Loại bài đăng:</label>
+                                        <label for="postCategory">Loại bài đăng<span class="text-danger">*</span>:</label>
                                         <select class="form-control" name="postCategory" id="postCategory">
                                             @foreach($postCategories as $postCategory)
                                                 <option data-value="{{ $postCategory->price }}"
@@ -70,51 +71,55 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label for="pricePerDay">Gía ngày( vnđ )</label>
-                                        <input class="form-control" id="pricePerDay" type="text" name="pricePerDay"
+                                        <input class="form-control" id="pricePerDay" type="text" name="pricePerDay" readonly
                                                value="{{ old('txtpricePerDay') }}"/>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-9">
-                                        <label for="term">Ngày bắt đầu và kết thúc:</label>
+                                        <label for="term">Ngày bắt đầu và kết thúc<span class="text-danger">*</span>:</label>
                                         <input class="form-control" id="term" type="text" name="term"/>
                                         <input type="hidden" name="txtstart_date" id="txtstart_date"/>
                                         <input type="hidden" name="txtend_date" id="txtend_date"/>
                                     </div>
                                     <div class="col-md-3">
-                                        <label for="fee">Phí đăng tin</label>
+                                        <label for="fee">Phí đăng tin<span class="text-danger">*</span></label>
                                         <input class="form-control" id="fee" type="text" name="txtfee"
                                                value="{{ old('txtfee') }}"/>
+                                        <span class="validate-txtfee text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="usr">Giá phòng( vnđ ):</label>
+                                            <label for="usr">Giá phòng( vnđ )<span class="text-danger">*</span>:</label>
                                             <input type="number" name="txtprice" class="form-control"
                                                    placeholder="750000" value="{{ old('txtprice') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="usr">Diện tích( m<sup>2</sup> ):</label>
+                                            <label for="usr">Diện tích( m<sup>2</sup> )<span class="text-danger">*</span>:</label>
                                             <input type="number" name="txtarea" class="form-control" placeholder="16"
                                                    value="{{ old('txtarea') }}">
+                                            <span class="validate-area text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="usr">SĐT Liên hệ:</label>
+                                            <label for="usr">SĐT Liên hệ<span class="text-danger">*</span>:</label>
                                             <input type="text" name="txtphone" class="form-control"
                                                    placeholder="0915111234" value="{{ old('txtphone') }}">
+                                            <span class="validate-phone text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="usr">Quận/ Huyện:</label>
-                                            <select class="select-option-custom pull-right" data-live-search="true"
+                                            <label for="selectdistrict">Chọn Quận/ Huyện<span class="text-danger">*</span>:</label>
+                                            <select class="select-option-custom pull-right form-control"
+                                                    data-live-search="true"
                                                     name="iddistrict" id="selectdistrict">
                                                 @foreach($district as $quan)
                                                     <option data-tokens="{{$quan->slug}}"
@@ -125,22 +130,26 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="usr">Danh mục:</label>
-                                            <select class="select-option-custom pull-right form-control" data-live-search="true"
-                                                    name="idcategory">
+                                            <label for="idcategory">Danh mục<span class="text-danger">*</span>:</label>
+                                            <select class="select-option-custom pull-right form-control"
+                                                    data-live-search="true"
+                                                    id="idcategory" name="idcategory">
                                                 @foreach($categories as $category)
-                                                    <option data-tokens="{{$category->slug}}" value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    <option data-tokens="{{$category->slug}}"
+                                                            value="{{ $category->id }}">{{ $category->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="post_menu">Danh mục bài đăng:</label>
-                                            <select class="select-option-custom pull-right form-control" data-live-search="true"
-                                                     name="postMenu" id="post_menu">
+                                            <label for="post_menu">Danh mục bài đăng<span class="text-danger">*</span>:</label>
+                                            <select class="select-option-custom pull-right form-control"
+                                                    data-live-search="true"
+                                                    name="postMenu" id="post_menu">
                                                 @foreach($postMenus as $postMenu)
-                                                    <option data-tokens="{{$postMenu->slug}}" value="{{ $postMenu->id }}">{{ $postMenu->name }}</option>
+                                                    <option data-tokens="{{$postMenu->slug}}"
+                                                            value="{{ $postMenu->id }}">{{ $postMenu->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -148,8 +157,9 @@
                                 </div>
                                 <div class="form-group">
                                     <!-- ************** Max Items Demo ************** -->
-                                    <label for="select-state">Các tiện ích có trong phòng trọ:</label>
-                                    <select id="select-state" name="tienich[]" multiple class="demo-default select-option-custom form-control"
+                                    <label for="select-state">Các tiện ích có trong phòng trọ<span class="text-danger">*</span>:</label>
+                                    <select id="select-state" name="tienich[]" multiple
+                                            class="select-option-custom form-control"
                                             placeholder="Chọn các tiện ích phòng trọ">
                                         @foreach($ultilities as $ultitlity)
                                             <option value="{{ $ultitlity->id }}">{{ $ultitlity->name }}</option>
@@ -162,14 +172,15 @@
                                               style=" resize: none;" value="{{ old('txtdescription') }}"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="comment">Thêm hình ảnh:</label>
+                                    <label for="comment">Thêm hình ảnh<span class="text-danger">*</span>:</label>
                                     <div class="file-loading">
                                         <input id="file-5" type="file" class="file" name="hinhanh[]" multiple
                                                data-preview-file-type="any" data-upload-url="#">
                                     </div>
                                 </div>
 
-                                <button class="btn btn-primary">Đăng Tin</button>
+                                <button id="btn-dang-tin" class="btn btn-primary">Đăng Tin</button>
+                                <a href="/user/profile" class="btn btn-danger">Quay lại</a>
                             </form>
                         @else
                             <div class="alert bg-danger">
@@ -204,7 +215,9 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.5/js/fileinput.min.js" integrity="sha512-1FvXwt9wkKd29ilILHy0zei6ScE5vdEKqZ6BSW+gmM7mfqC4T4256OmUfFzl1FkaNS3FUQ/Kdzrrs8SD83bCZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.5/js/fileinput.min.js"
+            integrity="sha512-1FvXwt9wkKd29ilILHy0zei6ScE5vdEKqZ6BSW+gmM7mfqC4T4256OmUfFzl1FkaNS3FUQ/Kdzrrs8SD83bCZA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript">
         $('#file-5').fileinput({
             theme: 'fa',
@@ -222,15 +235,53 @@
             },
             autoUpdateInput: false,
             // maxDate:'3d',
-            // minDate: -3
+            minDate: moment()
         }, function (start, end, label) {
             let diff = end.diff(start, 'days'),
                 feePerDay = $('#postCategory').find(':selected').data('value');
             // console.log(feePerDay)
             $('#txtstart_date').val(start.format('DD-MM-YYYY'))
             $('#txtend_date').val(end.format('DD-MM-YYYY'))
-            let fee = feePerDay * diff;
-            $('#fee').val(fee)
+            let fee = feePerDay * diff,
+                wallet = "{{ \Illuminate\Support\Facades\Auth::user()->wallet }}";
+            if (fee < wallet) {
+                $('#fee').val(fee)
+                $('.validate-txtfee').text('')
+                $('#btn-dang-tin').attr('disabled', false)
+            } else {
+                $('#fee').val(fee)
+                $('.validate-txtfee').text('Tài khoản bạn không đủ tiền vui lòng thử lại !')
+                $('#btn-dang-tin').attr('disabled', true)
+            }
+        });
+
+        $('input[name = txtarea]').keyup(function () {
+            if ($(this).val() < 0) {
+                $('.validate-area').text('Diện tích không hợp lệ, vui lòng nhập lại !')
+                $('#btn-dang-tin').attr('disabled', true)
+            } else {
+                $('.validate-area').text('')
+                $('#btn-dang-tin').attr('disabled', false)
+            }
+        })
+
+        $('input[name = txtphone]').change(function () {
+            let number = $(this).val().toString().length;
+            if ( number > 10 || number < 10) {
+                $('.validate-phone').text('Số điện thoại không hợp lệ , vui lòng nhập lại !')
+                $('#btn-dang-tin').attr('disabled', true)
+            } else {
+                $('.validate-phone').text('')
+                $('#btn-dang-tin').attr('disabled', false)
+            }
+        })
+
+        $('#post_menu').change(function () {
+            if ($(this).val() == 1) {
+                $('#idcategory').attr('disabled', false)
+            } else {
+                $('#idcategory').attr('disabled', true)
+            }
         });
 
         $('input[name="term"]').on('apply.daterangepicker', function (ev, picker) {
@@ -250,9 +301,9 @@
         })
     </script>
 
-    <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7UMd51lRd_Sv4Ws0Go8V8vgS-NHv1VwA&callback=initialize&libraries=geometry,places"
-            async defer></script>
+        <script type="text/javascript"
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYJTsar1ApHjtBUiOwUNR3iBkBF4L14kg&callback=initialize&libraries=geometry,places"
+                async defer></script>
     <script>
         var map;
         var marker;

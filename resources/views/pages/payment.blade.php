@@ -17,7 +17,11 @@
                                 </button>
                                 <div class="collapse" id="collapseExample1">
                                     <div class="card card-body">
-
+                                        <div style="height: 110px;">
+                                            <h5>Số tài khoản: <span class="font-weight-bold">1900378129813</span></h5>
+                                            <h5>Ngân hàng Techcombank:<span class="font-weight-bold">Chi nhánh Thanh Xuân</span></h5>
+                                            <h5>Chủ tài khoản:<span class="font-weight-bold">Vũ Thị Hường</span></h5>
+                                        </div>
                                     </div>
                                 </div>
                             </h5>
@@ -38,7 +42,10 @@
                                 </button>
                                 <div class="collapse" id="collapseExample2">
                                     <div class="card card-body">
-
+                                        <div style="height: 110px;">
+                                            <h5>Các loại thẻ hợp lệ <span class="font-weight-bold">Vietel,Vinaphone,Mobilephone</span></h5>
+                                            <h5>Lưu ý: <span class="text-danger">Khi nạp thẻ điện thoại sẽ kháu trừ 15% giá trị thẻ nạp.</span></h5>
+                                        </div>
                                     </div>
                                 </div>
                             </h5>
@@ -58,7 +65,10 @@
                                 </button>
                                 <div class="collapse" id="collapseExample3">
                                     <div class="card card-body">
-
+                                        <div style="height: 110px;">
+                                            <h5>Số điện thoại: <span class="font-weight-bold">034103012923</span></h5>
+                                            <h5>Chủ tài khoản:<span class="font-weight-bold">Vũ Thị Hường</span></h5>
+                                        </div>
                                     </div>
                                 </div>
                             </h5>

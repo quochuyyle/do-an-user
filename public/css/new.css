@@ -9,21 +9,76 @@
 }
 
 .navbar .navbar-wrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
   width: 100%;
-  padding: 0 35px;
+}
+
+@media screen and (min-width: 320px) {
+  .navbar .navbar-wrapper {
+    display: unset;
+    padding: 0;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .navbar .navbar-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 0 35px;
+  }
+}
+
+@media screen and (min-width: 320px) {
+  .navbar .navbar-brand {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .navbar .navbar-brand {
+    display: inherit;
+  }
+}
+
+@media screen and (min-width: 320px) {
+  .navbar .navbar-nav.navbar-right {
+    -webkit-box-align: unset !important;
+        -ms-flex-align: unset !important;
+            align-items: unset !important;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .navbar .navbar-nav.navbar-right {
+    -webkit-box-align: center !important;
+        -ms-flex-align: center !important;
+            align-items: center !important;
+  }
+}
+
+.navbar .nav-item {
+  padding: 0 5px;
 }
 
 .navbar .list-item {
   font-style: normal;
   font-weight: bold;
-  font-size: 15px;
   color: #FFFFFF !important;
+}
+
+@media screen and (min-width: 1200px) {
+  .navbar .list-item {
+    font-size: 11px;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .navbar .list-item {
+    font-size: 11px;
+  }
 }
 
 .navbar .list-item:hover {
@@ -839,6 +894,18 @@
   color: #000000;
 }
 
+@media screen and (min-width: 320px) {
+  .list-filter-wrapper {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .list-filter-wrapper {
+    display: inherit;
+  }
+}
+
 .login-wrapper {
   background: rgba(229, 229, 229, 0.5);
   padding: 30px 0;
@@ -853,8 +920,16 @@
           justify-content: center;
 }
 
-.login-wrapper .login-form .panel.panel-primary {
-  width: 500px;
+@media screen and (min-width: 320px) {
+  .login-wrapper .login-form .panel.panel-primary {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .login-wrapper .login-form .panel.panel-primary {
+    width: 500px;
+  }
 }
 
 .login-wrapper .login-form .panel-heading {
@@ -882,8 +957,16 @@
           justify-content: center;
 }
 
-.register-wrapper .register-form .panel.panel-primary {
-  width: 500px;
+@media screen and (min-width: 320px) {
+  .register-wrapper .register-form .panel.panel-primary {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .register-wrapper .register-form .panel.panel-primary {
+    width: 500px;
+  }
 }
 
 .register-wrapper .register-form .panel-heading {

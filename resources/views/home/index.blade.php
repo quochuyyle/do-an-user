@@ -127,7 +127,7 @@
             </div>
             <div class="home-wrapper">
                 <div class="row">
-                    <div class="col-9">
+                    <div class="col-sm-12 col-lg-9">
                         <div class="content-wrapper" id="show_motelroom">
                             <div class="title-wrapper">
                                 <h3 class="title">Danh sách đăng tin</h3>
@@ -140,7 +140,7 @@
                             @endif
                         </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-lg-3">
                         <div class="list-filter-wrapper">
                             <div class="title-wrapper">
                                 <h4 class="title">Danh mục cho thuê</h4>
@@ -268,6 +268,8 @@
                         });
                         var infowindow = new google.maps.InfoWindow();
                         (function (phongtro, data) {
+                            console.log(phongtro)
+                            console.log(data)
                             var content = '<div id="iw-container" style="width: 350px;">' +
                                 '<img  style="height: 200px;width: 100%" src="uploads/images/' + data.image + '">' +
                                 '<a href="phongtro/' + data.slug + '"><div class="iw-title">' + data.title + '</div></a>' +
@@ -283,11 +285,6 @@
                         })(phongtro, data);
 
                     }
-                    // google.maps.event.addListener(map, 'mousemove', function (e) {
-                    // 	document.getElementById("flat").innerHTML = e.latLng.lat().toFixed(6);
-                    // 	document.getElementById("lng").innerHTML = e.latLng.lng().toFixed(6);
-                    //
-                    // });
                 }
 
             </script>
@@ -316,6 +313,6 @@
 
                 })
             </script>
-            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7UMd51lRd_Sv4Ws0Go8V8vgS-NHv1VwA&callback=initMap"
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYJTsar1ApHjtBUiOwUNR3iBkBF4L14kg&callback=initMap"
                     async defer></script>
     @endpush

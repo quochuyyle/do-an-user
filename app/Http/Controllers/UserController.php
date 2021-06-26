@@ -20,6 +20,7 @@ use App\District;
 use App\Categories;
 use App\Motelroom;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
@@ -63,6 +64,11 @@ class UserController extends Controller
         $newuser->email = $req->txtmail;
         $newuser->user_type = $req->txttype;
         $newuser->save();
+
+        Mail::send([], [], function ($message) use ($newuser) {
+            $message->to($newuser->email, $newuser->name)->subject('Đăng kí tài khoản thành công !')
+                ->setBody('Bạn đã đăng kí thành công tài khoản trên website Tìm kiếm phòng Vũ Hường!');
+        });
         return redirect('/user/register')->with('success', 'Đăng kí thành công');
     }
 
@@ -100,14 +106,14 @@ class UserController extends Controller
     public function getprofile()
     {
 
-        $mypost = Motelroom::with('category')->where('user_id', Auth::user()->id)->get();
+        $mypost = Motelroom::with('category')->where([['user_id', '=', Auth::user()->id]])->orderBy('id', 'DESC')->get();
         $categories = Categories::all();
-        $walletHistories = \App\WalletHistory::where('user_id', Auth::user()->id)->get();
+        $walletHistories = \App\WalletHistory::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
         if (Auth::check() && Auth::user()->user_type == 3) {
-            $motelTradeHistories = MotelTradeHistory::with(['motelroom', 'user'])->where('owner_id', Auth::user()->id)->get();
+            $motelTradeHistories = MotelTradeHistory::with(['motelroom', 'user'])->where('owner_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
         }
         if (Auth::check() && Auth::user()->user_type == 2) {
-            $motelTradeHistories = MotelTradeHistory::with(['motelroom', 'user'])->where('user_id', Auth::user()->id)->get();
+            $motelTradeHistories = MotelTradeHistory::with(['motelroom', 'user'])->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
         }
 
 
@@ -234,23 +240,5 @@ class UserController extends Controller
 
     }
 
-    public function hienThongTinNhaTro(Request  $request, Motelroom $modelMotelroom, District  $district, Categories $category){
 
-        $motelroom = $modelMotelroom->where('id', $request->id)->first();
-        $districts = $district->get();
-        $categories = $category->get();
-        $postMenus = PostMenu::all();
-        $postCategories = PostCategory::all();
-       return \view('motelroom.edit', compact('motelroom', 'districts', 'categories', 'postMenus', 'postCategories'));
-    }
-
-    public function chinhSuaThongTinNhaTro(Request  $request, Motelroom $modelMotelroom, Term $modelTerm){
-         $motelroom = $modelMotelroom->updateMotelInformation($request);
-         if($request->has('term')) {
-             $term = $modelTerm->createNewTerm($request);
-         }
-         if($motelroom){
-             return redirect()->route('user.profile')->with(['message'=>'Cập nhật thành công !', 'alert-type'=>'success']);
-         }
-    }
 }
